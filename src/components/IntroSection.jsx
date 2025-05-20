@@ -1,7 +1,21 @@
+import { useState } from 'react';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
+import TableModal from './TableModal'; // Assuming TableModal.jsx is in the same directory
 
 // src/components/IntroSection.jsx
 export default function IntroSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const tableHeaders = ["Feature", "Classical Models (e.g., MSM, Baddeley's WM)", "Standard QM Approaches (e.g., Orch OR variants)", "TGD Framework"];
+  const tableRows = [
+    { "Feature": "Nature of Storage", "Classical Models (e.g., MSM, Baddeley's WM)": "Information encoded in neural patterns, synaptic strengths.", "Standard QM Approaches (e.g., Orch OR variants)": "Quantum states in microtubules or other neural structures; often focused on consciousness rather than explicit memory trace.", "TGD Framework": "Memories stored in 4-D brain (spacetime sheets), ZEO implies memories can be re-experienced via time-like entanglement." },
+    { "Feature": "Mechanism of Recall", "Classical Models (e.g., MSM, Baddeley's WM)": "Activation of stored patterns, cue-dependent retrieval.", "Standard QM Approaches (e.g., Orch OR variants)": "Collapse of quantum wave function, objective reduction; specific recall mechanisms less detailed.", "TGD Framework": "Intentional action (negentropic entanglement) initiates communication with geometric past; 'signals' from past to present (negative energy photons)." },
+    { "Feature": "Subjective Experience (Qualia)", "Classical Models (e.g., MSM, Baddeley's WM)": "Emergent property of complex neural activity; 'hard problem' largely unaddressed.", "Standard QM Approaches (e.g., Orch OR variants)": "Conscious moments linked to quantum computations/collapse; qualia associated with fundamental spacetime geometry (Penrose).", "TGD Framework": "Qualia are fundamental properties of quantum jumps; sensory qualia at sensory organs, contents of memory as qualia from geometric past." },
+    { "Feature": "Arrow of Time / Memory Directionality", "Classical Models (e.g., MSM, Baddeley's WM)": "Implicitly follows thermodynamic arrow; past -> present encoding.", "Standard QM Approaches (e.g., Orch OR variants)": "Standard arrow of time; some models might explore advanced/retarded potentials but not central to memory.", "TGD Framework": "ZEO allows for both arrows of time; memory recall involves signals from geometric past (non-standard time directionality)." },
+    { "Feature": "Capacity & Longevity", "Classical Models (e.g., MSM, Baddeley's WM)": "LTM vast but subject to decay/interference; physical basis of lifelong memories debated.", "Standard QM Approaches (e.g., Orch OR variants)": "Quantum states are fragile (decoherence); long-term stability of quantum memory traces is a challenge.", "TGD Framework": "Geometric past is immutable; memory capacity is effectively infinite. Negentropic entanglement provides stability for 'living' memories." },
+    { "Feature": "Active vs. Passive Recall", "Classical Models (e.g., MSM, Baddeley's WM)": "Can be both; e.g., cued recall (passive) vs. free recall (active search).", "Standard QM Approaches (e.g., Orch OR variants)": "Typically passive collapse; active intentionality less defined.", "TGD Framework": "Recall is an active, intentional process (directed attention via magnetic body); re-experiencing past quantum states." }
+  ];
+
   const [pageTitleRef, pageTitleVisible] = useIntersectionObserver({ threshold: 0.1 });
   const [pageSubtitleRef, pageSubtitleVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
   
@@ -63,15 +77,16 @@ export default function IntroSection() {
             </dl>
           </div>
           <div 
-            className={`diagram-card md:col-span-1 ${challengesContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}
+            onClick={() => setIsModalOpen(true)}
+            className={`diagram-card md:col-span-1 ${challengesContentVisible ? 'animate-fadeInRight' : 'opacity-0'} clickable-diagram`}
           >
             <img
-              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram :+Memory+Models+%26+Quantum+Considerations"
-              alt="Diagram illustrating challenges in memory models and quantum considerations"
+              src="memory_models.png"
+              alt="Snapshot of Table 1: Comparative Overview of Key Memory Models. Click to open full table."
               className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
             />
             <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">
-              Challenges: Memory Models & Quantum Considerations
+              Table 1: Comparative Overview (Click diagram to view details)
             </p>
           </div>
         </div>
@@ -95,7 +110,7 @@ export default function IntroSection() {
                 className={`diagram-card md:col-span-1 order-first ${limitationsContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}
             >
                 <img
-                src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram :+Standard+QM+Limitations"
+                src="quantum_memory.png"
                 alt="Diagram illustrating limitations of standard QM for memory"
                 className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
                 />
@@ -127,6 +142,14 @@ export default function IntroSection() {
         </p>
       </div>
       </div>
+
+      <TableModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        title="Table 1: Comparative Overview of Key Memory Models" 
+        headers={tableHeaders} 
+        rows={tableRows} 
+      />
     </section>
   );
 }

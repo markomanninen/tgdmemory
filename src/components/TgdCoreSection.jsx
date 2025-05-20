@@ -44,7 +44,7 @@ export default function TgdCoreSection() {
           </div>
           <div className={`diagram-card md:col-span-1 ${subSection1ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
             <img 
-              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Spacetime+%26+Quantum+Concepts"
+              src="manysheeted_spacetime.png"
               alt="Diagram of TGD Spacetime and Quantum Concepts"
               className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
             />
