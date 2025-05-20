@@ -16,7 +16,6 @@ export default function ImplicationsSection() {
   return (
     <section id="implications" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="implications-title">
       <h2 id="implications-title" ref={titleRef} className={`slide-title ${titleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>Potential Implications of TGD's Memory Model for Fundamental Physics</h2>
-      <h3 ref={subTitleRef} className={`text-center text-2xl font-semibold text-sky-700 mb-6 ${subTitleVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>Section: Implications</h3>
       <div className="space-y-8 content-text">
         <div className="grid md:grid-cols-2 gap-8 items-start">
           <div className="space-y-6">

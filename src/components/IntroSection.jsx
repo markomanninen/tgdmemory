@@ -14,15 +14,14 @@ export default function IntroSection() {
         ref={titleRef} 
         className={`slide-title ${isTitleIntersecting ? 'animate-fadeIn' : 'opacity-0'}`}
       >
-        The Complexities of Memory: Mainstream, Quantum, and Novel Physical Perspectives
+        Introduction to Mainstream and Quantum Perspectives on Memory
       </h1>
       <h2 
         ref={subtitleRef}
         className={`slide-subtitle ${isSubtitleIntersecting ? 'animate-slideUp' : 'opacity-0'} animation-delay-200`}
       >
-        An Examination of Theoretical Gaps and Alternative Frameworks
+        How subjective memories are realized in TGD inspired theory of consciousness?
       </h2>
-      <h3 className="text-center text-2xl font-semibold text-sky-700 mb-6">Section: Introduction</h3>
       <div 
         ref={contentRef}
         className={`content-text space-y-6 max-w-4xl mx-auto ${isContentIntersecting ? 'animate-fadeInUp' : 'opacity-0'} animation-delay-400`}

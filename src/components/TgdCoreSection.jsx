@@ -10,7 +10,6 @@ export default function TgdCoreSection() {
   return (
     <section id="tgd-core" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="tgd-core-title">
       <h2 id="tgd-core-title" className="slide-title">Core Principles of TGD Relevant to Memory</h2>
-      <h3 className="text-center text-2xl font-semibold text-sky-700 mb-6">Section: TGD Core</h3>
       <p 
         ref={textRef}
         className={`text-center text-gray-600 mb-10 max-w-3xl mx-auto ${isTextIntersecting ? 'animate-fadeInUp' : 'opacity-0'}`}

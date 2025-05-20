@@ -13,8 +13,7 @@ export default function ConclusionSection() {
   return (
     <section id="conclusion" className="slide-section min-h-screen flex flex-col justify-center" aria-labelledby="conclusion-title">
       <h2 id="conclusion-title" ref={titleRef} className={`slide-title ${titleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>Concluding Remarks: Memory within the TGD Framework</h2>
-      <h3 ref={subTitleRef} className={`text-center text-2xl font-semibold text-sky-700 mb-6 ${subTitleVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>Section: Conclusion</h3>
-      <div className="content-text space-y-6 text-center max-w-4xl mx-auto">
+        <div className="content-text space-y-6 text-center max-w-4xl mx-auto">
         <p ref={p1Ref} className={`${p1Visible ? 'animate-fadeInUp' : 'opacity-0'}`}>
           This presentation has outlined TGD's distinct perspective on memory, contrasting it with established and other alternative models. TGD proposes memory as an active, 4-dimensional, conscious process, orchestrated by Magnetic Bodies and intrinsically linked to the structure of spacetime.
         </p>

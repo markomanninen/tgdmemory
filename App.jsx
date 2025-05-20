@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import ConclusionSection from './src/components/ConclusionSection';
+import ContactSection from './src/components/ContactSection'; // Import ContactSection
 import Header from './src/components/Header'; // Import Header component
 import ImplicationsSection from './src/components/ImplicationsSection';
 import IntroSection from './src/components/IntroSection';
@@ -9,7 +10,7 @@ import TgdMemorySection from './src/components/TgdMemorySection';
 export default function App() {
   const [activeSection, setActiveSection] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false); // State for Back to Top button
-  const sections = ['intro', 'tgd-core', 'tgd-memory', 'implications', 'conclusion'];
+  const sections = ['intro', 'tgd-core', 'tgd-memory', 'implications', 'conclusion', 'contact'];
   const headerHeight = 64;
 
   const scrollToSection = (index) => {
@@ -89,11 +90,12 @@ export default function App() {
         <TgdMemorySection />
         <ImplicationsSection />
         <ConclusionSection />
+        <ContactSection /> {/* Add ContactSection here */}
       </main>
 
       {/* Footer */}
       <footer className="text-center py-10 text-gray-500 text-sm bg-white border-t border-gray-200">
-        <p>Presentation based on concepts from Topological Geometrodynamics by Matti Pitkänen.</p>
+        <p>Copyright &copy; {new Date().getFullYear()} - Marko T. Manninen</p>
       </footer>
 
       {showBackToTop && (

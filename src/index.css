@@ -18,6 +18,37 @@
     @apply text-base md:text-lg text-gray-700 leading-relaxed;
 }
 
+/* List Styles */
+ul,
+ol {
+    @apply list-inside space-y-2 mb-4 pl-4;
+}
+
+ul {
+    @apply list-disc;
+}
+
+ol {
+    @apply list-decimal;
+}
+
+li {
+    @apply mb-1;
+}
+
+/* Definition List Styles */
+dl {
+    @apply mb-6 space-y-3;
+}
+
+dt {
+    @apply font-semibold text-sky-700 text-lg;
+}
+
+dd {
+    @apply pl-4 text-gray-600 leading-relaxed;
+}
+
 .keyword-list dt {
     @apply text-sky-700;
 }

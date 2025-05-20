@@ -21,6 +21,7 @@ export default function Header({ sections, activeSection, scrollToSection }) {
               {id === 'intro' && 'Introduction'}
               {id === 'implications' && 'Implications'}
               {id === 'conclusion' && 'Conclusion'}
+              {id === 'contact' && 'Contacts & Resources'}
             </button>
           ))}
         </div>

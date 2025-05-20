@@ -16,7 +16,6 @@ export default function TgdMemorySection() {
   return (
     <section id="tgd-memory" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="tgd-memory-title">
       <h2 id="tgd-memory-title" ref={titleRef} className={`slide-title ${titleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>The TGD Model of Memory: A 4D, Conscious Process</h2>
-      <h3 ref={subTitleRef} className={`text-center text-2xl font-semibold text-sky-700 mb-6 ${subTitleVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>Section: TGD Memory Model</h3>
       <div className="space-y-8 content-text">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div ref={content1Ref} className={`${content1Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
