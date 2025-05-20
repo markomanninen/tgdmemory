@@ -1,18 +1,31 @@
 // src/components/TgdMemorySection.jsx
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
+
 export default function TgdMemorySection() {
+  const [titleRef, titleVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [subTitleRef, subTitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 200 });
+  const [content1Ref, content1Visible] = useIntersectionObserver({ threshold: 0.1, delay: 400 });
+  const [diagram1Ref, diagram1Visible] = useIntersectionObserver({ threshold: 0.1, delay: 600 });
+  const [content2Ref, content2Visible] = useIntersectionObserver({ threshold: 0.1, delay: 400 });
+  const [diagram2Ref, diagram2Visible] = useIntersectionObserver({ threshold: 0.1, delay: 600 });
+  const [content3Ref, content3Visible] = useIntersectionObserver({ threshold: 0.1, delay: 400 });
+  const [diagram3Ref, diagram3Visible] = useIntersectionObserver({ threshold: 0.1, delay: 600 });
+  const [content4Ref, content4Visible] = useIntersectionObserver({ threshold: 0.1, delay: 400 });
+  const [diagram4Ref, diagram4Visible] = useIntersectionObserver({ threshold: 0.1, delay: 600 });
+
   return (
     <section id="tgd-memory" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="tgd-memory-title">
-      <h2 id="tgd-memory-title" className="slide-title">The TGD Model of Memory: A 4D, Conscious Process</h2>
-      <h3 className="text-center text-2xl font-semibold text-sky-700 mb-6">Section: TGD Memory Model</h3>
+      <h2 id="tgd-memory-title" ref={titleRef} className={`slide-title ${titleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>The TGD Model of Memory: A 4D, Conscious Process</h2>
+      <h3 ref={subTitleRef} className={`text-center text-2xl font-semibold text-sky-700 mb-6 ${subTitleVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>Section: TGD Memory Model</h3>
       <div className="space-y-8 content-text">
         <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div>
+          <div ref={content1Ref} className={`${content1Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
             <h3 className="text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-3">Memory as a 4-Dimensional Construct in ZEO – The "4D Brain"</h3>
             <p>
               In ZEO, quantum states are superpositions of entire 4D spacetime surfaces. Memory is proposed to be fundamentally encoded in the 4D history (the spacetime surface) of the "self" (conscious entity), rather than solely in the present 3D brain state. This "4D brain" concept implies past experiences are part of the self's extended spacetime reality. Information about conscious quantum jumps is encoded into this 4D surface, facilitated by the proposed non-determinism of TGD's classical field equations.
             </p>
           </div>
-          <div className="diagram-card">
+          <div ref={diagram1Ref} className={`diagram-card ${diagram1Visible ? 'animate-fadeInRight' : 'opacity-0'}`}>
             <img
               src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram :+Self%27s+4D+Spacetime+History+(Memory+Encoded+in+Geometry)"
               alt="Diagram of 4D Brain in TGD"
@@ -24,7 +37,7 @@ export default function TgdMemorySection() {
           </div>
         </div>
         <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="diagram-card order-last md:order-first">
+          <div ref={diagram2Ref} className={`diagram-card order-last md:order-first ${diagram2Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
             <img
               src="https://placehold.co/600x450/e2e8f0/38bdf8?text=Diagram :+Magnetic+Body+Mediated+Memory+Encoding+%28Hologram+Formation%29+Recall+%28Phase+Conjugation%29"
               alt="Diagram of MB and Holographic Memory"
@@ -34,7 +47,7 @@ export default function TgdMemorySection() {
               Magnetic Body Mediated Memory Encoding (Hologram Formation), Recall (Phase Conjugation)
             </p>
           </div>
-          <div>
+          <div ref={content2Ref} className={`${content2Visible ? 'animate-fadeInRight' : 'opacity-0'}`}>
             <h3 className="text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-3">Role of Magnetic Bodies (MB) and Holographic Principles</h3>
             <p>The MB is hypothesized to actively participate in memory processes:</p>
             <ul className="list-disc pl-5 space-y-2">
@@ -44,7 +57,7 @@ export default function TgdMemorySection() {
           </div>
         </div>
         <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div>
+          <div ref={content3Ref} className={`${content3Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
             <h3 className="text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-3">State Function Reductions (SFRs) & Subjective Time</h3>
             <ul className="list-disc pl-5 space-y-2">
               <li><strong>SSFRs (Small SFRs):</strong> Occur repeatedly, preserve the arrow of geometric time, constitute the "self's" subjective time flow and are associated with sensory perception.</li>
@@ -54,7 +67,7 @@ export default function TgdMemorySection() {
               TGD thus views memory as an active re-experiencing of the 4D past, linked to consciousness (quantum jumps) and orchestrated by the MB.
             </p>
           </div>
-          <div className="diagram-card">
+          <div ref={diagram3Ref} className={`diagram-card ${diagram3Visible ? 'animate-fadeInRight' : 'opacity-0'}`}>
             <img
               src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram :+Subjective+Time+Flow+SSFRs+vs.+BSRs+in+Memory+Recall"
               alt="Diagram of SFRs and Subjective Time"
@@ -65,10 +78,10 @@ export default function TgdMemorySection() {
             </p>
           </div>
         </div>
-        <div className="text-center">
+        <div ref={content4Ref} className={`text-center ${content4Visible ? 'animate-fadeInUp' : 'opacity-0'}`}>
           <h3 className="text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-3">Cognitive Correlates: p-Adic Physics</h3>
           <p>p-Adic spacetime regions are proposed as correlates of cognition and intention. Intentions (p-adic) may transform into actions (real) via p-adic-to-real phase transitions. Cognitive aspects of memory could involve interactions between real (sensory/memory traces) and p-adic (cognitive processing) sectors of the TGD universe.</p>
-          <div className="diagram-card mx-auto">
+          <div ref={diagram4Ref} className={`diagram-card mx-auto ${diagram4Visible ? 'animate-fadeInUp' : 'opacity-0'}`}>
             <img
               src="https://placehold.co/600x300/e2e8f0/38bdf8?text=Diagram :+Interface+of+p-Adic+%28Cognition%29+and+Real+%28Physical%29+Domains"
               alt="Diagram of p-Adic Physics in Cognition"

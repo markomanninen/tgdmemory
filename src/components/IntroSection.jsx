@@ -1,15 +1,32 @@
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
+
 // src/components/IntroSection.jsx
 export default function IntroSection() {
+  const [titleRef, isTitleIntersecting] = useIntersectionObserver({ threshold: 0.1 });
+  const [subtitleRef, isSubtitleIntersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  const [contentRef, isContentIntersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+  const [diagramRef, isDiagramIntersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+
   return (
     <section id="intro" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="intro-title">
-      <h1 id="intro-title" className="slide-title animate-fadeIn">
+      <h1 
+        id="intro-title" 
+        ref={titleRef} 
+        className={`slide-title ${isTitleIntersecting ? 'animate-fadeIn' : 'opacity-0'}`}
+      >
         The Complexities of Memory: Mainstream, Quantum, and Novel Physical Perspectives
       </h1>
-      <h2 className="slide-subtitle animate-slideUp">
+      <h2 
+        ref={subtitleRef}
+        className={`slide-subtitle ${isSubtitleIntersecting ? 'animate-slideUp' : 'opacity-0'} animation-delay-200`}
+      >
         An Examination of Theoretical Gaps and Alternative Frameworks
       </h2>
       <h3 className="text-center text-2xl font-semibold text-sky-700 mb-6">Section: Introduction</h3>
-      <div className="content-text space-y-6 max-w-4xl mx-auto">
+      <div 
+        ref={contentRef}
+        className={`content-text space-y-6 max-w-4xl mx-auto ${isContentIntersecting ? 'animate-fadeInUp' : 'opacity-0'} animation-delay-400`}
+      >
         <p>
           Memory, the capacity for encoding, storing, and retrieving information, is a fundamental aspect of human cognition. It underpins identity, learning, and adaptation. Traditional investigations within psychology and neuroscience have provided significant insights into its biological substrates and behavioral manifestations.
         </p>
@@ -34,7 +51,10 @@ export default function IntroSection() {
               </li>
             </ul>
           </div>
-          <div className="diagram-card">
+          <div 
+            ref={diagramRef}
+            className={`diagram-card ${isDiagramIntersecting ? 'animate-fadeInRight' : 'opacity-0'} animation-delay-600`}
+          >
             <img
               src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram :+Comparative+Analysis+of+Memory+Model+Limitations"
               alt="Diagram illustrating challenges in memory models"

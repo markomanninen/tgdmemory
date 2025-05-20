@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import ConclusionSection from './src/components/ConclusionSection';
+import Header from './src/components/Header'; // Import Header component
 import ImplicationsSection from './src/components/ImplicationsSection';
 import IntroSection from './src/components/IntroSection';
 import TgdCoreSection from './src/components/TgdCoreSection';
@@ -7,6 +8,7 @@ import TgdMemorySection from './src/components/TgdMemorySection';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState(0);
+  const [showBackToTop, setShowBackToTop] = useState(false); // State for Back to Top button
   const sections = ['intro', 'tgd-core', 'tgd-memory', 'implications', 'conclusion'];
   const headerHeight = 64;
 
@@ -21,7 +23,7 @@ export default function App() {
     }
   };
 
-  // Scroll listener to update active section
+  // Scroll listener to update active section and show/hide Back to Top button
   useEffect(() => {
     const handleScroll = () => {
       let index = 0;
@@ -35,6 +37,13 @@ export default function App() {
         }
       }
       setActiveSection(index);
+
+      // Show Back to Top button if scrolled down enough
+      if (window.scrollY > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -63,34 +72,16 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeSection]);
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <div className="bg-sky-50 text-gray-800 font-sans">
-      {/* Header */}
-      <header className="fixed w-full top-0 z-50 bg-white shadow-lg">
-        <nav className="container mx-auto px-6 py-3 flex justify-between items-center">
-          <div className="text-xl md:text-2xl font-bold text-sky-700">TGD & Memory</div>
-          <div className="flex space-x-4">
-            {sections.map((id, idx) => (
-              <button
-                key={id}
-                onClick={() => scrollToSection(idx)}
-                className={`px-3 py-2 rounded-md text-sm transition-all duration-200 ${
-                  activeSection === idx
-                    ? 'text-sky-700 bg-sky-100 border-b-2 border-sky-600 font-semibold'
-                    : 'text-gray-600 hover:text-sky-600'
-                }`}
-                aria-current={activeSection === idx ? 'page' : undefined}
-              >
-                {id === 'tgd-core' && 'TGD Core'}
-                {id === 'tgd-memory' && 'TGD Memory Model'}
-                {id === 'intro' && 'Introduction'}
-                {id === 'implications' && 'Implications'}
-                {id === 'conclusion' && 'Conclusion'}
-              </button>
-            ))}
-          </div>
-        </nav>
-      </header>
+      <Header sections={sections} activeSection={activeSection} scrollToSection={scrollToSection} />
 
       <main className="container mx-auto px-4 pt-24 pb-12">
         <IntroSection />
@@ -104,6 +95,18 @@ export default function App() {
       <footer className="text-center py-10 text-gray-500 text-sm bg-white border-t border-gray-200">
         <p>Presentation based on concepts from Topological Geometrodynamics by Matti Pitkänen.</p>
       </footer>
+
+      {showBackToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-4 rounded-full shadow-lg transition-opacity duration-300 ease-in-out z-50"
+          aria-label="Scroll to top"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }

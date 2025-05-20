@@ -1,14 +1,27 @@
-// src/components/TgdCoreSection.jsx
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
+
 export default function TgdCoreSection() {
+  const [textRef, isTextIntersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+  const [listRef, isListIntersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+  const [diagram1Ref, isDiagram1Intersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+  const [list2Ref, isList2Intersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+  const [diagram2Ref, isDiagram2Intersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+
   return (
     <section id="tgd-core" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="tgd-core-title">
       <h2 id="tgd-core-title" className="slide-title">Core Principles of TGD Relevant to Memory</h2>
       <h3 className="text-center text-2xl font-semibold text-sky-700 mb-6">Section: TGD Core</h3>
-      <p className="text-center text-gray-600 mb-10 max-w-3xl mx-auto">
+      <p 
+        ref={textRef}
+        className={`text-center text-gray-600 mb-10 max-w-3xl mx-auto ${isTextIntersecting ? 'animate-fadeInUp' : 'opacity-0'}`}
+      >
         Understanding TGD's model of memory requires familiarity with its key, non-standard tenets. These form the foundation for its approach to consciousness and memory.
       </p>
       <div className="grid md:grid-cols-2 gap-8 items-start">
-        <dl className="keyword-list p-6 rounded-xl shadow-lg border border-sky-200 bg-sky-50 space-y-5">
+        <dl 
+          ref={listRef}
+          className={`keyword-list p-6 rounded-xl shadow-lg border border-sky-200 bg-sky-50 space-y-5 ${isListIntersecting ? 'animate-fadeInLeft' : 'opacity-0'} animation-delay-200`}
+        >
           <div>
             <dt className="font-semibold text-sky-800 text-lg md:text-xl mb-1">1. Spacetime as a 4-Surface:</dt>
             <dd className="ml-4 text-gray-600 text-sm md:text-base">
@@ -28,7 +41,10 @@ export default function TgdCoreSection() {
             </dd>
           </div>
         </dl>
-        <div className="diagram-card order-first md:order-last">
+        <div 
+          ref={diagram1Ref}
+          className={`diagram-card order-first md:order-last ${isDiagram1Intersecting ? 'animate-fadeInRight' : 'opacity-0'} animation-delay-400`}
+        >
           <img
             src="https://placehold.co/600x500/e2e8f0/38bdf8?text=Diagram :+1.+Many-Sheeted+Spacetime+2.+Causal+Diamond+(ZEO)+3.+h_eff+Hierarchy"
             alt="Diagram of TGD Spacetime, ZEO, and h_eff"
@@ -40,7 +56,10 @@ export default function TgdCoreSection() {
         </div>
       </div>
       <div className="grid md:grid-cols-2 gap-8 items-start mt-8">
-        <div className="diagram-card order-last md:order-first">
+        <div 
+          ref={diagram2Ref}
+          className={`diagram-card order-last md:order-first ${isDiagram2Intersecting ? 'animate-fadeInLeft' : 'opacity-0'} animation-delay-400`}
+        >
           <img
             src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram :+4.+Magnetic+Body+and+Flux+Tubes+Interacting+with+Biological+System"
             alt="Diagram of Magnetic Body"
@@ -50,7 +69,10 @@ export default function TgdCoreSection() {
             Magnetic Body and Flux Tubes Interacting with Biological System
           </p>
         </div>
-        <dl className="keyword-list p-6 rounded-xl shadow-lg border border-sky-200 bg-sky-50 space-y-5">
+        <dl 
+          ref={list2Ref}
+          className={`keyword-list p-6 rounded-xl shadow-lg border border-sky-200 bg-sky-50 space-y-5 ${isList2Intersecting ? 'animate-fadeInRight' : 'opacity-0'} animation-delay-200`}
+        >
           <div>
             <dt className="font-semibold text-sky-800 text-lg md:text-xl mb-1">4. Magnetic Bodies (MB):</dt>
             <dd className="ml-4 text-gray-600 text-sm md:text-base">

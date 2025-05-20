@@ -49,3 +49,65 @@
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* New animation: Fade In Up */
+.animate-fadeInUp {
+  animation: fadeInUpAnimation 0.8s ease-out forwards;
+  opacity: 0; /* Start hidden */
+}
+
+@keyframes fadeInUpAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* New animation: Fade In Left */
+.animate-fadeInLeft {
+  animation: fadeInLeftAnimation 0.8s ease-out forwards;
+  opacity: 0; /* Start hidden */
+}
+
+@keyframes fadeInLeftAnimation {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* New animation: Fade In Right */
+.animate-fadeInRight {
+  animation: fadeInRightAnimation 0.8s ease-out forwards;
+  opacity: 0; /* Start hidden */
+}
+
+@keyframes fadeInRightAnimation {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Utility for animation delay - can be extended */
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+.animation-delay-400 {
+  animation-delay: 0.4s;
+}
+.animation-delay-600 {
+  animation-delay: 0.6s;
+}
