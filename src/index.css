@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.slide-section {
+    @apply py-16 md:py-24;
+}
+
+.slide-title {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-center text-sky-800 mb-4 md:mb-6;
+}
+
+.slide-subtitle {
+    @apply text-xl md:text-2xl text-center text-sky-600 mb-10 md:mb-12;
+}
+
+.content-text {
+    @apply text-base md:text-lg text-gray-700 leading-relaxed;
+}
+
+.keyword-list dt {
+    @apply text-sky-700;
+}
+
+.diagram-placeholder {
+    @apply rounded-lg shadow-md border border-gray-300 bg-gray-50;
+}
+
+.diagram-card {
+    @apply p-4 bg-white rounded-xl shadow-xl border border-sky-100;
+}
+
+/* Fade in animation */
+.animate-fadeIn {
+    animation: fadeInAnimation 1s ease-in-out;
+}
+
+@keyframes fadeInAnimation {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Slide up animation */
+.animate-slideUp {
+    animation: slideUpAnimation 0.8s ease-out;
+}
+
+@keyframes slideUpAnimation {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
