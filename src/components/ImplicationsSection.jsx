@@ -46,13 +46,7 @@ export default function ImplicationsSection() {
         <div className="mt-10">
           <h3 ref={subHeaderRef} className={`text-center text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-3 ${subHeaderVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>Predictions of Novel Physical Phenomena:</h3>
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            <ul ref={listContentRef} className={`content-text list-disc pl-5 space-y-2 ${listContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
-              <li><strong>Hierarchy of Planck Constants (h<sub>eff</sub>):</strong> Existence of "dark matter" phases exhibiting macroscopic quantum coherence.</li>
-              <li><strong>Many-Sheeted Spacetime:</strong> Potential for new types of interactions.</li>
-              <li><strong>ZEO & Negative Energy Signals:</strong> Theoretical possibility of signals with a reversed arrow of geometric time (relevant to memory recall).</li>
-              <li><strong>p-Adic Physics:</strong> Observable physical signatures of the interface between p-adic (cognition) and real domains.</li>
-            </ul>
-            <div ref={diagram2Ref} className={`diagram-card ${diagram2Visible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <div ref={diagram2Ref} className={`diagram-card order-first ${diagram2Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
               <img
                 src="https://placehold.co/600x350/e2e8f0/38bdf8?text=Diagram :+Examples+of+Predicted+New+Physical+Phenomena"
                 alt="Diagram of New TGD Phenomena"
@@ -62,6 +56,12 @@ export default function ImplicationsSection() {
                 Examples of Predicted New Physical Phenomena
               </p>
             </div>
+            <ul ref={listContentRef} className={`content-text list-disc pl-5 space-y-2 order-last ${listContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+              <li><strong>Hierarchy of Planck Constants (h<sub>eff</sub>):</strong> Existence of "dark matter" phases exhibiting macroscopic quantum coherence.</li>
+              <li><strong>Many-Sheeted Spacetime:</strong> Potential for new types of interactions.</li>
+              <li><strong>ZEO & Negative Energy Signals:</strong> Theoretical possibility of signals with a reversed arrow of geometric time (relevant to memory recall).</li>
+              <li><strong>p-Adic Physics:</strong> Observable physical signatures of the interface between p-adic (cognition) and real domains.</li>
+            </ul>
           </div>
           <p ref={footerRef} className={`content-text mt-4 text-center ${footerVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
             Direct experimental verification is highly challenging, but indirect support could arise from anomalous observations in various physical or biological systems.
