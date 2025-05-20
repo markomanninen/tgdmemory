@@ -27,7 +27,7 @@ export default function QmLimitationsSection() {
               alt="Diagram illustrating limitations of standard QM for memory"
               className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50"
             />
-            <p className="diagram-caption text-center text-sm text-gray-500 mt-2 italic">
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">
               Limitations of Standard Quantum Mechanics in Explaining Memory
             </p>
           </div>

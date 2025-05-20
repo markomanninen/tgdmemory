@@ -26,7 +26,7 @@ export default function ContactSection() {
                 <h4 className="text-lg font-semibold text-sky-600">Through the Wormhole on Spacetime Surface: Early History of Topological Geometrodynamics Theory</h4>
                 <p className="text-sm text-gray-600 mt-1">2024, Holistic Science Publications</p>
                 <p className="text-sm text-gray-600">ISBN: 978-952-65432-3-9</p>
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-sm text-gray-600 mt-7">
                   <b>ResearchGate Profile</b>: <a href="https://www.researchgate.net/profile/Marko-Manninen" target="_blank" rel="noopener noreferrer" className="hover:text-sky-600 underline">
                     researchgate.net/profile/Marko-Manninen
                   </a>
@@ -51,7 +51,7 @@ export default function ContactSection() {
                 <h4 className="text-lg font-semibold text-sky-600">Topological Geometrodynamics: Revised Edition</h4>
                 <p className="text-sm text-gray-600 mt-1">2016, Bentham Books</p>
                 <p className="text-sm text-gray-600">ISBN: 978-1-68108-179-3</p>
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-sm text-gray-600 mt-7">
                   <b>Blogspot</b>: <a href="https://matpitka.blogspot.com" target="_blank" rel="noopener noreferrer" className="hover:text-sky-600 underline">
                     matpitka.blogspot.com
                   </a> &bull; <b>TGD Theory</b>: <a href="https://www.tgdtheory.fi" target="_blank" rel="noopener noreferrer" className="hover:text-sky-600 underline">

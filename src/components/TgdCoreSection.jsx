@@ -1,125 +1,90 @@
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 export default function TgdCoreSection() {
-  // Refs for the first subsection
-  const [subTitle1Ref, isSubTitle1Intersecting] = useIntersectionObserver({ threshold: 0.1 });
-  const [textRef, isTextIntersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-  const [listRef, isListIntersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
-  const [diagram1Ref, isDiagram1Intersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
-  
-  // Refs for the second subsection
-  const [subTitle2Ref, isSubTitle2Intersecting] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
-  const [list2Ref, isList2Intersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -100px 0px', delay: 200 });
-  const [diagram2Ref, isDiagram2Intersecting] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -100px 0px', delay: 300 });
-  const [outroTextRef, isOutroTextIntersecting] = useIntersectionObserver({ threshold: 0.1, delay: 400 });
+  const [titleRef, titleVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [subtitleRef, subtitleVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
+  const [subSection1TitleRef, subSection1TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection1ContentRef, subSection1ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+
+  const [subSection2TitleRef, subSection2TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection2ContentRef, subSection2ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
 
   return (
     <section id="tgd-core" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="tgd-core-title">
-      <h2 id="tgd-core-title" className="slide-title">Core Principles of TGD Relevant to Memory</h2>
-      <p 
-        ref={textRef}
-        className={`text-center text-gray-600 mb-10 max-w-3xl mx-auto ${isTextIntersecting ? 'animate-fadeInUp' : 'opacity-0'}`}
+      <h2 
+        id="tgd-core-title" 
+        ref={titleRef} 
+        className={`slide-title ${titleVisible ? 'animate-fadeIn' : 'opacity-0'}`}
       >
-        Understanding TGD's model of memory requires familiarity with its key, non-standard tenets. These form the foundation for its approach to consciousness and memory.
-      </p>
+        Core Concepts of Topological Geometrodynamics (TGD)
+      </h2>
 
-      {/* First Subsection: Spacetime, ZEO, and h_eff */}
-      <div className="pt-8">
-        <h3 
-            ref={subTitle1Ref} 
-            className={`text-2xl font-semibold text-sky-700 mb-6 text-center ${isSubTitle1Intersecting ? 'animate-fadeInDown' : 'opacity-0'}`}
+      {/* Subsection 1: Fundamental Spacetime and Quantum Concepts */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection1TitleRef} 
+          className={`subsection-title ${subSection1TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
         >
-            Fundamental Spacetime and Quantum Concepts
-        </h3>
-        <div className="grid md:grid-cols-2 gap-8 items-start">
-            <dl 
-            ref={listRef}
-            className={`keyword-list p-6 rounded-xl shadow-lg border border-sky-200 bg-sky-50 space-y-5 ${isListIntersecting ? 'animate-fadeInLeft' : 'opacity-0'} animation-delay-200`}
-            >
-            <div>
-                <dt className="font-semibold text-sky-800 text-lg md:text-xl mb-1">1. Spacetime as a 4-Surface:</dt>
-                <dd className="ml-4 text-gray-600 text-sm md:text-base">
-                TGD posits spacetime as a 4-dimensional surface within an 8-dimensional ambient space (H = M⁴ × CP²). This leads to a "many-sheeted spacetime," where classical fields are quantized as entities like flux tubes on these sheets.
-                </dd>
-            </div>
-            <div>
-                <dt className="font-semibold text-sky-800 text-lg md:text-xl mb-1">2. Zero Energy Ontology (ZEO):</dt>
-                <dd className="ml-4 text-gray-600 text-sm md:text-base">
-                Physical states are "zero energy states" bounded by 3-surfaces within a Causal Diamond (CD). A quantum jump (State Function Reduction, SFR) between these states is identified as a moment of consciousness. ZEO distinguishes geometric time from subjective time (a sequence of SFRs).
-                </dd>
-            </div>
-            <div>
-                <dt className="font-semibold text-sky-800 text-lg md:text-xl mb-1">3. Hierarchy of Planck Constants (h<sub>eff</sub>):</dt>
-                <dd className="ml-4 text-gray-600 text-sm md:text-base">
-                Planck's constant is proposed to have a spectrum of values (h<sub>eff</sub> = n × h₀), potentially enabling macroscopic quantum coherence in biological systems. Larger h<sub>eff</sub> values are associated with increased complexity and representational capacity.
-                </dd>
-            </div>
+          Fundamental Spacetime and Quantum Concepts
+        </h4>
+        <div 
+          ref={subSection1ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection1ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-adjacent-text md:col-span-1 ${subSection1ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <dl>
+              <dt>Many-Sheeted Spacetime:</dt>
+              <dd>TGD posits a hierarchical structure of spacetime sheets, allowing for a complex interplay of physical systems at different scales. This contrasts with the single, monolithic spacetime of General Relativity.</dd>
+              <dt>Zero Energy Ontology (ZEO):</dt>
+              <dd>In ZEO, physical states are superpositions of histories, and quantum jumps recreate these histories. This provides a basis for understanding the flow of subjective time and intentional action.</dd>
+              <dt>Hierarchy of Planck Constants:</dt>
+              <dd>TGD proposes a hierarchy of effective Planck constants (h_eff = n * h), suggesting that macroscopic quantum coherence can occur at larger scales than predicted by standard quantum mechanics. This is crucial for biological systems.</dd>
             </dl>
-            <div 
-            ref={diagram1Ref}
-            className={`diagram-card order-first md:order-last ${isDiagram1Intersecting ? 'animate-fadeInRight' : 'opacity-0'} animation-delay-400`}
-            >
-            <img
-                src="https://placehold.co/600x500/e2e8f0/38bdf8?text=Diagram :+1.+Many-Sheeted+Spacetime+2.+Causal+Diamond+(ZEO)+3.+h_eff+Hierarchy"
-                alt="Diagram of TGD Spacetime, ZEO, and h_eff"
-                className="diagram-placeholder"
+          </div>
+          <div className={`diagram-card md:col-span-1 ${subSection1ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Spacetime+%26+Quantum+Concepts"
+              alt="Diagram of TGD Spacetime and Quantum Concepts"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
             />
-            <p className="diagram-caption text-center text-sm text-gray-500 mt-2 italic">
-                TGD Spacetime, ZEO, and h_eff Hierarchy
-            </p>
-            </div>
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Spacetime & Quantum Concepts</p>
+          </div>
         </div>
       </div>
 
-      {/* Second Subsection: Magnetic Bodies and p-Adic Physics */}
-      <div className="mt-16 pt-10 border-t border-sky-100">
-        <h3 
-            ref={subTitle2Ref} 
-            className={`text-2xl font-semibold text-sky-700 mb-6 text-center ${isSubTitle2Intersecting ? 'animate-fadeInDown' : 'opacity-0'}`}
+      {/* Subsection 2: Field Bodies and Cognitive Correlates */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection2TitleRef} 
+          className={`subsection-title ${subSection2TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
         >
-            Field Bodies and Cognitive Correlates
-        </h3>
-        <div className="grid md:grid-cols-2 gap-8 items-start">
-            <div 
-            ref={diagram2Ref}
-            className={`diagram-card order-last md:order-first ${isDiagram2Intersecting ? 'animate-fadeInLeft' : 'opacity-0'} animation-delay-200`}
-            >
-            <img
-                src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram :+4.+Magnetic+Body+and+Flux+Tubes+Interacting+with+Biological+System"
-                alt="Diagram of Magnetic Body"
-                className="diagram-placeholder"
+          Field Bodies and Cognitive Correlates
+        </h4>
+        <div 
+          ref={subSection2ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-card md:col-span-1 order-first ${subSection2ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Field+Bodies+%26+Cognition"
+              alt="Diagram of TGD Field Bodies and Cognitive Correlates"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
             />
-            <p className="diagram-caption text-center text-sm text-gray-500 mt-2 italic">
-                Magnetic Body and Flux Tubes Interacting with Biological System
-            </p>
-            </div>
-            <dl 
-            ref={list2Ref}
-            className={`keyword-list p-6 rounded-xl shadow-lg border border-sky-200 bg-sky-50 space-y-5 ${isList2Intersecting ? 'animate-fadeInRight' : 'opacity-0'} animation-delay-400`}
-            >
-            <div>
-                <dt className="font-semibold text-sky-800 text-lg md:text-xl mb-1">4. Magnetic Bodies (MB):</dt>
-                <dd className="ml-4 text-gray-600 text-sm md:text-base">
-                Field bodies, primarily magnetic, composed of matter with large h<sub>eff</sub> (dark matter in TGD sense), are associated with physical systems. MBs are theorized as intentional agents interacting with biological systems, playing a role in consciousness and memory.
-                </dd>
-            </div>
-            <div>
-                <dt className="font-semibold text-sky-800 text-lg md:text-xl mb-1">5. p-Adic Physics (Cognition & Intention):</dt>
-                <dd className="ml-4 text-gray-600 text-sm md:text-base">
-                p-Adic number fields are proposed to describe physical correlates of cognition, imagination, and intention. The transformation of p-adic intention to real action is hypothesized to occur via p-adic-to-real phase transitions.
-                </dd>
-            </div>
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Field Bodies & Cognitive Correlates</p>
+          </div>
+          <div className={`diagram-adjacent-text md:col-span-1 order-last ${subSection2ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <dl>
+              <dt>Magnetic Bodies (MB):</dt>
+              <dd>Each physical system is proposed to have an associated magnetic body, an onion-like structure of magnetic flux sheets. MBs are carriers of dark matter (as h_eff phases) and serve as a higher-level controller of the biological body.</dd>
+              <dt>p-Adic Physics as Correlate of Cognition:</dt>
+              <dd>TGD introduces p-adic number fields as correlates of cognition and intention. This mathematical framework allows for a description of cognitive representations and processes that are distinct from, yet interact with, real (sensory) physics.</dd>
+              <dt>Negentropic Entanglement (NE):</dt>
+              <dd>A key concept related to h_eff, NE is proposed to be a correlate of conscious information, attention, and understanding. It is stable under quantum jumps and provides a basis for the formation of coherent conscious experiences.</dd>
             </dl>
+          </div>
         </div>
       </div>
-
-      <p 
-        ref={outroTextRef}
-        className={`content-text mt-10 text-center ${isOutroTextIntersecting ? 'animate-fadeInUp' : 'opacity-0'} animation-delay-500`}
-      >
-        These interconnected concepts are central to TGD's model of memory as a dynamic, conscious process within a 4-dimensional framework.
-      </p>
     </section>
   );
 }

@@ -3,69 +3,91 @@ import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 export default function ImplicationsSection() {
   const [titleRef, titleVisible] = useIntersectionObserver({ threshold: 0.1 });
-  const [subTitleRef, subTitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 200 });
-  const [content1Ref, content1Visible] = useIntersectionObserver({ threshold: 0.1, delay: 400 });
-  const [content2Ref, content2Visible] = useIntersectionObserver({ threshold: 0.1, delay: 500 });
-  const [content3Ref, content3Visible] = useIntersectionObserver({ threshold: 0.1, delay: 600 });
-  const [diagram1Ref, diagram1Visible] = useIntersectionObserver({ threshold: 0.1, delay: 700 });
-  const [subHeaderRef, subHeaderVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
-  const [listContentRef, listContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 500 });
-  const [diagram2Ref, diagram2Visible] = useIntersectionObserver({ threshold: 0.1, delay: 700 });
-  const [footerRef, footerVisible] = useIntersectionObserver({ threshold: 0.1, delay: 400 });
+  const [subtitleRef, subtitleVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  const [subSection1TitleRef, subSection1TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection1ContentRef, subSection1ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+
+  const [subSection2TitleRef, subSection2TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection2ContentRef, subSection2ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
 
   return (
     <section id="implications" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="implications-title">
-      <h2 id="implications-title" ref={titleRef} className={`slide-title ${titleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>Potential Implications of TGD's Memory Model for Fundamental Physics</h2>
-      <div className="space-y-8 content-text">
-        <div className="grid md:grid-cols-2 gap-8 items-start">
-          <div className="space-y-6">
-            <div ref={content1Ref} className={`${content1Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
-              <h3 className="text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-3">1. Reconceptualization of Spacetime:</h3>
-              <p>Spacetime would be understood as a dynamic, many-sheeted structure, serving as a repository of experiential history. Memory could be an intrinsic property of its evolving geometry.</p>
-            </div>
-            <div ref={content2Ref} className={`${content2Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
-              <h3 className="text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-3">2. Alterations to Quantum Measurement Theory:</h3>
-              <p>TGD integrates quantum measurement with a theory of consciousness, where the SFR is a moment of consciousness. ZEO aims to address aspects of the measurement problem by incorporating the observer ("self").</p>
-            </div>
-            <div ref={content3Ref} className={`${content3Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
-              <h3 className="text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-3">3. Consciousness as a Fundamental Physical Aspect:</h3>
-              <p>Consciousness might not be merely emergent but a fundamental aspect of reality, associated with quantum jumps, ZEO, MBs, and the <code>h<sub>eff</sub></code> hierarchy, implying a hierarchy of conscious entities.</p>
-            </div>
-          </div>
-          <div ref={diagram1Ref} className={`diagram-card ${diagram1Visible ? 'animate-fadeInRight' : 'opacity-0'}`}>
-            <img
-              src="https://placehold.co/600x550/e2e8f0/38bdf8?text=Conceptual+Diagram :+Physics+Reassessment+-Dynamic+Spacetime+Record+-Observer-Inclusive+QM+-Fundamental+Consciousness"
-              alt="Diagram of Physics Implications of TGD"
-              className="diagram-placeholder"
+      <h2 
+        id="implications-title" 
+        ref={titleRef} 
+        className={`slide-title ${titleVisible ? 'animate-fadeIn' : 'opacity-0'}`}
+      >
+        Implications and Predictions of the TGD Model
+      </h2>
+
+      {/* Subsection 1: Predictions of Novel Physical Phenomena */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection1TitleRef} 
+          className={`subsection-title ${subSection1TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
+        >
+          Predictions of Novel Physical Phenomena
+        </h4>
+        <div 
+          ref={subSection1ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection1ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-card md:col-span-1 order-first ${subSection1ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Novel+Physics"
+              alt="Diagram of Novel Physical Phenomena in TGD"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
             />
-            <p className="diagram-caption text-center text-sm text-gray-500 mt-2 italic">
-              Conceptual Diagram: Physics Reassessment
-            </p>
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Novel Physical Phenomena</p>
+          </div>
+          <div className={`diagram-adjacent-text md:col-span-1 order-last ${subSection1ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <dl>
+              <dt>Hierarchy of Planck Constants (h_eff):</dt>
+              <dd>Predicts macroscopic quantum coherence in biological systems, potentially observable as novel bio-electromagnetic effects.</dd>
+              <dt>Zero Energy Ontology (ZEO):</dt>
+              <dd>Suggests that the arrow of time might not be fixed, allowing for phenomena like retrocausality in certain contexts (e.g., memory recall as seeing into the geometric past).</dd>
+              <dt>Many-Sheeted Spacetime:</dt>
+              <dd>Implies the existence of new forms of matter and energy (e.g., dark matter as h_eff phases, exotic particles confined to specific spacetime sheets).</dd>
+              <dt>p-Adic Physics:</dt>
+              <dd>Could lead to a physical basis for understanding intentionality and cognitive processes, potentially testable through their influence on physical systems.</dd>
+            </dl>
           </div>
         </div>
-        <div className="mt-10">
-          <h3 ref={subHeaderRef} className={`text-center text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-3 ${subHeaderVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>Predictions of Novel Physical Phenomena:</h3>
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div ref={diagram2Ref} className={`diagram-card order-first ${diagram2Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
-              <img
-                src="https://placehold.co/600x350/e2e8f0/38bdf8?text=Diagram :+Examples+of+Predicted+New+Physical+Phenomena"
-                alt="Diagram of New TGD Phenomena"
-                className="diagram-placeholder"
-              />
-              <p className="diagram-caption text-center text-sm text-gray-500 mt-2 italic">
-                Examples of Predicted New Physical Phenomena
-              </p>
-            </div>
-            <ul ref={listContentRef} className={`content-text list-disc pl-5 space-y-2 order-last ${listContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
-              <li><strong>Hierarchy of Planck Constants (h<sub>eff</sub>):</strong> Existence of "dark matter" phases exhibiting macroscopic quantum coherence.</li>
-              <li><strong>Many-Sheeted Spacetime:</strong> Potential for new types of interactions.</li>
-              <li><strong>ZEO & Negative Energy Signals:</strong> Theoretical possibility of signals with a reversed arrow of geometric time (relevant to memory recall).</li>
-              <li><strong>p-Adic Physics:</strong> Observable physical signatures of the interface between p-adic (cognition) and real domains.</li>
-            </ul>
+      </div>
+
+      {/* Subsection 2: Implications for Understanding Consciousness and Biology */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection2TitleRef} 
+          className={`subsection-title ${subSection2TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
+        >
+          Implications for Understanding Consciousness and Biology
+        </h4>
+        <div 
+          ref={subSection2ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-adjacent-text md:col-span-1 ${subSection2ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <dl>
+              <dt>Nature of Subjective Experience:</dt>
+              <dd>TGD offers a framework where subjective experience is primary, linked to quantum jumps and the hierarchy of selves.</dd>
+              <dt>Biological Self-Organization:</dt>
+              <dd>Magnetic bodies and the hierarchy of h_eff provide mechanisms for the coordinated behavior of complex biological systems, beyond standard biochemical explanations.</dd>
+              <dt>New Approaches to Healing:</dt>
+              <dd>Understanding the role of magnetic bodies and dark photons could lead to novel therapeutic interventions based on electromagnetic fields.</dd>
+              <dt>Evolution of Consciousness:</dt>
+              <dd>The TGD framework suggests that evolution involves not just biological adaptation but also an increase in the complexity and levels of consciousness, driven by the expansion of the h_eff hierarchy.</dd>
+            </dl>
           </div>
-          <p ref={footerRef} className={`content-text mt-4 text-center ${footerVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
-            Direct experimental verification is highly challenging, but indirect support could arise from anomalous observations in various physical or biological systems.
-          </p>
+          <div className={`diagram-card md:col-span-1 ${subSection2ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Consciousness+%26+Biology"
+              alt="Diagram of TGD Implications for Consciousness and Biology"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Consciousness & Biology</p>
+          </div>
         </div>
       </div>
     </section>

@@ -3,148 +3,153 @@ import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 export default function TgdMemorySection() {
   const [titleRef, titleVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [subtitleRef, subtitleVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-  // Refs for Subsection 1: 4D Brain
-  const [subTitle1Ref, subTitle1Visible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
-  const [content1Ref, content1Visible] = useIntersectionObserver({ threshold: 0.1, delay: 200 });
-  const [diagram1Ref, diagram1Visible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+  const [subSection1TitleRef, subSection1TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection1ContentRef, subSection1ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
 
-  // Refs for Subsection 2: Magnetic Bodies and Holography
-  const [subTitle2Ref, subTitle2Visible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
-  const [content2Ref, content2Visible] = useIntersectionObserver({ threshold: 0.1, delay: 200 });
-  const [diagram2Ref, diagram2Visible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+  const [subSection2TitleRef, subSection2TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection2ContentRef, subSection2ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
 
-  // Refs for Subsection 3: SFRs & Subjective Time
-  const [subTitle3Ref, subTitle3Visible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
-  const [content3Ref, content3Visible] = useIntersectionObserver({ threshold: 0.1, delay: 200 });
-  const [diagram3Ref, diagram3Visible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+  const [subSection3TitleRef, subSection3TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection3ContentRef, subSection3ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
 
-  // Refs for Subsection 4: p-Adic Physics
-  const [subTitle4Ref, subTitle4Visible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
-  const [content4TextRef, content4TextVisible] = useIntersectionObserver({ threshold: 0.1, delay: 200 }); // Renamed for clarity
-  const [diagram4Ref, diagram4Visible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+  const [subSection4TitleRef, subSection4TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection4ContentRef, subSection4ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
 
   return (
     <section id="tgd-memory" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="tgd-memory-title">
-      <h2 id="tgd-memory-title" ref={titleRef} className={`slide-title ${titleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>The TGD Model of Memory: A 4D, Conscious Process</h2>
-      
-      {/* Subsection 1: Memory as a 4-Dimensional Construct in ZEO */}
-      <div className="pt-8 content-text">
-        <h3 
-            ref={subTitle1Ref} 
-            className={`text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-4 text-center ${subTitle1Visible ? 'animate-fadeInDown' : 'opacity-0'}`}
+      <h2 
+        id="tgd-memory-title" 
+        ref={titleRef} 
+        className={`slide-title ${titleVisible ? 'animate-fadeIn' : 'opacity-0'}`}
+      >
+        The TGD Model of Memory
+      </h2>
+
+      {/* Subsection 1: Memory in Zero Energy Ontology (ZEO) */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection1TitleRef} 
+          className={`subsection-title ${subSection1TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
         >
-            1. Memory as a 4-Dimensional Construct in ZEO – The "4D Brain"
-        </h3>
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div ref={content1Ref} className={`${content1Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
-            <p>
-              In ZEO, quantum states are superpositions of entire 4D spacetime surfaces. Memory is proposed to be fundamentally encoded in the 4D history (the spacetime surface) of the "self" (conscious entity), rather than solely in the present 3D brain state. This "4D brain" concept implies past experiences are part of the self's extended spacetime reality. Information about conscious quantum jumps is encoded into this 4D surface, facilitated by the proposed non-determinism of TGD's classical field equations.
-            </p>
+          Memory in Zero Energy Ontology (ZEO)
+        </h4>
+        <div 
+          ref={subSection1ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection1ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-adjacent-text md:col-span-1 ${subSection1ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <dl>
+              <dt>Episodic Memories as Re-Experiences:</dt>
+              <dd>In TGD, episodic memories are not stored representations but actual re-experiences of a past event. This is achieved by quantum jumping to a state where the sub-self (mental image) corresponding to the memory is briefly re-activated in the geometric past.</dd>
+              <dt>Role of Magnetic Bodies:</dt>
+              <dd>The magnetic body (MB) plays a crucial role. It can initiate memory recall by sending signals (e.g., dark photons) that resonate with specific brain circuits, effectively 'lighting up' a past experience. The MB acts as the 'experiencer' of these re-created mental images.</dd>
+            </dl>
           </div>
-          <div ref={diagram1Ref} className={`diagram-card ${diagram1Visible ? 'animate-fadeInRight' : 'opacity-0'}`}>
-            <img
-              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram :+Self%27s+4D+Spacetime+History+(Memory+Encoded+in+Geometry)"
-              alt="Diagram of 4D Brain in TGD"
-              className="diagram-placeholder"
+          <div className={`diagram-card md:col-span-1 ${subSection1ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+ZEO+Memory+Recall"
+              alt="Diagram of TGD ZEO Memory Recall"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
             />
-            <p className="diagram-caption text-center text-sm text-gray-500 mt-2 italic">
-              Self’s 4D Spacetime History (Memory Encoded in Geometry)
-            </p>
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Memory Recall in ZEO</p>
           </div>
         </div>
       </div>
 
-      {/* Subsection 2: Role of Magnetic Bodies (MB) and Holographic Principles */}
-      <div className="mt-12 pt-10 border-t border-sky-100 content-text">
-        <h3 
-            ref={subTitle2Ref} 
-            className={`text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-4 text-center ${subTitle2Visible ? 'animate-fadeInDown' : 'opacity-0'}`}
+      {/* Subsection 2: Time, Self, and the Hierarchy of Selves */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection2TitleRef} 
+          className={`subsection-title ${subSection2TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
         >
-            2. Role of Magnetic Bodies (MB) and Holographic Principles
-        </h3>
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div ref={diagram2Ref} className={`diagram-card order-last md:order-first ${diagram2Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
-            <img
-              src="https://placehold.co/600x450/e2e8f0/38bdf8?text=Diagram :+Magnetic+Body+Mediated+Memory+Encoding+%28Hologram+Formation%29+Recall+%28Phase+Conjugation%29"
-              alt="Diagram of MB and Holographic Memory"
-              className="diagram-placeholder"
+          Time, Self, and the Hierarchy of Selves
+        </h4>
+        <div 
+          ref={subSection2ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-card md:col-span-1 order-first ${subSection2ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Hierarchy+of+Selves"
+              alt="Diagram of TGD Hierarchy of Selves"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
             />
-            <p className="diagram-caption text-center text-sm text-gray-500 mt-2 italic">
-              Magnetic Body Mediated Memory Encoding (Hologram Formation), Recall (Phase Conjugation)
-            </p>
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Hierarchy of Selves & Time Perception</p>
           </div>
-          <div ref={content2Ref} className={`${content2Visible ? 'animate-fadeInRight' : 'opacity-0'}`}>
-            <p>The MB is hypothesized to actively participate in memory processes:</p>
-            <ul className="list-disc pl-5 space-y-2">
-              <li><strong>Encoding:</strong> The MB may send "reference beams" (e.g., dark photons) that interfere with "object beams" (sensory input) to create holographic memory traces on biological structures.</li>
-              <li><strong>Recall:</strong> The MB might send phase-conjugate beams to the geometric past, interacting with the hologram to generate a time-reversed mental image, which is then communicated to present consciousness. (Potential correlate: coupled ripple oscillations).</li>
-            </ul>
+          <div className={`diagram-adjacent-text md:col-span-1 order-last ${subSection2ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <dl>
+              <dt>Subjective vs. Geometric Time:</dt>
+              <dd>TGD distinguishes between subjective time (sequence of quantum jumps) and geometric time (coordinate time of spacetime). Memories are located in geometric past, but re-experienced in the subjective present of the self.</dd>
+              <dt>Hierarchy of Selves:</dt>
+              <dd>Consciousness is organized into a hierarchy of selves, where selves at higher levels have longer-lasting conscious experiences and integrate information from lower-level selves. This hierarchy is reflected in the structure of magnetic bodies.</dd>
+            </dl>
           </div>
         </div>
       </div>
 
-      {/* Subsection 3: State Function Reductions (SFRs) & Subjective Time */}
-      <div className="mt-12 pt-10 border-t border-sky-100 content-text">
-        <h3 
-            ref={subTitle3Ref} 
-            className={`text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-4 text-center ${subTitle3Visible ? 'animate-fadeInDown' : 'opacity-0'}`}
+      {/* Subsection 3: Negentropic Entanglement and Memory Formation */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection3TitleRef} 
+          className={`subsection-title ${subSection3TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
         >
-            3. State Function Reductions (SFRs) & Subjective Time
-        </h3>
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div ref={content3Ref} className={`${content3Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
-            <ul className="list-disc pl-5 space-y-2">
-              <li><strong>SSFRs (Small SFRs):</strong> Occur repeatedly, preserve the arrow of geometric time, constitute the "self's" subjective time flow and are associated with sensory perception.</li>
-              <li><strong>BSRs (Big SFRs):</strong> More significant events potentially involving a change in the arrow of geometric time for a self or sub-self. Hypothesized as fundamental for motor action and conscious memory recall (accessing the geometric past).</li>
-            </ul>
-            <p className="mt-2">
-              TGD thus views memory as an active re-experiencing of the 4D past, linked to consciousness (quantum jumps) and orchestrated by the MB.
-            </p>
+          Negentropic Entanglement and Memory Formation
+        </h4>
+        <div 
+          ref={subSection3ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection3ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-adjacent-text md:col-span-1 ${subSection3ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <dl>
+              <dt>Negentropic Entanglement (NE):</dt>
+              <dd>NE, possible in the intersection of real and p-adic worlds, is proposed as a correlate of conscious information, attention, and understanding. It is stable and can be preserved across quantum jumps, forming the basis of memory engrams as stable patterns of NE.</dd>
+              <dt>Memory Engrams as NE Patterns:</dt>
+              <dd>Instead of synaptic strengths, memory engrams could be fundamentally patterns of NE at the level of magnetic bodies, connecting different brain regions or even different selves in the hierarchy.</dd>
+            </dl>
           </div>
-          <div ref={diagram3Ref} className={`diagram-card ${diagram3Visible ? 'animate-fadeInRight' : 'opacity-0'}`}>
-            <img
-              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram :+Subjective+Time+Flow+SSFRs+vs.+BSRs+in+Memory+Recall"
-              alt="Diagram of SFRs and Subjective Time"
-              className="diagram-placeholder"
+          <div className={`diagram-card md:col-span-1 ${subSection3ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Negentropic+Entanglement"
+              alt="Diagram of TGD Negentropic Entanglement"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
             />
-            <p className="diagram-caption text-center text-sm text-gray-500 mt-2 italic">
-              Subjective Time Flow SSFRs vs BSRs in Memory Recall
-            </p>
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Negentropic Entanglement & Memory</p>
           </div>
         </div>
       </div>
 
       {/* Subsection 4: Cognitive Correlates: p-Adic Physics */}
-      <div className="mt-12 pt-10 border-t border-sky-100 content-text">
-        <h3 
-            ref={subTitle4Ref} 
-            className={`text-xl md:text-2xl font-semibold text-sky-600 mt-6 mb-4 text-center ${subTitle4Visible ? 'animate-fadeInDown' : 'opacity-0'}`}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection4TitleRef} 
+          className={`subsection-title ${subSection4TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
         >
-            4. Cognitive Correlates: p-Adic Physics
-        </h3>
-        <div className="grid md:grid-cols-2 gap-8 items-start">
-          <div 
-            ref={diagram4Ref} 
-            className={`diagram-card ${diagram4Visible ? 'animate-fadeInLeft' : 'opacity-0'} animation-delay-200`}
-          >
-            <img
-              src="https://placehold.co/600x300/e2e8f0/38bdf8?text=Diagram :+Interface+of+p-Adic+%28Cognition%29+and+Real+%28Physical%29+Domains"
-              alt="Diagram of p-Adic Physics in Cognition"
-              className="diagram-placeholder"
+          Cognitive Correlates: p-Adic Physics
+        </h4>
+        <div 
+          ref={subSection4ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection4ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-card md:col-span-1 order-first ${subSection4ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+p-Adic+Cognition"
+              alt="Diagram of TGD p-Adic Physics and Cognition"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
             />
-            <p className="diagram-caption text-center text-sm text-gray-500 mt-2 italic">
-              Interface of p-Adic (Cognition) and Real (Physical) Domains
-            </p>
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: p-Adic Physics & Cognitive Representation</p>
           </div>
-          <div ref={content4TextRef} className={`text-left ${content4TextVisible ? 'animate-fadeInRight' : 'opacity-0'} animation-delay-100`}> 
-            <p className="mb-4">
-              p-Adic spacetime regions are proposed as correlates of cognition and intention. Intentions (p-adic) may transform into actions (real) via p-adic-to-real phase transitions. Cognitive aspects of memory could involve interactions between real (sensory/memory traces) and p-adic (cognitive processing) sectors of the TGD universe.
-            </p>
+          <div className={`diagram-adjacent-text md:col-span-1 order-last ${subSection4ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <dl>
+              <dt>p-Adic Spacetime Sheets as Cognitive Representations:</dt>
+              <dd>p-Adic spacetime sheets are interpreted as geometric correlates of cognitive representations, intentions, and plans. They provide a mathematical framework for understanding the non-deterministic and information-rich nature of thought.</dd>
+              <dt>Transformation of Intention to Action:</dt>
+              <dd>Cognitive processes (p-adic) can transform into real physical actions (real physics) via quantum jumps that convert p-adic spacetime sheets to real ones. This is fundamental for understanding how intentions lead to actions.</dd>
+            </dl>
           </div>
         </div>
       </div>
-
     </section>
   );
 }

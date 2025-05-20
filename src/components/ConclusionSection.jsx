@@ -23,7 +23,7 @@ export default function ConclusionSection() {
             alt="Synthesizing Diagram of TGD's View"
             className="diagram-placeholder"
           />
-          <p className="diagram-caption text-center text-sm text-gray-500 mt-2 italic">
+          <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">
             Synthesizing Diagram: TGD's Integrated View of Memory, Consciousness, Cosmos
           </p>
         </div>
