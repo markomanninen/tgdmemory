@@ -304,6 +304,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    z-index: 10;
   }
 
   .equation-display:hover .copy-button {
