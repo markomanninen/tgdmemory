@@ -1,77 +1,68 @@
 import { useEffect, useState } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import ConclusionSection from './src/components/ConclusionSection';
-import ContactSection from './src/components/ContactSection'; // Import ContactSection
-import Header from './src/components/Header'; // Import Header component
+import ContactSection from './src/components/ContactSection';
+import Header from './src/components/Header';
 import ImplicationsSection from './src/components/ImplicationsSection';
 import IntroSection from './src/components/IntroSection';
+import PagesMenu from './src/components/PagesMenu';
 import TgdCoreSection from './src/components/TgdCoreSection';
 import TgdMemorySection from './src/components/TgdMemorySection';
 
+// Main content component for the home page
+const MainContent = ({ sections, activeSection, scrollToSection, headerHeight }) => (
+  // The Header is now rendered by the App component directly for all routes
+  <main className="container mx-auto px-4 pt-24 pb-12">
+    <IntroSection />
+    <TgdCoreSection />
+    <TgdMemorySection />
+    <ImplicationsSection />
+    <ConclusionSection />
+    <ContactSection />
+  </main>
+);
+
 export default function App() {
   const [activeSection, setActiveSection] = useState(0);
-  const [showBackToTop, setShowBackToTop] = useState(false); // State for Back to Top button
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const sections = ['intro', 'tgd-core', 'tgd-memory', 'implications', 'conclusion', 'contact'];
-  const headerHeight = 64;
+  const headerHeight = 64; // Assuming a fixed header height
+  const location = useLocation();
 
   const scrollToSection = (index) => {
-    const section = document.getElementById(sections[index]);
-    if (section) {
+    const sectionId = sections[index];
+    const sectionElement = document.getElementById(sectionId);
+    if (sectionElement) {
       window.scrollTo({
-        top: section.offsetTop - headerHeight,
+        top: sectionElement.offsetTop - headerHeight,
         behavior: 'smooth',
       });
       setActiveSection(index);
     }
   };
 
-  // Scroll listener to update active section and show/hide Back to Top button
+  // Simplified useEffect for scroll listener - only for main page
   useEffect(() => {
-    const handleScroll = () => {
-      let index = 0;
-      for (let i = 0; i < sections.length; i++) {
-        const section = document.getElementById(sections[i]);
-        if (
-          section &&
-          window.scrollY >= section.offsetTop - headerHeight - 150
-        ) {
-          index = i;
+    if (location.pathname === '/') {
+      const handleScroll = () => {
+        let currentIndex = 0;
+        for (let i = 0; i < sections.length; i++) {
+          const section = document.getElementById(sections[i]);
+          if (section && window.scrollY >= section.offsetTop - headerHeight - 150) {
+            currentIndex = i;
+          }
         }
-      }
-      setActiveSection(index);
+        setActiveSection(currentIndex);
+        setShowBackToTop(window.scrollY > 300);
+      };
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    } else {
+      setShowBackToTop(false); // Hide back to top button on other pages
+      setActiveSection(0); // Reset active section
+    }
+  }, [location.pathname, sections, headerHeight]);
 
-      // Show Back to Top button if scrolled down enough
-      if (window.scrollY > 300) {
-        setShowBackToTop(true);
-      } else {
-        setShowBackToTop(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Keyboard navigation support
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (document.activeElement !== document.body) return;
-
-      if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        if (activeSection < sections.length - 1) {
-          scrollToSection(activeSection + 1);
-        }
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        if (activeSection > 0) {
-          scrollToSection(activeSection - 1);
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeSection]);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -82,23 +73,36 @@ export default function App() {
 
   return (
     <div className="bg-sky-50 text-gray-800 font-sans">
-      <Header sections={sections} activeSection={activeSection} scrollToSection={scrollToSection} />
-
-      <main className="container mx-auto px-4 pt-24 pb-12">
-        <IntroSection />
-        <TgdCoreSection />
-        <TgdMemorySection />
-        <ImplicationsSection />
-        <ConclusionSection />
-        <ContactSection /> {/* Add ContactSection here */}
-      </main>
+      {/* Render Header for all routes, passing necessary props */}
+      <Header
+        sections={sections}
+        activeSection={activeSection}
+        scrollToSection={scrollToSection}
+        // Pass a flag or modify sections prop if header content needs to change for /pages
+        isPagesView={location.pathname === '/pages'}
+      />
+      <Routes>
+        <Route path="/" element={
+          <MainContent
+            sections={sections}
+            activeSection={activeSection}
+            scrollToSection={scrollToSection}
+            headerHeight={headerHeight}
+          />
+        } />
+        <Route path="/pages" element={
+          // PagesMenu will be rendered below the global Header
+          <PagesMenu />
+        } />
+      </Routes>
 
       {/* Footer */}
       <footer className="text-center py-10 text-gray-500 text-sm bg-white border-t border-gray-200">
         <p>Copyright &copy; {new Date().getFullYear()} - Marko T. Manninen</p>
       </footer>
 
-      {showBackToTop && (
+      {/* Back to Top Button - only show if not on /pages and showBackToTop is true */}
+      {showBackToTop && location.pathname === '/' && (
         <button
           onClick={scrollToTop}
           className="fixed bottom-8 right-8 bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-4 rounded-full shadow-lg transition-opacity duration-300 ease-in-out z-50"

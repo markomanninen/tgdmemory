@@ -1,0 +1,71 @@
+/* Assuming this file is processed by Tailwind CSS and imported into your main application */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Force the left panel to be visible on large screens */
+@media (min-width: 1024px) {
+  aside.lg\:block {
+    display: block !important; /* Force display on large screens regardless of conflicting utilities */
+    width: 25% !important; /* Ensure width is maintained */
+  }
+}
+
+/* Styles for Explainable Equations & Modal */
+@layer components {
+  /* Force visibility for your left panel - REPLACE .your-left-panel-class-or-id with the actual class or ID */
+  .your-left-panel-class-or-id { /* Or use #your-left-panel-id */
+    @apply block !important; /* Or flex, grid, etc., depending on its display type. !important is a strong measure. */
+    /* You might also need to ensure width/height are appropriate if they are being zeroed out by a utility */
+    /* e.g., width: auto !important; min-width: 200px !important; (adjust as needed) */
+  }
+
+  .explainable-equation-container {
+    @apply relative py-2; /* Add some padding if needed */
+  }
+
+  .equation-explainer-trigger {
+    @apply absolute top-1/2 right-0 -translate-y-1/2 p-1 w-8 h-8 flex items-center justify-center bg-sky-100 text-sky-700 rounded-full cursor-pointer opacity-0 transition-opacity duration-300 text-sm font-bold;
+    /* Positioned at the right edge of its container. */
+  }
+
+  .explainable-equation-container:hover .equation-explainer-trigger {
+    @apply opacity-100;
+  }
+
+  .equation-explainer-trigger:hover {
+    @apply bg-sky-200;
+  }
+
+  /* Modal Styles (re-defining here for clarity, ensure they don't conflict with other modal styles if you have them) */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4;
+  }
+
+  .modal-content {
+    @apply bg-white p-6 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] flex flex-col;
+  }
+
+  .modal-header {
+    @apply flex justify-between items-center border-b border-gray-200 pb-3 mb-4;
+  }
+
+  .modal-title {
+    @apply text-2xl font-semibold text-sky-800;
+  }
+
+  .modal-close-button {
+    @apply text-gray-600 hover:text-gray-900 text-3xl font-bold leading-none cursor-pointer; /* Added cursor-pointer for consistency */
+  }
+
+  .modal-body {
+    @apply overflow-y-auto flex-grow;
+    /* Styles for content within the modal body, like the equation display */
+  }
+  .modal-body .p-2.border.border-gray-200 { /* Targeting the div holding the LaTeX equation */
+    @apply bg-gray-50 mb-4 text-base overflow-x-auto;
+  }
+  .modal-body code { /* Styling for the raw LaTeX display */
+    @apply bg-gray-100 p-1 rounded text-xs break-all;
+  }
+}

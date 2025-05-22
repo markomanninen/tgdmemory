@@ -1,0 +1,47 @@
+Project Structure and Line Counts
+=================================
+Generated on: Tue May 20 13:40:40 EEST 2025
+
+.
+./index.html
+./tailwind.config.js
+./LICENSE
+./node_modules
+./vite.config.js
+./docs
+./README.md
+./public
+./.gitignore
+./package-lock.json
+./package.json
+./scripts
+./.github
+./App.jsx
+./.git
+./postcss.config.js
+./src
+
+-----------------------------------
+    14 ./index.html
+    12 ./tailwind.config.js
+     8 ./vite.config.js
+     0 ./README.md
+    29 ./package.json
+    42 ./.github/workflows/deploy.yml
+   113 ./App.jsx
+     6 ./postcss.config.js
+   218 ./src/index.css
+    31 ./src/components/Header.jsx
+   155 ./src/components/IntroSection.jsx
+    90 ./src/components/TgdCoreSection.jsx
+    68 ./src/components/ContactSection.jsx
+    40 ./src/components/TableModal.jsx
+    38 ./src/components/QmLimitationsSection.jsx
+    95 ./src/components/ImplicationsSection.jsx
+   155 ./src/components/TgdMemorySection.jsx
+    40 ./src/components/ConclusionSection.jsx
+    30 ./src/hooks/useIntersectionObserver.js
+    10 ./src/main.jsx
+-----------------------------------
+Total Files Found: 20
+Total Lines Found: 1194

@@ -1,0 +1,71 @@
+/* Custom styles extracted from dirac_propagator.html */
+body {
+    font-family: 'Georgia', serif; /* Example: more academic-looking font */
+}
+
+.prose { /* Tailwind prose adjustments if needed */
+    max-width: 80ch; /* Adjust for optimal reading length */
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4 {
+    margin-top: 1.5em; /* Add top margin for spacing */
+    margin-bottom: 0.75em; /* Add bottom margin */
+}
+.prose h2 {
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid #e2e8f0; /* Add a light border under h2 */
+}
+.prose section h2.text-2xl {
+    margin-top: 0; /* First h2 in a section might not need extra top margin if section has margin */
+}
+.prose p {
+    margin-bottom: 1em;
+    line-height: 1.7;
+}
+
+.prose ol, .prose ul {
+    margin-bottom: 1em;
+}
+
+/* Center equations */
+.equation {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* Specific styles from the original file */
+.scroll-mt-custom {
+    scroll-margin-top: 100px; /* Adjust as needed based on fixed header height */
+}
+
+#table-of-contents nav a.active {
+    font-weight: bold;
+    color: #2b6cb0; /* Tailwind's blue-600 */
+}
+
+#table-of-contents nav ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#table-of-contents nav ul ul {
+    padding-left: 1rem; /* Indent sub-items */
+}
+
+#table-of-contents nav li {
+    margin-bottom: 0.25rem;
+}
+
+.sticky-top-offset {
+    top: 2rem; /* Adjust this value to match your desired offset */
+    /* This class is intended for use with `position: sticky` */
+}
+
+/* Mobile navigation */
+#mobile-toc-panel {
+    /* Styles for the slide-out ToC panel */
+    transition: transform 0.3s ease-in-out;
+}
+#mobile-toc-panel.hidden {
+    transform: translateX(-100%);
+}

@@ -1,0 +1,13 @@
+{
+  "ignore": [
+    "explanations-cache/*",
+    "../public/explanations-cache/*",
+    "*.json"
+  ],
+  "watch": [
+    "server.js",
+    "openai-integration.js",
+    "gemini-integration.js"
+  ],
+  "ext": "js"
+}

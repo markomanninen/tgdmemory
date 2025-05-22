@@ -1,0 +1,16 @@
+Project Statistics
+==================
+Generated on: Tue May 20 13:40:41 EEST 2025
+
+Total Relevant Files Count: 20
+Total Lines of Code (Code+Config+Docs): 1194
+
+Line Counts per Extension:
+--------------------------
+.jsx        :    11 files,     835 lines
+.js         :     4 files,      56 lines
+.json       :     1 files,      29 lines
+.yml        :     1 files,      42 lines
+.css        :     1 files,     218 lines
+.html       :     1 files,      14 lines
+.md         :     1 files,       0 lines

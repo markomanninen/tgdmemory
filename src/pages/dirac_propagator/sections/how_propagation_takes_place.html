@@ -1,0 +1,174 @@
+<section id="how-propagation-takes-place" class="mb-12 scroll-mt-custom">
+    <h2 class="text-2xl font-semibold mb-6 border-l-4 border-blue-500 pl-4">2. How does the propagation take place?</h2>
+    <p>I have considered two alternative views concerning what fermion propagation could mean.</p>
+    <ol class="list-decimal ml-6">
+        <li>Fermions propagate along the 4-D space-time surface \(X^4\) as induced spinor fields and the propagator is defined by the analog of 4-D massless Dirac operator.</li>
+        <li>Fermions propagate in H and virtuality in geometric sense could mean that they can leave the space-time surface during the propagation. Off mass-shell property would mean off-space-time surface.</li>
+    </ol>
+    <p>Could the two interpretations for the fermion propagation be consistent? The space-time propagation as a 4-D propagation is geometrically much more restricted. Could the propagator code for the information about initial and final quantum states as a kind of quantum-classical correspondence?</p>
+
+    <h3 id="leptons-quarks-quantized" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">2.1 Leptons and quarks as quantized free spinor fields in H</h3>
+    <p>It is good to start with the description of H spinor fields and of the H Dirac equation. This topic is also discussed in Appendix A.</p>
+
+    <h4 id="leptons-quarks-h-spinors" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">2.1.1 Leptons and quarks as H spinors with different H chiralities</h4>
+    <p>Consider first the general theory.</p>
+    <ol class="list-decimal ml-6">
+        <li>The second quantized spinor field in \(H=M^4 \times CP_2\) can be written as superpositions of modes multiplied with a creation or annihilation operator.</li>
+        <li>Suppose that the spinor fields of H have a definite H-chirality so that they are either leptonic or quark-like, not a superposition of the two: this would violate the superselection rule of charge and fermion number.
+        One has
+        <div class="explainable-equation-container" title="H-chirality definition" data-latex-equation="\begin{equation} \Gamma_9\Psi_\epsilon = \epsilon \Psi_\epsilon \end{equation}">
+            <p class="equation">$$ \begin{equation} \Gamma_9\Psi_\epsilon = \epsilon \Psi_\epsilon \end{equation} $$</p>
+            <span class="equation-explainer-trigger">?</span>
+        </div>
+        \(\epsilon =+1/-1\) is the H-chirality and quarks and leptons have opposite chiralities.</li>
+        <li>The Dirac equation is satisfied by the spinor modes of H. They are massless in H but not in \(M^4\)(!). This is essential for the twistorization and the divergence-free nature of the theory.
+        The Dirac operator is
+        <div class="explainable-equation-container" title="Dirac operator sum" data-latex-equation="\begin{equation} D = D(M^4) + D(CP_2) \end{equation}">
+            <p class="equation">$$ \begin{equation} D = D(M^4) + D(CP_2) \end{equation} $$</p>
+            <span class="equation-explainer-trigger">?</span>
+        </div>
+        where
+        <div class="explainable-equation-container" title="M4 Dirac operator" data-latex-equation="\begin{equation} D(M^4) = \gamma^k p_k \end{equation}">
+            <p class="equation">$$ \begin{equation} D(M^4) = \gamma^k p_k \end{equation} $$</p>
+            <span class="equation-explainer-trigger">?</span>
+        </div>
+        is the Dirac operator in \(M^4\) and
+        <div class="explainable-equation-container" title="CP2 Dirac operator" data-latex-equation="\begin{equation} D(CP_2) = \Gamma^k D_k \end{equation}">
+            <p class="equation">$$ \begin{equation} D(CP_2) = \Gamma^k D_k \end{equation} $$</p>
+            <span class="equation-explainer-trigger">?</span>
+        </div>
+        is the Dirac operator in \(CP_2\). Here \(D_k\) is covariant derivative, which is defined by the spinor connection of \(CP_2\) that encodes electroweak interactions. The Kähler gauge potential \(A_k\) for leptons is \(3A_k\) and for quarks \(A_k\). This explains the different electric charges of quarks and leptons.
+        Twistorialization suggests that \(M^4\) allows the analog of Kähler structure whereas vielbein connection should be trivial by the flatness of the metric. Kähler form should satisfy the analog self-duality meaning that locally it is analogous to mutually orthogonal electric and magnetic fields of the same magnitude.</li>
+        <li>Quarks correspond to triality t=1 partial waves and leptons to triality t=0 partial waves. These modes are not simply color triplets for physical quarks and color singlets for physical leptons. For physical fermions, a mechanism producing color triplets for quarks and singlets for leptons is needed.
+        According to the first section of the Appendix, the color partial waves with different charges correspond to color partial waves characterized by an integer pair (p,q). p and q can thought of as giving the numbers of triplets and anti-triplets in the tensor containing the representation in question. The dimension of the color representation is \(d(p,q) = (1/2)(p+1)(q+1)(p+q+2)\).
+        In the case of leptons, one has representations (p,p) for neutrinos and (3+p,p) for charged leptons. The dimensions are \((p+1)^2(p+2)\) for neutrinos and \((3+p+1)(p+1)(p+2)\) for charged leptons (Mistake in original formula, should be \((3+p+1)(p+1)(p+2)\) or similar based on (p,q) general formula, \(d(3+p,p) = 1/2 (p+4)(p+1)(2p+5)\) ). The color representations are the same for both \(CP_2\) chiralities which correspond to opposite \(M^4\) chiralities for a fixed H chirality.
+        In the case of quarks one has representations (p+1,p) and (p+4,p) for D resp. U type quarks and the corresponding dimensions are \(1/2(p+2)(p+1)(2p+3)\) resp. \(1/2(p+5)(p+1)(2p+5)\). The two \(CP_2\) chiralities are transformed to each other by \(D(CP_2)\): covariantly right-handed neutrino is an exception since it is annihilated by \(D(CP_2)\).</li>
+        <li>The charge assignable to color partial wave is not a local notion characterized by a spinor index since \(D(CP_2)\) mixes different isospin states, whose identification depends on the choice of the vierbein in \(CP_2\). This is understandable since the choice of the \(CP_2\) spinor basis is determined apart from a local U(2) rotation. The same problem is encountered in standard model and solved by going to unitary gauge. One can ask whether it might be possible to define the counterpart of the unitary gauge as a global choice of \(CP_2\) vierbein for which the \(CP_2\) spinor is constant or covariantly constant for a given color partial wave.</li>
+    </ol>
+
+    <h4 id="dirac-equation-h" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">2.1.2 Dirac equation in H</h4>
+    <ol class="list-decimal ml-6">
+        <li>Dirac equation in H says the following
+        <div class="explainable-equation-container" title="Dirac equation in H" data-latex-equation="\begin{equation} D\Psi_\epsilon = 0 \end{equation}">
+            <p class="equation">$$ \begin{equation} D\Psi_\epsilon = 0 \end{equation} $$</p>
+            <span class="equation-explainer-trigger">?</span>
+        </div>
+        Here \(\epsilon =+1/-1\) refers to quark/lepton.</li>
+        <li>Solutions to Dirac equation can be constructed by taking a spinor \(\Phi_\epsilon\), which is not a solution of Dirac equation, but satisfies the following conditions:
+            <ol class="list-alpha ml-6">
+                <li>H-chirality is well defined.
+                <div class="explainable-equation-container" title="H-chirality for Phi_epsilon" data-latex-equation="\begin{equation} \Gamma_9\Phi_\epsilon = \epsilon \Phi_\epsilon \end{equation}">
+                    <p class="equation">$$ \begin{equation} \Gamma_9\Phi_\epsilon = \epsilon \Phi_\epsilon \end{equation} $$</p>
+                    <span class="equation-explainer-trigger">?</span>
+                </div>
+                H-chirality \(\epsilon\) is the product \(\epsilon=\epsilon_1 \times \epsilon_2\) of \(M^4\) chirality \(\epsilon_1\) and \(CP_2\) chirality \(\epsilon_2\). It is -1 if the \(M^4\) and \(CP_2\) chiralities are opposite and +1 if they are the same.
+                Consider first the possibility that \(\Phi_\epsilon\) is the tensor product of the \(M^4\) spinor and the \(CP_2\) spinor with the same or opposite chirality corresponding to quarks and leptons.</li>
+                <li>\(\Phi_\epsilon\) is \(M^4\) plane wave so that \(D(M^4) = \gamma^k p_k\) is effectively true.</li>
+                <li>\(\Phi_\epsilon\) satisfies the square of the Dirac equation but not the Dirac equation:
+                <div class="explainable-equation-container" title="Square of Dirac equation conditions" data-latex-equation="\begin{equation} \label{eq:dirac_single_num} \begin{aligned} D^2 \Phi_{\epsilon} &= 0 \\ D(M^4)^2 \Phi_{\epsilon} &= p^2 \Phi_{\epsilon} \\ D^2(CP_2) \Phi_{\epsilon} &= -\Lambda^2 \Phi_{\epsilon} \end{aligned} \end{equation}">
+                    <p class="equation">$$ \begin{equation} \label{eq:dirac_single_num} \begin{aligned} D^2 \Phi_{\epsilon} &= 0 \\ D(M^4)^2 \Phi_{\epsilon} &= p^2 \Phi_{\epsilon} \\ D^2(CP_2) \Phi_{\epsilon} &= -\Lambda^2 \Phi_{\epsilon} \end{aligned} \end{equation} $$</p>
+                    <span class="equation-explainer-trigger">?</span>
+                </div>
+                An eigenmode of \(D(M^4)^2\) and \(D^2(CP_2)\) is therefore in question. We obtain a spectrum \(\Lambda_n^2\), the details of which are not relevant in this context.
+                The mass is quantized:
+                <div class="explainable-equation-container" title="Mass quantization" data-latex-equation="\begin{equation} p^2 = \Lambda_n^2 \end{equation}">
+                    <p class="equation">$$ \begin{equation} p^2 = \Lambda_n^2 \end{equation} $$</p>
+                    <span class="equation-explainer-trigger">?</span>
+                </div>
+                </li>
+            </ol>
+        </li>
+        <li>How to obtain the solution of Dirac's equation \(\Psi_\epsilon\)? It is obtained by operating on the spinor \(\Phi_\epsilon\) with the Dirac operator \(D=D(M^2)+D(CP_2)\):
+        <div class="explainable-equation-container" title="Solution of Dirac equation Psi_epsilon" data-latex-equation="\begin{equation} \Psi_\epsilon = D\Phi_\epsilon \end{equation}">
+            <p class="equation">$$ \begin{equation} \Psi_\epsilon = D\Phi_\epsilon \end{equation} $$</p>
+            <span class="equation-explainer-trigger">?</span>
+        </div>
+        The Dirac equation holds
+        <div class="explainable-equation-container" title="Dirac equation for Psi" data-latex-equation="\begin{equation} D\Psi = D^2\Psi_0 = 0 \end{equation}">
+            <p class="equation">$$ \begin{equation} D\Psi = D^2\Psi_0 = 0 \end{equation} $$</p>
+            <span class="equation-explainer-trigger">?</span>
+        </div>
+        </li>
+    </ol>
+    <p>A couple of comments regarding the chiralities are in order.</p>
+    <ol class="list-decimal ml-6">
+        <li>The spinor \(\Phi_\epsilon\) has well-defined \(M^4\) and \(CP_2\) chiralities, but for the spinor \(D\Phi_\epsilon\) the chiralities are not well-defined.</li>
+        <li>Although \(\Phi_\epsilon\) can be chosen as the product of the \(\Psi=\psi \otimes \phi\) definite \(M^4\) of the spinor with chirality \(\psi\) and the spinor with chirality \(\phi\) of the definition \(CP_2\), then \(D\Psi\) is a superposition
+        <div class="explainable-equation-container" title="Superposition for DPsi" data-latex-equation="\begin{equation} D(M^4)\psi \otimes \phi + \psi \otimes D(CP_2)\phi \end{equation}">
+            <p class="equation">$$ \begin{equation} D(M^4)\psi \otimes \phi + \psi \otimes D(CP_2)\phi \end{equation} $$</p>
+            <span class="equation-explainer-trigger">?</span>
+        </div>
+        where the H-chiralities have changed because \(D(M^4)\) (\(D(CP_2)\) changes the chirality of \(M^4\) (\(CP_2\)). It can be said that both \(M^4\) and \(CP_2\) chiralities are mixed when the mass is non-zero.</li>
+        <li>It turns out that only a right-handed neutrino can have a massless state.</li>
+    </ol>
+
+    <h3 id="propagation-along-x4" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">2.2 Does the propagation take place along space-time surface \(X^4\)?</h3>
+    <p>For the modes of the induced spinor field the propagation would take place along the spacetime surface and possibly also along a related lower-dimensional surface such as a partonic 2-surface and light-like curves along it.</p>
+    <ol class="list-decimal ml-6">
+        <li>This 4-dimensional (or possibly lower-dimensional) propagator corresponds to the inverse of the Dirac operator for the induced gamma matrices as projection of the 8-D vector formed by H gamma matrices. Induced gamma matrices anticommute to the induced metric.</li>
+        <li>One can also consider modified gamma matrices determined as contractions of the canonical momentum currents of the classical action with the gamma matrices of H <a href="#ref-allb-cspin">[cspin, wcwnew (allb)]</a>. These do not anticommute to the induced metric but for them 4-D super-conformal symmetry would be exact and classical field equations would appear as a consistency condition guaranteeing hermiticity.
+        For the induced gamma matrices super-conformal symmetry is violated at the vertices <a href="#ref-btart-whatgravitons">[whatgravitons (btart)]</a>, where the full action makes itself visible: outside the singularities minimal surface property consistent with volume action, giving rise to induced gamma matrices, holds true.</li>
+        <li>The beauty of this view (also that based on H propagator) is that the constructions of the propagator and of the physical states are completely separated from each other. The propagator is the inverse of the Dirac operator for induced spinors. For H propagator the construction is easy but the situation need not be the same now.</li>
+        <li>One might hope that holography=holomorphy principle <a href="#ref-btart-Frenkel">[Frenkel, Langlands2025, HHtwistor (btart)]</a> allows the explicit construction of the propagator using complex coordinates assignable to the Hamilton-Jacobi structure involving hypercomplex coordinates (u,v) and complex coordinates (w,\(\bar{w}\)) <a href="#ref-btart-HJ">[HJ (btart)]</a>. Hypercomplex coordinates (u,v) would be the analogs of light-like coordinates and the Minkowskian signature would make the propagation possible.
+        In the Euclidean situation the propagator would be bilinear in holomorphic and antiholomorphic modes \(h_1=h_2\) would be a delta function singularity. Now the situation is more complex but one might hope that Wick rotation for the second complex coordinate, transforming it to hypercomplex coordinate, could give the propagator.
+        For light-like curves at partonic orbits identified as fermionic lines, the propagator can be constructed explicitly by a semiclassical argument.</li>
+    </ol>
+    <p>One can criticize this approach.</p>
+    <ol class="list-decimal ml-6">
+        <li>In the case of Minkowski space it is clear what virtuality of the fermion means for the massless case: the explicit expression for the massless fermion propagator implies the massive virtual modes. For virtual modes with \(p^2 \neq 0\) \(p^k\gamma_k\Psi\) is nonvanishing.</li>
+        <li>What could the non-vanishing virtual momentum squared correspond to in the recent case? The condition \(D\Psi = (\Gamma^k D_k + \Gamma^{\bar{k}} D_{\bar{k}})\Psi = 0\), reduces for the holomorphic modes, satisfying \(D_{\bar{k}}\Psi=0\), to the condition \(\Gamma^k\Psi=0\). An analogous condition is true for the antiholomorphic modes.
+        \(\Gamma^k\Psi \neq 0\) should be true for the virtual modes. This condition is consistent with the condition that H chirality is fixed but means mixing of the \(M^4\) chiralities which is the signature of massivation due to the virtual mass.</li>
+    </ol>
+
+    <h3 id="propagation-in-h" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">2.3 Does the propagation occur in H?</h3>
+    <p>The second option is that the propagation takes place in H for the spinor modes of H in such a way that only the endpoints of the propagator \(D_F(h_1,h_2)\) are restricted to the space-time surface \(X^4\). One could say that virtuality in geometric sense for the fermions means that they can leave the space-time surface. The propagation along space-time surface already discussed would mean the analog of on-mass-shell propagation.</p>
+
+    <h4 id="massless-dirac-m4" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">2.3.1 Massless Dirac propagator in \(M^4\)</h4>
+    <p>The \(M^4\) case provides a kind of role model. For momentum basis, the inverse of the Dirac operator can be solved algebraically and space-time representation involves integration over virtual momenta with \(p^2 \neq 0\).</p>
+    <p>The momentum space - and space-time representations of the massless Dirac propagator can be found in the book "An introduction to quantum field theory" by Peskin and Schröder (edition 1995, p. 660) (see <a href="https://physics.stackexchange.com/questions/263846/the-analytical-result-for-free-massless-fermion-propagator" target="_blank" rel="noopener noreferrer">this link</a>) and are given by</p>
+    <ol class="list-decimal ml-6">
+        <li>The representation of the massless Dirac propagator in momentum space is given by
+        <div class="explainable-equation-container" title="Massless Dirac propagator in momentum space" data-latex-equation="\begin{equation} \tilde{S}_F(p) = \frac{i \gamma \cdot p}{p^2 + i\epsilon} \end{equation}">
+            <p class="equation">$$ \begin{equation} \tilde{S}_F(p) = \frac{i \gamma \cdot p}{p^2 + i\epsilon} \end{equation} $$</p>
+            <span class="equation-explainer-trigger">?</span>
+        </div>
+        Here the \(1/(x+i\epsilon)\) is a shorthand notation for \(1/x \mp i\pi\delta(x)\).</li>
+        <li>The space-time representation of the massless Dirac propagator is obtained from the momentum representation \(D_F(p) = ip^k\gamma_k/(p^2+i\epsilon)\) as Fourier transform
+        <div class="explainable-equation-container" title="Massless Dirac propagator in space-time" data-latex-equation="\begin{equation} S_F(x-y) = \int \frac{d^4p}{(2\pi)^4} e^{-ip\cdot(x-y)} \left[ \frac{i\gamma\cdot p}{p^2+i\epsilon} \right] = - \frac{i}{2\pi^2} \frac{\gamma\cdot(x-y)}{|x-y|^4} \end{equation}">
+            <p class="equation">$$ \begin{equation} S_F(x-y) = \int \frac{d^4p}{(2\pi)^4} e^{-ip\cdot(x-y)} \left[ \frac{i\gamma\cdot p}{p^2+i\epsilon} \right] = - \frac{i}{2\pi^2} \frac{\gamma\cdot(x-y)}{|x-y|^4} \end{equation} $$</p>
+            <span class="equation-explainer-trigger">?</span>
+        </div>
+        This form conforms can be deduced from the scaling invariance.</li>
+    </ol>
+    <p>As one might guess, the propagator has a part, which is a delta function concentrated on the boundary of a double light-cone. The reader can verify this by calculating the 4-D volume integral of \(S_F(m=x-y)\) by using a standard definition of delta function in terms of 4-D volume integral and the basic rules for integrating delta functions.</p>
+    <p>It is advantageous to use spherical coordinates \((a,\eta,\theta,\phi)\) related to linear Minkowski coordinates \(m^k\) by the equations</p>
+    <div class="explainable-equation-container" title="Spherical Minkowski coordinates" data-latex-equation="\begin{equation} \begin{aligned} m^0 &= a \times \cosh(\eta) \\ m^1 &= a \times \sinh(\eta)\cos(\theta) \\ m^2 &= a \times \sinh(\eta)\sin(\theta)\cos(\phi) \\ m^3 &= a \times \sinh(\eta)\sin(\theta)\sin(\phi) \end{aligned} \end{equation}">
+        <p class="equation">$$ \begin{equation} \begin{aligned} m^0 &= a \times \cosh(\eta) \\ m^1 &= a \times \sinh(\eta)\cos(\theta) \\ m^2 &= a \times \sinh(\eta)\sin(\theta)\cos(\phi) \\ m^3 &= a \times \sinh(\eta)\sin(\theta)\sin(\phi) \end{aligned} \end{equation} $$</p>
+        <span class="equation-explainer-trigger">?</span>
+    </div>
+    <p>\(a^2=m^k m_k\) defines the light-cone proper-time. The line element of the \(M^4\) metric is that for empty Robertson-Walker cosmology \(ds^2= da^2-a^2(dr^2/(1+r^2) -r^2d\Omega^2)\). The 4-D volume element is \(dV_4= a^3r^2 dadr \sin(\theta) d\theta d\phi\).</p>
+    <p>In the integrand of the volume integral, the dependence on a disappears. The integral of the spatial part of \(m^k\gamma_k\) over angle coordinates vanishes. The contribution of \(m^0\gamma_0\) gives two delta functions corresponding to \(m^0 \pm r_M\) non-vanishing at the light-cone boundary.</p>
+
+    <h4 id="deduction-h-propagator" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">2.3.2 Deduction of the H propagator</h4>
+    <p>The separate conservation of lepton and quark numbers forces the counterpart of the massless propagator, not only in H but also in \(M^4\).</p>
+    <ol class="list-decimal ml-6">
+        <li>The H propagator corresponds to the inverse of the massless Dirac operator of H. It is essential that the modes have a well-defined H-chirality meaning that lepton and quarks numbers are separately conserved.</li>
+        <li>One could argue that since \(M^4\) masses for spinor modes are given by \(p^2=\Lambda_n^2\), where \(\Lambda_n^2\) is the eigenvalue of \(D(CP_2)^2\), each mode gives rise to a propagator with mass \(\Lambda_n^2\). Since \(\Lambda_n\) corresponds to \(CP_2\) mass scale, only the covariantly constant right-handed neutrino would propagate above \(CP_2\) mass scale! The other modes would propagate only in the \(CP_2\) length scale. Note however that in \(M^4\) massive propagation along light-like geodesics reduces to massless propagation.
+        The second problem is that for this view the poles at \(p^2=\Lambda_n^2\) do not emerge and must be put in by hand as normalization factors for off-mass-shell states. The reason is that the \(1/D^2\) factor disappears in the matrix elements of \(D/(D^2+i\epsilon)\) between the massive H spinor modes \(\Psi\), which are of form \(\Psi=D\Phi\). The only exception is the right-handed neutrino, which is covariantly constant in \(CP_2\) degrees of freedom. Only the right-handed neutrino would propagate.
+        The delicate difference with respect to the ordinary massive propagation in \(M^4\) is that the ordinary massive propagator is given by \(D_F=1/(p^k\gamma_k+m) = (p^k\gamma_k-m)/(p^2-m^2+i\epsilon)\) by \(p^2-m^2=(p^k\gamma_k+m)(p^k\gamma_k-m)\). In TGD, a propagator massive in \(M^4\) sense is massless in the 8-D sense and one has \(D_F=1/D = D/(D^2+i\epsilon)\).</li>
+        <li>What does the fixing the H-chirality implied by the separate conservation of quark and lepton numbers mean? The H-spinor is a combination of two spinors, where the \(M^4\) and \(CP_2\) chiralities \(\epsilon_1\) and \(\epsilon_2\) are well defined and their product \(\epsilon=\epsilon_1\epsilon_2\) is +1 or -1 depending on whether it is a quark or a lepton. The combinations (1,-1) and (-1,1) and on the other hand (1,1) and (-1,-1) are possible.
+        But the fixed \(M^4\) chirality means that propagation is like that for a massless fermion in \(M^4\)! The mass spectrum for \(D(P_2)\) does not show itself in the \(M^4\) part of the propagator and the construction of states and of the propagator are completely separate problems. This picture also corresponds to the picture of QCD where massless quarks are assumed as an approximation.</li>
+        <li>What about the propagation in \(CP_2\) degrees of freedom? It follows directly from the defining condition that the propagator is a delta function in \(CP_2\) degrees of freedom. There is no propagation at all. This just what the Euclidian signature of \(CP_2\) suggests. The matrix elements of the propagator between quantum states constructed from the conformal representations having H spinor modes as ground states are extremely simple and reduce to the same form as in QFTs for fermions with internal quantum numbers.</li>
+    </ol>
+
+    <h4 id="h-propagator-consequences" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">2.3.3 Some consequences</h4>
+    <p>This result has some highly non-trivial consequences.</p>
+    <ol class="list-decimal ml-6">
+        <li>The H propagation includes the constraint that the end points of the propagator belong to the space-time surface through the fact that \(h_1\) and \(h_2\) are on the same spacetime surface. Since there is no propagation at all in \(CP_2\) the points \(s_1\) and \(s_2\) are identical!
+        The condition \(s_1=s_2\) at the spacetime surface gives two complex conditions for \(s_2\) when \(s_1\) is fixed and the result is a discrete set of points on the spacetime surface! Only in these cases does propagation occur. The theory discretizes itself in \(CP_2\) degrees of freedom! Discretization would not be an approximation but a prediction of the theory. This is the basic idea behind the identification of cognitive representation as a number theoretic discretization using points of the embedding space for which H coordinates make sense both as real numbers and numbers in an extension of p-adic numbers.</li>
+        <li>The light-like parton orbits are in a special role now since the partonic 2-surfaces at the ends of the parton orbit can have a large number of common points if their \(CP_2\) projections are identical. This would explain why they are physically in exceptional position.
+        The picture of propagation along light-like geodesics suggest by physical intuition is consistent with the condition \(s_1=s_2\) but a light-like geodesic is not needed for the H-propagator.</li>
+        <li>From this it should be easy to understand what happens in quark and color confinement (gluons are bound states of quarks and antiquarks in TGD). The classical time evolution involves the failure of classical determinism identifiable as p-adic non-determinism <a href="#ref-btart-Langlands2025">[Langlands2025, HHtwistor (btart)]</a>. There is a sequence of analogs of multifurcations involving non-determinism. In this sequence the number of common points possessed by the initial and final partonic orbits decreases and eventually the propagator amplitude becomes very small. This means color confinement.</li>
+    </ol>
+    <p class="my-4 p-3 bg-yellow-100 border border-yellow-300 rounded-md text-yellow-700"><em>Note: Content from an external file specified in the original LaTeX document (<code>/Users/matpitka/tgdmaterials/texfiles/dirprop1D.tex</code>) would be included here. This content is not available for direct rendering.</em></p>
+</section>

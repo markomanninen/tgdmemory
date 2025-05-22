@@ -1,9 +1,13 @@
 // src/components/Header.jsx
+import { Link } from 'react-router-dom'; // Import Link
+
 export default function Header({ sections, activeSection, scrollToSection }) {
   return (
     <header className="fixed w-full top-0 z-50 bg-white shadow-lg">
       <nav className="container mx-auto px-6 py-3 flex justify-between items-center">
-        <div className="text-xl md:text-2xl font-bold text-sky-700">TGD & Memory</div>
+        <Link to="/pages" className="text-xl md:text-2xl font-bold text-sky-700 hover:text-sky-600"> {/* Link to /pages */}
+          TGD & Memory
+        </Link>
         <div className="flex space-x-4">
           {sections.map((id, idx) => (
             <button

@@ -1,0 +1,1254 @@
+<!-- FILE: ./index.html -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TGD Memory - Exploring Theoretical Domains of Consciousness</title>
+    <meta name="description" content="An interactive exploration of TGD Core, TGD Memory, its implications, and concluding thoughts on consciousness and memory." />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+// FILE: ./tailwind.config.js
+
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./App.jsx"
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+
+// FILE: ./vite.config.js
+
+import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  base: "/tgdmemory/"
+})
+
+# FILE: ./README.md
+
+# tgdmemory
+// FILE: ./package.json
+
+{
+  "name": "tgdmemory-presentation",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "vite": "^5.2.0"
+  }
+}
+
+# FILE: ./.github/workflows/deploy.yml
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Or your default branch
+  workflow_dispatch: # Allows manual triggering
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Specify your Node.js version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist' # The folder where your build output is located
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+// FILE: ./App.jsx
+
+import { useEffect, useState } from 'react';
+import ConclusionSection from './src/components/ConclusionSection';
+import ContactSection from './src/components/ContactSection'; // Import ContactSection
+import Header from './src/components/Header'; // Import Header component
+import ImplicationsSection from './src/components/ImplicationsSection';
+import IntroSection from './src/components/IntroSection';
+import TgdCoreSection from './src/components/TgdCoreSection';
+import TgdMemorySection from './src/components/TgdMemorySection';
+
+export default function App() {
+  const [activeSection, setActiveSection] = useState(0);
+  const [showBackToTop, setShowBackToTop] = useState(false); // State for Back to Top button
+  const sections = ['intro', 'tgd-core', 'tgd-memory', 'implications', 'conclusion', 'contact'];
+  const headerHeight = 64;
+
+  const scrollToSection = (index) => {
+    const section = document.getElementById(sections[index]);
+    if (section) {
+      window.scrollTo({
+        top: section.offsetTop - headerHeight,
+        behavior: 'smooth',
+      });
+      setActiveSection(index);
+    }
+  };
+
+  // Scroll listener to update active section and show/hide Back to Top button
+  useEffect(() => {
+    const handleScroll = () => {
+      let index = 0;
+      for (let i = 0; i < sections.length; i++) {
+        const section = document.getElementById(sections[i]);
+        if (
+          section &&
+          window.scrollY >= section.offsetTop - headerHeight - 150
+        ) {
+          index = i;
+        }
+      }
+      setActiveSection(index);
+
+      // Show Back to Top button if scrolled down enough
+      if (window.scrollY > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Keyboard navigation support
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (document.activeElement !== document.body) return;
+
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        if (activeSection < sections.length - 1) {
+          scrollToSection(activeSection + 1);
+        }
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        if (activeSection > 0) {
+          scrollToSection(activeSection - 1);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeSection]);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  return (
+    <div className="bg-sky-50 text-gray-800 font-sans">
+      <Header sections={sections} activeSection={activeSection} scrollToSection={scrollToSection} />
+
+      <main className="container mx-auto px-4 pt-24 pb-12">
+        <IntroSection />
+        <TgdCoreSection />
+        <TgdMemorySection />
+        <ImplicationsSection />
+        <ConclusionSection />
+        <ContactSection /> {/* Add ContactSection here */}
+      </main>
+
+      {/* Footer */}
+      <footer className="text-center py-10 text-gray-500 text-sm bg-white border-t border-gray-200">
+        <p>Copyright &copy; {new Date().getFullYear()} - Marko T. Manninen</p>
+      </footer>
+
+      {showBackToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-4 rounded-full shadow-lg transition-opacity duration-300 ease-in-out z-50"
+          aria-label="Scroll to top"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
+          </svg>
+        </button>
+      )}
+    </div>
+  );
+}
+// FILE: ./postcss.config.js
+
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+
+// FILE: ./src/index.css
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.slide-section {
+    @apply py-16 md:py-24;
+}
+
+.slide-title {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-center text-sky-800 mb-4 md:mb-6;
+}
+
+.slide-subtitle {
+    @apply text-xl md:text-2xl text-center text-sky-600 mb-10 md:mb-12;
+}
+
+.subsection-title {
+    @apply text-2xl font-semibold text-sky-700 mb-6 text-center;
+}
+
+.subsection-divider {
+    @apply mt-12 pt-8 border-t border-sky-100; /* Standardized top padding and margin */
+}
+
+.content-text {
+    @apply text-base md:text-lg text-gray-700 leading-relaxed;
+}
+
+/* List Styles */
+ul,
+ol {
+    @apply list-inside space-y-2 mb-4 pl-4;
+}
+
+ul {
+    @apply list-disc;
+}
+
+ol {
+    @apply list-decimal;
+}
+
+li {
+    @apply mb-1;
+}
+
+/* Definition List Styles */
+dl {
+    @apply mb-6 space-y-3;
+}
+
+dt {
+    @apply font-semibold text-sky-700 text-lg px-4; /* Replaced padding: 0 1rem with Tailwind class px-4 */
+}
+
+dd {
+    @apply pl-4 text-gray-600 leading-relaxed;
+}
+
+.diagram-placeholder {
+    @apply rounded-lg shadow-md border border-gray-300 bg-gray-50;
+}
+
+.diagram-card {
+    @apply p-4 bg-white rounded-xl shadow-xl border border-sky-100;
+}
+
+.diagram-adjacent-text-container {
+    @apply grid md:grid-cols-2 gap-8 items-stretch; /* Use items-stretch for equal height */
+}
+
+.diagram-adjacent-text {
+    @apply p-4 bg-white rounded-lg shadow-md border border-gray-200 flex flex-col justify-center; /* Simulates DL styling and centers content if needed */
+    /* Ensure this takes full height if direct child of items-stretch grid/flex */
+}
+
+.diagram-adjacent-text ul {
+    @apply list-disc list-inside space-y-2; /* Retain list styling if it's a list */
+}
+
+.diagram-adjacent-text p {
+    @apply text-gray-700 leading-relaxed; /* General paragraph styling within this container */
+}
+
+/* Fade in animation */
+.animate-fadeIn {
+    animation: fadeInAnimation 1s ease-in-out;
+}
+
+@keyframes fadeInAnimation {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Slide up animation */
+.animate-slideUp {
+    animation: slideUpAnimation 0.8s ease-out;
+}
+
+@keyframes slideUpAnimation {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* New animation: Fade In Up */
+.animate-fadeInUp {
+  animation: fadeInUpAnimation 0.8s ease-out forwards;
+  opacity: 0; /* Start hidden */
+}
+
+@keyframes fadeInUpAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* New animation: Fade In Left */
+.animate-fadeInLeft {
+  animation: fadeInLeftAnimation 0.8s ease-out forwards;
+  opacity: 0; /* Start hidden */
+}
+
+@keyframes fadeInLeftAnimation {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* New animation: Fade In Right */
+.animate-fadeInRight {
+  animation: fadeInRightAnimation 0.8s ease-out forwards;
+  opacity: 0; /* Start hidden */
+}
+
+@keyframes fadeInRightAnimation {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Utility for animation delay - can be extended */
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+.animation-delay-400 {
+  animation-delay: 0.4s;
+}
+.animation-delay-600 {
+  animation-delay: 0.6s;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4;
+}
+
+.modal-content {
+  @apply bg-white p-6 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] flex flex-col;
+}
+
+.modal-header {
+  @apply flex justify-between items-center border-b border-gray-200 pb-3 mb-4;
+}
+
+.modal-title {
+  @apply text-2xl font-semibold text-sky-800;
+}
+
+.modal-close-button {
+  @apply text-gray-600 hover:text-gray-900 text-3xl font-bold leading-none;
+}
+
+.modal-body {
+  @apply overflow-y-auto flex-grow;
+}
+
+.table-container {
+  @apply w-full overflow-x-auto;
+}
+
+.table-container table {
+  @apply min-w-full divide-y divide-gray-200 border border-gray-300;
+}
+
+.table-container th {
+  @apply px-4 py-3 text-left text-xs font-medium text-sky-700 uppercase tracking-wider bg-sky-50 border-b border-gray-300;
+}
+
+.table-container td {
+  @apply px-4 py-3 text-sm text-gray-600 border-b border-gray-200 whitespace-normal break-words;
+}
+
+.table-container tr:last-child td {
+  @apply border-b-0;
+}
+
+.table-container tr:nth-child(even) {
+  @apply bg-gray-50;
+}
+
+.clickable-diagram {
+  @apply cursor-pointer transition-transform duration-200 hover:scale-105;
+}
+
+// FILE: ./src/components/Header.jsx
+
+// src/components/Header.jsx
+export default function Header({ sections, activeSection, scrollToSection }) {
+  return (
+    <header className="fixed w-full top-0 z-50 bg-white shadow-lg">
+      <nav className="container mx-auto px-6 py-3 flex justify-between items-center">
+        <div className="text-xl md:text-2xl font-bold text-sky-700">TGD & Memory</div>
+        <div className="flex space-x-4">
+          {sections.map((id, idx) => (
+            <button
+              key={id}
+              onClick={() => scrollToSection(idx)}
+              className={`px-3 py-2 rounded-md text-sm transition-all duration-200 ${
+                activeSection === idx
+                  ? 'text-sky-700 bg-sky-100 border-b-2 border-sky-600 font-semibold'
+                  : 'text-gray-600 hover:text-sky-600'
+              }`}
+              aria-current={activeSection === idx ? 'page' : undefined}
+            >
+              {id === 'tgd-core' && 'TGD Core'}
+              {id === 'tgd-memory' && 'TGD Memory Model'}
+              {id === 'intro' && 'Introduction'}
+              {id === 'implications' && 'Implications'}
+              {id === 'conclusion' && 'Conclusion'}
+              {id === 'contact' && 'Contacts & Resources'}
+            </button>
+          ))}
+        </div>
+      </nav>
+    </header>
+  );
+}
+
+// FILE: ./src/components/IntroSection.jsx
+
+import { useState } from 'react';
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
+import TableModal from './TableModal'; // Assuming TableModal.jsx is in the same directory
+
+// src/components/IntroSection.jsx
+export default function IntroSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const tableHeaders = ["Feature", "Classical Models (e.g., MSM, Baddeley's WM)", "Standard QM Approaches (e.g., Orch OR variants)", "TGD Framework"];
+  const tableRows = [
+    { "Feature": "Nature of Storage", "Classical Models (e.g., MSM, Baddeley's WM)": "Information encoded in neural patterns, synaptic strengths.", "Standard QM Approaches (e.g., Orch OR variants)": "Quantum states in microtubules or other neural structures; often focused on consciousness rather than explicit memory trace.", "TGD Framework": "Memories stored in 4-D brain (spacetime sheets), ZEO implies memories can be re-experienced via time-like entanglement." },
+    { "Feature": "Mechanism of Recall", "Classical Models (e.g., MSM, Baddeley's WM)": "Activation of stored patterns, cue-dependent retrieval.", "Standard QM Approaches (e.g., Orch OR variants)": "Collapse of quantum wave function, objective reduction; specific recall mechanisms less detailed.", "TGD Framework": "Intentional action (negentropic entanglement) initiates communication with geometric past; 'signals' from past to present (negative energy photons)." },
+    { "Feature": "Subjective Experience (Qualia)", "Classical Models (e.g., MSM, Baddeley's WM)": "Emergent property of complex neural activity; 'hard problem' largely unaddressed.", "Standard QM Approaches (e.g., Orch OR variants)": "Conscious moments linked to quantum computations/collapse; qualia associated with fundamental spacetime geometry (Penrose).", "TGD Framework": "Qualia are fundamental properties of quantum jumps; sensory qualia at sensory organs, contents of memory as qualia from geometric past." },
+    { "Feature": "Arrow of Time / Memory Directionality", "Classical Models (e.g., MSM, Baddeley's WM)": "Implicitly follows thermodynamic arrow; past -> present encoding.", "Standard QM Approaches (e.g., Orch OR variants)": "Standard arrow of time; some models might explore advanced/retarded potentials but not central to memory.", "TGD Framework": "ZEO allows for both arrows of time; memory recall involves signals from geometric past (non-standard time directionality)." },
+    { "Feature": "Capacity & Longevity", "Classical Models (e.g., MSM, Baddeley's WM)": "LTM vast but subject to decay/interference; physical basis of lifelong memories debated.", "Standard QM Approaches (e.g., Orch OR variants)": "Quantum states are fragile (decoherence); long-term stability of quantum memory traces is a challenge.", "TGD Framework": "Geometric past is immutable; memory capacity is effectively infinite. Negentropic entanglement provides stability for 'living' memories." },
+    { "Feature": "Active vs. Passive Recall", "Classical Models (e.g., MSM, Baddeley's WM)": "Can be both; e.g., cued recall (passive) vs. free recall (active search).", "Standard QM Approaches (e.g., Orch OR variants)": "Typically passive collapse; active intentionality less defined.", "TGD Framework": "Recall is an active, intentional process (directed attention via magnetic body); re-experiencing past quantum states." }
+  ];
+
+  const [pageTitleRef, pageTitleVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [pageSubtitleRef, pageSubtitleVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  
+  const [introParagraphRef, introParagraphVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -100px 0px', delay: 200 });
+
+  const [challengesTitleRef, challengesTitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [challengesContentRef, challengesContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 }); // Combined ref for list and diagram parent
+
+  const [transitionParagraphRef, transitionParagraphVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+
+  const [limitationsTitleRef, limitationsTitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [limitationsContentRef, limitationsContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 }); // Combined ref for list and diagram parent
+
+
+  return (
+    <section id="intro" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="intro-title">
+      <h1 
+        id="intro-title" 
+        ref={pageTitleRef} 
+        className={`slide-title ${pageTitleVisible ? 'animate-fadeIn' : 'opacity-0'}`}
+      >
+        Introduction to Mainstream and Quantum Perspectives on Memory
+      </h1>
+      <h2 
+        ref={pageSubtitleRef}
+        className={`slide-subtitle ${pageSubtitleVisible ? 'animate-slideUp' : 'opacity-0'} animation-delay-200`}
+      >
+        How subjective memories are realized in TGD inspired theory of consciousness?
+      </h2>
+      
+      <div 
+        ref={introParagraphRef}
+        className={`content-text space-y-6 ${introParagraphVisible ? 'animate-fadeInUp' : 'opacity-0'} animation-delay-400`}
+      >
+        <p>
+          Memory, the capacity for encoding, storing, and retrieving information, is a fundamental aspect of human cognition. It underpins identity, learning, and adaptation. Traditional investigations within psychology and neuroscience have provided significant insights into its biological substrates and behavioral manifestations.
+        </p>
+      </div>
+
+      {/* Subsection: Challenges in Understanding Memory */}
+      <div className="subsection-divider"> 
+        <h3 
+          id="challenges-title" 
+          ref={challengesTitleRef} 
+          className={`subsection-title ${challengesTitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
+        >
+          Challenges in Understanding Memory
+        </h3>
+        <div 
+          ref={challengesContentRef} 
+          className={`diagram-adjacent-text-container content-text ${challengesContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-adjacent-text md:col-span-1 ${challengesContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <dl>
+              <dt>Mainstream Models:</dt>
+              <dd>Frameworks such as the Multi-Store Model or Working Memory models delineate information processing architectures. However, a comprehensive explanation for the subjective qualities of memory, including the phenomenal experience of recollection, often remains outside their primary scope.</dd>
+              <dt>Quantum Considerations in Consciousness Science:</dt>
+              <dd>The difficulties in accounting for subjective experience (the "hard problem" of consciousness) have led some to consider quantum mechanical principles. Concepts like superposition and entanglement have been explored for their potential parallels with mental phenomena (e.g., the Orch OR theory).</dd>
+            </dl>
+          </div>
+          <div 
+            onClick={() => setIsModalOpen(true)}
+            className={`diagram-card md:col-span-1 ${challengesContentVisible ? 'animate-fadeInRight' : 'opacity-0'} clickable-diagram`}
+          >
+            <img
+              src="memory_models.png"
+              alt="Snapshot of Table 1: Comparative Overview of Key Memory Models. Click to open full table."
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">
+              Table 1: Comparative Overview (Click diagram to view details)
+            </p>
+          </div>
+        </div>
+      </div>
+      
+
+      {/* Subsection: Limitations of Standard Quantum Mechanics for Memory */}
+      <div className="subsection-divider"> 
+        <h3 
+            id="qm-limitations-title" 
+            ref={limitationsTitleRef} 
+            className={`subsection-title ${limitationsTitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
+        >
+            Limitations of Standard Quantum Mechanics for Memory
+        </h3>
+        <div 
+            ref={limitationsContentRef}
+            className={`diagram-adjacent-text-container content-text ${limitationsContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+            <div 
+                className={`diagram-card md:col-span-1 order-first ${limitationsContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}
+            >
+                <img
+                src="quantum_memory.png"
+                alt="Diagram illustrating limitations of standard QM for memory"
+                className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+                />
+                <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">
+                Limitations of Standard Quantum Mechanics in Explaining Memory
+                </p>
+            </div>
+            <div className={`diagram-adjacent-text md:col-span-1 order-last ${limitationsContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+              <dl>
+                  <dt>Prioritization of Consciousness:</dt>
+                  <dd>Many quantum-mind theories prioritize consciousness, with memory often a secondary consideration.</dd>
+                  <dt>Decoherence Problem:</dt>
+                  <dd>The "decoherence problem" poses challenges for sustaining quantum states in the brain's thermal environment.</dd>
+                  <dt>Limited Empirical Validation:</dt>
+                  <dd>Direct empirical validation of specific, non-trivial quantum mechanisms in memory processes is currently limited.</dd>
+                  <dt>Storage and Recall Mechanisms:</dt>
+                  <dd>Standard QM does not readily offer mechanisms for the storage of vast lifelong information or the detailed nature of subjective recall.</dd>
+              </dl>
+            </div>
+            
+        </div>
+
+      <div 
+        ref={transitionParagraphRef}
+        className={`content-text mt-10 pt-6 ${transitionParagraphVisible ? 'animate-fadeInUp' : 'opacity-0'} animation-delay-200`}
+      >
+        <p>
+          <b>Prompt an inquiry</b>: Is a more fundamental revision of physical principles necessary to fully address the multifaceted nature of memory? This presentation will examine Topological Geometrodynamics (TGD), developed by Matti Pitkänen, as a distinct theoretical framework proposing memory as an integral aspect of spacetime and consciousness.
+        </p>
+      </div>
+      </div>
+
+      <TableModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        title="Table 1: Comparative Overview of Key Memory Models" 
+        headers={tableHeaders} 
+        rows={tableRows} 
+      />
+    </section>
+  );
+}
+
+// FILE: ./src/components/TgdCoreSection.jsx
+
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
+
+export default function TgdCoreSection() {
+  const [titleRef, titleVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [subtitleRef, subtitleVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  const [subSection1TitleRef, subSection1TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection1ContentRef, subSection1ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+
+  const [subSection2TitleRef, subSection2TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection2ContentRef, subSection2ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+
+  return (
+    <section id="tgd-core" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="tgd-core-title">
+      <h2 
+        id="tgd-core-title" 
+        ref={titleRef} 
+        className={`slide-title ${titleVisible ? 'animate-fadeIn' : 'opacity-0'}`}
+      >
+        Core Concepts of Topological Geometrodynamics (TGD)
+      </h2>
+
+      {/* Subsection 1: Fundamental Spacetime and Quantum Concepts */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection1TitleRef} 
+          className={`subsection-title ${subSection1TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
+        >
+          Fundamental Spacetime and Quantum Concepts
+        </h4>
+        <div 
+          ref={subSection1ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection1ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-adjacent-text md:col-span-1 ${subSection1ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <dl>
+              <dt>Many-Sheeted Spacetime:</dt>
+              <dd>TGD posits a hierarchical structure of spacetime sheets, allowing for a complex interplay of physical systems at different scales. This contrasts with the single, monolithic spacetime of General Relativity.</dd>
+              <dt>Zero Energy Ontology (ZEO):</dt>
+              <dd>In ZEO, physical states are superpositions of histories, and quantum jumps recreate these histories. This provides a basis for understanding the flow of subjective time and intentional action.</dd>
+              <dt>Hierarchy of Planck Constants:</dt>
+              <dd>TGD proposes a hierarchy of effective Planck constants (h_eff = n * h), suggesting that macroscopic quantum coherence can occur at larger scales than predicted by standard quantum mechanics. This is crucial for biological systems.</dd>
+            </dl>
+          </div>
+          <div className={`diagram-card md:col-span-1 ${subSection1ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <img 
+              src="manysheeted_spacetime.png"
+              alt="Diagram of TGD Spacetime and Quantum Concepts"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Spacetime & Quantum Concepts</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Subsection 2: Field Bodies and Cognitive Correlates */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection2TitleRef} 
+          className={`subsection-title ${subSection2TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
+        >
+          Field Bodies and Cognitive Correlates
+        </h4>
+        <div 
+          ref={subSection2ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-card md:col-span-1 order-first ${subSection2ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Field+Bodies+%26+Cognition"
+              alt="Diagram of TGD Field Bodies and Cognitive Correlates"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Field Bodies & Cognitive Correlates</p>
+          </div>
+          <div className={`diagram-adjacent-text md:col-span-1 order-last ${subSection2ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <dl>
+              <dt>Magnetic Bodies (MB):</dt>
+              <dd>Each physical system is proposed to have an associated magnetic body, an onion-like structure of magnetic flux sheets. MBs are carriers of dark matter (as h_eff phases) and serve as a higher-level controller of the biological body.</dd>
+              <dt>p-Adic Physics as Correlate of Cognition:</dt>
+              <dd>TGD introduces p-adic number fields as correlates of cognition and intention. This mathematical framework allows for a description of cognitive representations and processes that are distinct from, yet interact with, real (sensory) physics.</dd>
+              <dt>Negentropic Entanglement (NE):</dt>
+              <dd>A key concept related to h_eff, NE is proposed to be a correlate of conscious information, attention, and understanding. It is stable under quantum jumps and provides a basis for the formation of coherent conscious experiences.</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// FILE: ./src/components/ContactSection.jsx
+
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
+
+export default function ContactSection() {
+  const [titleRef, titleVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [contact1Ref, contact1Visible] = useIntersectionObserver({ threshold: 0.1, delay: 200 });
+  const [book1Ref, book1Visible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+  const [contact2Ref, contact2Visible] = useIntersectionObserver({ threshold: 0.1, delay: 400 });
+  const [book2Ref, book2Visible] = useIntersectionObserver({ threshold: 0.1, delay: 500 });
+
+  return (
+    <section id="contact" className="slide-section py-16 md:py-24 bg-sky-50" aria-labelledby="contact-title">
+      <h2 id="contact-title" ref={titleRef} className={`slide-title ${titleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>Contacts &amp; Resources</h2>
+      <div className="content-text max-w-4xl mx-auto space-y-12">
+        <div ref={contact1Ref} className={`p-6 bg-white rounded-lg shadow-lg ${contact1Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+          <h3 className="text-2xl font-semibold text-sky-700 mb-3">Marko T. Manninen</h3>
+          <p className="mb-1"><a href="tel:+358505882868" className="hover:text-sky-600">+358 50 5882868</a></p>
+          <p className="mb-4"><a href="mailto:elonmedia@gmail.com" className="hover:text-sky-600">elonmedia@gmail.com</a></p>
+          <div ref={book1Ref} className={`mt-4 pt-4 border-t border-sky-100 ${book1Visible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+              <img 
+                src="tgd_early_intro.jpeg" 
+                alt="Book cover placeholder for Through the Wormhole on Spacetime Surface" 
+                className="w-32 sm:w-36 h-auto rounded shadow-md border border-gray-300"
+              />
+              <div>
+                <h4 className="text-lg font-semibold text-sky-600">Through the Wormhole on Spacetime Surface: Early History of Topological Geometrodynamics Theory</h4>
+                <p className="text-sm text-gray-600 mt-1">2024, Holistic Science Publications</p>
+                <p className="text-sm text-gray-600">ISBN: 978-952-65432-3-9</p>
+                <p className="text-sm text-gray-600 mt-7">
+                  <b>ResearchGate Profile</b>: <a href="https://www.researchgate.net/profile/Marko-Manninen" target="_blank" rel="noopener noreferrer" className="hover:text-sky-600 underline">
+                    researchgate.net/profile/Marko-Manninen
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div ref={contact2Ref} className={`p-6 bg-white rounded-lg shadow-lg ${contact2Visible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+          <h3 className="text-2xl font-semibold text-sky-700 mb-3">Matti J. Pitkänen</h3>
+          <p className="mb-1"><a href="tel:+358400587258" className="hover:text-sky-600">+358 40 0587258</a></p>
+          <p className="mb-4"><a href="mailto:matpitka6@gmail.com" className="hover:text-sky-600">matpitka6@gmail.com</a></p>
+          <div ref={book2Ref} className={`mt-4 pt-4 border-t border-sky-100 ${book2Visible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+              <img 
+                src="tgd_revised.jpg" 
+                alt="Book cover placeholder for Topological Geometrodynamics: Revised Edition" 
+                className="w-32 sm:w-36 h-auto rounded shadow-md border border-gray-300"
+              />
+              <div>
+                <h4 className="text-lg font-semibold text-sky-600">Topological Geometrodynamics: Revised Edition</h4>
+                <p className="text-sm text-gray-600 mt-1">2016, Bentham Books</p>
+                <p className="text-sm text-gray-600">ISBN: 978-1-68108-179-3</p>
+                <p className="text-sm text-gray-600 mt-7">
+                  <b>Blogspot</b>: <a href="https://matpitka.blogspot.com" target="_blank" rel="noopener noreferrer" className="hover:text-sky-600 underline">
+                    matpitka.blogspot.com
+                  </a> &bull; <b>TGD Theory</b>: <a href="https://www.tgdtheory.fi" target="_blank" rel="noopener noreferrer" className="hover:text-sky-600 underline">
+                    tgdtheory.fi
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// FILE: ./src/components/TableModal.jsx
+
+// src/components/TableModal.jsx
+
+export default function TableModal({ isOpen, onClose, title, headers, rows }) {
+  if (!isOpen) {
+    return null;
+  }
+
+  return (
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="table-modal-title">
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h3 id="table-modal-title" className="modal-title">{title}</h3>
+          <button onClick={onClose} className="modal-close-button" aria-label="Close modal">&times;</button>
+        </div>
+        <div className="modal-body">
+          <div className="table-container">
+            <table>
+              <thead>
+                <tr>
+                  {headers.map((header) => (
+                    <th key={header}>{header}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, rowIndex) => (
+                  <tr key={rowIndex}>
+                    {headers.map((header) => (
+                      <td key={`${rowIndex}-${header}`}>{row[header]}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// FILE: ./src/components/QmLimitationsSection.jsx
+
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
+
+export default function QmLimitationsSection() {
+  const [titleRef, titleVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [listRef, listVisible] = useIntersectionObserver({ threshold: 0.1, delay: 200 });
+  const [diagramRef, diagramVisible] = useIntersectionObserver({ threshold: 0.1, delay: 400 });
+
+  return (
+    <section id="qm-limitations" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="qm-limitations-title">
+      <h2 id="qm-limitations-title" ref={titleRef} className={`slide-title ${titleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>
+        Limitations of Standard Quantum Mechanics for Memory
+      </h2>
+      <div className="content-text space-y-6">
+        <div className="grid md:grid-cols-2 gap-8 items-start">
+          <ul ref={listRef} className={`list-disc pl-5 space-y-2 md:col-span-1 ${listVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <li>Many quantum-mind theories prioritize consciousness, with memory often a secondary consideration.</li>
+            <li>The "decoherence problem" poses challenges for sustaining quantum states in the brain's thermal environment.</li>
+            <li>Direct empirical validation of specific, non-trivial quantum mechanisms in memory processes is currently limited.</li>
+            <li>Standard QM does not readily offer mechanisms for the storage of vast lifelong information or the detailed nature of subjective recall.</li>
+          </ul>
+          <div 
+            ref={diagramRef}
+            className={`diagram-card md:col-span-1 ${diagramVisible ? 'animate-fadeInRight' : 'opacity-0'}`}
+          >
+            <img
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram :+Standard+QM+Limitations"
+              alt="Diagram illustrating limitations of standard QM for memory"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">
+              Limitations of Standard Quantum Mechanics in Explaining Memory
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// FILE: ./src/components/ImplicationsSection.jsx
+
+// src/components/ImplicationsSection.jsx
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
+
+export default function ImplicationsSection() {
+  const [titleRef, titleVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [subtitleRef, subtitleVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  const [subSection1TitleRef, subSection1TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection1ContentRef, subSection1ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+
+  const [subSection2TitleRef, subSection2TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection2ContentRef, subSection2ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+
+  return (
+    <section id="implications" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="implications-title">
+      <h2 
+        id="implications-title" 
+        ref={titleRef} 
+        className={`slide-title ${titleVisible ? 'animate-fadeIn' : 'opacity-0'}`}
+      >
+        Implications and Predictions of the TGD Model
+      </h2>
+
+      {/* Subsection 1: Predictions of Novel Physical Phenomena */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection1TitleRef} 
+          className={`subsection-title ${subSection1TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
+        >
+          Predictions of Novel Physical Phenomena
+        </h4>
+        <div 
+          ref={subSection1ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection1ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-card md:col-span-1 order-first ${subSection1ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Novel+Physics"
+              alt="Diagram of Novel Physical Phenomena in TGD"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Novel Physical Phenomena</p>
+          </div>
+          <div className={`diagram-adjacent-text md:col-span-1 order-last ${subSection1ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <dl>
+              <dt>Hierarchy of Planck Constants (h_eff):</dt>
+              <dd>Predicts macroscopic quantum coherence in biological systems, potentially observable as novel bio-electromagnetic effects.</dd>
+              <dt>Zero Energy Ontology (ZEO):</dt>
+              <dd>Suggests that the arrow of time might not be fixed, allowing for phenomena like retrocausality in certain contexts (e.g., memory recall as seeing into the geometric past).</dd>
+              <dt>Many-Sheeted Spacetime:</dt>
+              <dd>Implies the existence of new forms of matter and energy (e.g., dark matter as h_eff phases, exotic particles confined to specific spacetime sheets).</dd>
+              <dt>p-Adic Physics:</dt>
+              <dd>Could lead to a physical basis for understanding intentionality and cognitive processes, potentially testable through their influence on physical systems.</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      {/* Subsection 2: Implications for Understanding Consciousness and Biology */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection2TitleRef} 
+          className={`subsection-title ${subSection2TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
+        >
+          Implications for Understanding Consciousness and Biology
+        </h4>
+        <div 
+          ref={subSection2ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-adjacent-text md:col-span-1 ${subSection2ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <dl>
+              <dt>Nature of Subjective Experience:</dt>
+              <dd>TGD offers a framework where subjective experience is primary, linked to quantum jumps and the hierarchy of selves.</dd>
+              <dt>Biological Self-Organization:</dt>
+              <dd>Magnetic bodies and the hierarchy of h_eff provide mechanisms for the coordinated behavior of complex biological systems, beyond standard biochemical explanations.</dd>
+              <dt>New Approaches to Healing:</dt>
+              <dd>Understanding the role of magnetic bodies and dark photons could lead to novel therapeutic interventions based on electromagnetic fields.</dd>
+              <dt>Evolution of Consciousness:</dt>
+              <dd>The TGD framework suggests that evolution involves not just biological adaptation but also an increase in the complexity and levels of consciousness, driven by the expansion of the h_eff hierarchy.</dd>
+            </dl>
+          </div>
+          <div className={`diagram-card md:col-span-1 ${subSection2ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Consciousness+%26+Biology"
+              alt="Diagram of TGD Implications for Consciousness and Biology"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Consciousness & Biology</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// FILE: ./src/components/TgdMemorySection.jsx
+
+// src/components/TgdMemorySection.jsx
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
+
+export default function TgdMemorySection() {
+  const [titleRef, titleVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [subtitleRef, subtitleVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  const [subSection1TitleRef, subSection1TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection1ContentRef, subSection1ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+
+  const [subSection2TitleRef, subSection2TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection2ContentRef, subSection2ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+
+  const [subSection3TitleRef, subSection3TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection3ContentRef, subSection3ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+
+  const [subSection4TitleRef, subSection4TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection4ContentRef, subSection4ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+
+  return (
+    <section id="tgd-memory" className="slide-section border-b border-sky-200 min-h-screen flex flex-col justify-center" aria-labelledby="tgd-memory-title">
+      <h2 
+        id="tgd-memory-title" 
+        ref={titleRef} 
+        className={`slide-title ${titleVisible ? 'animate-fadeIn' : 'opacity-0'}`}
+      >
+        The TGD Model of Memory
+      </h2>
+
+      {/* Subsection 1: Memory in Zero Energy Ontology (ZEO) */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection1TitleRef} 
+          className={`subsection-title ${subSection1TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
+        >
+          Memory in Zero Energy Ontology (ZEO)
+        </h4>
+        <div 
+          ref={subSection1ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection1ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-adjacent-text md:col-span-1 ${subSection1ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <dl>
+              <dt>Episodic Memories as Re-Experiences:</dt>
+              <dd>In TGD, episodic memories are not stored representations but actual re-experiences of a past event. This is achieved by quantum jumping to a state where the sub-self (mental image) corresponding to the memory is briefly re-activated in the geometric past.</dd>
+              <dt>Role of Magnetic Bodies:</dt>
+              <dd>The magnetic body (MB) plays a crucial role. It can initiate memory recall by sending signals (e.g., dark photons) that resonate with specific brain circuits, effectively 'lighting up' a past experience. The MB acts as the 'experiencer' of these re-created mental images.</dd>
+            </dl>
+          </div>
+          <div className={`diagram-card md:col-span-1 ${subSection1ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+ZEO+Memory+Recall"
+              alt="Diagram of TGD ZEO Memory Recall"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Memory Recall in ZEO</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Subsection 2: Time, Self, and the Hierarchy of Selves */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection2TitleRef} 
+          className={`subsection-title ${subSection2TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
+        >
+          Time, Self, and the Hierarchy of Selves
+        </h4>
+        <div 
+          ref={subSection2ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-card md:col-span-1 order-first ${subSection2ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Hierarchy+of+Selves"
+              alt="Diagram of TGD Hierarchy of Selves"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Hierarchy of Selves & Time Perception</p>
+          </div>
+          <div className={`diagram-adjacent-text md:col-span-1 order-last ${subSection2ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <dl>
+              <dt>Subjective vs. Geometric Time:</dt>
+              <dd>TGD distinguishes between subjective time (sequence of quantum jumps) and geometric time (coordinate time of spacetime). Memories are located in geometric past, but re-experienced in the subjective present of the self.</dd>
+              <dt>Hierarchy of Selves:</dt>
+              <dd>Consciousness is organized into a hierarchy of selves, where selves at higher levels have longer-lasting conscious experiences and integrate information from lower-level selves. This hierarchy is reflected in the structure of magnetic bodies.</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      {/* Subsection 3: Negentropic Entanglement and Memory Formation */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection3TitleRef} 
+          className={`subsection-title ${subSection3TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
+        >
+          Negentropic Entanglement and Memory Formation
+        </h4>
+        <div 
+          ref={subSection3ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection3ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-adjacent-text md:col-span-1 ${subSection3ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <dl>
+              <dt>Negentropic Entanglement (NE):</dt>
+              <dd>NE, possible in the intersection of real and p-adic worlds, is proposed as a correlate of conscious information, attention, and understanding. It is stable and can be preserved across quantum jumps, forming the basis of memory engrams as stable patterns of NE.</dd>
+              <dt>Memory Engrams as NE Patterns:</dt>
+              <dd>Instead of synaptic strengths, memory engrams could be fundamentally patterns of NE at the level of magnetic bodies, connecting different brain regions or even different selves in the hierarchy.</dd>
+            </dl>
+          </div>
+          <div className={`diagram-card md:col-span-1 ${subSection3ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Negentropic+Entanglement"
+              alt="Diagram of TGD Negentropic Entanglement"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Negentropic Entanglement & Memory</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Subsection 4: Cognitive Correlates: p-Adic Physics */}
+      <div className="subsection-divider">
+        <h4 
+          ref={subSection4TitleRef} 
+          className={`subsection-title ${subSection4TitleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}
+        >
+          Cognitive Correlates: p-Adic Physics
+        </h4>
+        <div 
+          ref={subSection4ContentRef} 
+          className={`diagram-adjacent-text-container content-text ${subSection4ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className={`diagram-card md:col-span-1 order-first ${subSection4ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+p-Adic+Cognition"
+              alt="Diagram of TGD p-Adic Physics and Cognition"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: p-Adic Physics & Cognitive Representation</p>
+          </div>
+          <div className={`diagram-adjacent-text md:col-span-1 order-last ${subSection4ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <dl>
+              <dt>p-Adic Spacetime Sheets as Cognitive Representations:</dt>
+              <dd>p-Adic spacetime sheets are interpreted as geometric correlates of cognitive representations, intentions, and plans. They provide a mathematical framework for understanding the non-deterministic and information-rich nature of thought.</dd>
+              <dt>Transformation of Intention to Action:</dt>
+              <dd>Cognitive processes (p-adic) can transform into real physical actions (real physics) via quantum jumps that convert p-adic spacetime sheets to real ones. This is fundamental for understanding how intentions lead to actions.</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// FILE: ./src/components/ConclusionSection.jsx
+
+// src/components/ConclusionSection.jsx
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
+
+export default function ConclusionSection() {
+  const [titleRef, titleVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [subTitleRef, subTitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 200 });
+  const [p1Ref, p1Visible] = useIntersectionObserver({ threshold: 0.1, delay: 400 });
+  const [diagramRef, diagramVisible] = useIntersectionObserver({ threshold: 0.1, delay: 600 });
+  const [p2Ref, p2Visible] = useIntersectionObserver({ threshold: 0.1, delay: 500 });
+  const [p3Ref, p3Visible] = useIntersectionObserver({ threshold: 0.1, delay: 600 });
+  const [thankYouRef, thankYouVisible] = useIntersectionObserver({ threshold: 0.1, delay: 700 });
+
+  return (
+    <section id="conclusion" className="slide-section min-h-screen flex flex-col justify-center" aria-labelledby="conclusion-title">
+      <h2 id="conclusion-title" ref={titleRef} className={`slide-title ${titleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>Concluding Remarks: Memory within the TGD Framework</h2>
+        <div className="content-text space-y-6 text-center max-w-4xl mx-auto">
+        <p ref={p1Ref} className={`${p1Visible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+          This presentation has outlined TGD's distinct perspective on memory, contrasting it with established and other alternative models. TGD proposes memory as an active, 4-dimensional, conscious process, orchestrated by Magnetic Bodies and intrinsically linked to the structure of spacetime.
+        </p>
+        <div ref={diagramRef} className={`diagram-card mx-auto ${diagramVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+          <img
+            src="https://placehold.co/600x300/e2e8f0/38bdf8?text=Synthesizing+Diagram :+TGD%27s+Integrated+View+of+Memory,+Consciousness,+Cosmos"
+            alt="Synthesizing Diagram of TGD's View"
+            className="diagram-placeholder"
+          />
+          <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">
+            Synthesizing Diagram: TGD's Integrated View of Memory, Consciousness, Cosmos
+          </p>
+        </div>
+        <p ref={p2Ref} className={`${p2Visible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+          Were this model to be substantiated, it would necessitate a significant re-evaluation of foundational concepts in physics, including spacetime, quantum measurement, and the nature of consciousness.
+        </p>
+        <p ref={p3Ref} className={`${p3Visible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+          While TGD is a theoretically extensive and experimentally demanding framework, it offers a comprehensive structure for considering fundamental questions about memory, consciousness, and their physical basis. It suggests a view of the universe with potentially deeper interconnections and a more integral role for conscious experience than currently understood.
+        </p>
+        <p ref={thankYouRef} className={`mt-8 text-xl font-semibold ${thankYouVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>Thank you.</p>
+      </div>
+    </section>
+  );
+}
+
+// FILE: ./src/hooks/useIntersectionObserver.js
+
+// src/hooks/useIntersectionObserver.js
+import { useEffect, useRef, useState } from 'react';
+
+export default function useIntersectionObserver(options) {
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  const elementRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsIntersecting(true);
+        // Optional: Unobserve after first intersection if you only want to animate once
+        // observer.unobserve(entry.target);
+      }
+    }, options);
+
+    const currentElement = elementRef.current;
+    if (currentElement) {
+      observer.observe(currentElement);
+    }
+
+    return () => {
+      if (currentElement) {
+        observer.unobserve(currentElement);
+      }
+    };
+  }, [options]);
+
+  return [elementRef, isIntersecting];
+}
+
+// FILE: ./src/main.jsx
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from '../App.jsx'
+import './index.css'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+

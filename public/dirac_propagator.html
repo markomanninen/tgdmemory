@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About the structure of Dirac propagator in TGD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        html { 
+            scroll-behavior: smooth;
+        }
+        .prose {
+            max-width: none; 
+        }
+        .prose h1, .prose h2, .prose h3, .prose h4, .prose h5 {
+            color: #1a202c; 
+            font-weight: 600;
+            margin-top: 1.5em;
+            margin-bottom: 0.75em;
+        }
+        .prose p, .prose li {
+            color: #4a5568; 
+            line-height: 1.7;
+            margin-bottom: 1em;
+        }
+        .prose a {
+            color: #2b6cb0; 
+            text-decoration: none;
+        }
+        .prose a:hover {
+            text-decoration: underline;
+        }
+        .sticky-nav { 
+            position: -webkit-sticky; 
+            position: sticky; 
+            top: 1rem; 
+            max-height: calc(100vh - 2rem); 
+            overflow-y: auto;
+        }
+        .sticky-nav::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sticky-nav::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .sticky-nav::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+        }
+        .sticky-nav::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+        #mobileNavButton {
+            z-index: 50; 
+        }
+        .active-nav-link {
+            color: #2563eb !important; /* Tailwind blue-600 */
+            font-weight: 700 !important;
+        }
+        .equation {
+            display: block;
+            padding: 0.5em 1em;
+            margin: 1em 0;
+            background-color: #f9fafb; /* Very light gray */
+            border-left: 3px solid #60a5fa; /* Blue accent */
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap; /* Allow wrapping for long equations */
+            word-break: break-all;
+            font-size: 0.95em;
+        }
+        .scroll-mt-custom { /* Custom scroll margin for better anchor positioning */
+            scroll-margin-top: 4rem; /* Adjust as needed, e.g., 64px or 4rem */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 antialiased">
+
+    <button id="mobileNavButton" class="lg:hidden fixed top-4 left-4 bg-blue-600 text-white p-3 rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+    </button>
+
+    <div class="container mx-auto px-4 py-8 lg:flex">
+        <aside id="navigationSidebar" 
+               class="fixed lg:sticky inset-y-0 left-0 w-72 bg-white p-6 shadow-lg lg:shadow-none 
+                      transform -translate-x-full lg:translate-x-0 
+                      transition-transform duration-300 ease-in-out 
+                      lg:mr-8 rounded-r-lg lg:rounded-lg 
+                      sticky-nav prose z-40">
+            <h3 class="text-lg font-semibold mb-4 text-blue-700">Contents</h3>
+            <nav id="article-toc">
+                </nav>
+        </aside>
+
+        <main class="flex-1 bg-white p-6 sm:p-8 md:p-10 rounded-lg shadow-xl prose">
+            <header class="mb-12 border-b pb-6">
+                <h1 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 leading-tight">About the structure of Dirac propagator in TGD</h1>
+                <p class="text-center text-gray-500 mt-2"><em>Note: Author and address information from local files in the original LaTeX document are not included.</em></p>
+            </header>
+
+            <section id="abstract" class="mb-12 scroll-mt-custom">
+                <h2 class="text-2xl font-semibold mb-4 border-l-4 border-blue-500 pl-4">Abstract</h2>
+                <p>In this article the notion of fermion propagator is discussed. It is found that the construction is much more than a mere computational challenge. There are two alternative approaches. Fermionic propagation could correspond to a) a 4-D or lower-dimensional propagation at the space-time level for the induced spinor fields as analog of massless propagation or b) to 8-D propagation in H between points belonging to the space-time surface.</p>
+                <p>For the option b) the separate conservations of baryon and lepton number requires fixed H-chirality so that the spinor mode is sum of products of M<sup>4</sup> and CP<sub>2</sub> spinors with fixed M<sup>4</sup> and CP<sub>2</sub> chiralities whose product is +1 or -1. This implies that M<sup>4</sup> propagation is massless. The Euclidean signature of CP<sub>2</sub> in turn suggests that there is no propagation in CP<sub>2</sub> and the CP<sub>2</sub> projections s<sub>1</sub> and s<sub>2</sub> for the ends of the propagator line are the same. This allows a very simple form for the matrix elements of the propagator and the condition s<sub>1</sub>=s<sub>2</sub> implies that the propagation from s<sub>1</sub> is possible to a discrete set of points s<sub>2</sub>. This has direct relevance for the understanding of color confinement and more or less implies the intuitively deduced TGD based model for elementary particles.</p>
+                <p>Although the option a) need not provide a realistic propagator, it could provide a very useful semiclassical picture. If the condition s<sub>1</sub>=s<sub>2</sub> is assumed, fermionic propagation along light-like geodesics of H is favored and in accordance with the model for elementary particles. This allows a classical space-time picture of particle massivation by p-adic thermodynamics and color confinement.</p>
+                <p>Also the interpretational and technical problems related to the construction of 4-D variants of super-conformal representations having spinor modes as ground states and to the p-adic thermodynamics are discussed.</p>
+            </section>
+
+            <section id="toc-container" class="mb-12 scroll-mt-custom">
+                 <h2 class="text-2xl font-semibold mb-4 border-l-4 border-blue-500 pl-4">Table of Contents</h2>
+                 <div id="generated-toc-main" class="prose-sm">
+                    </div>
+            </section>
+
+
+            <section id="introduction-sec" class="mb-12 scroll-mt-custom">
+                <h2 class="text-2xl font-semibold mb-6 border-l-4 border-blue-500 pl-4">1. Introduction</h2>
+                <p>In this article the identification and calculation of the fermion propagator S<sub>F</sub>(h<sub>1</sub>,h<sub>2</sub>) in H=M<sup>4</sup>×CP<sub>2</sub> is discussed in detail. Also the definition of fermion propagator at space-time surface is considered.</p>
+            
+                <h3 id="basic-questions" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">1.1 Basic questions</h3>
+                <p>Let us summarize the basic physical picture first. The following picture is only one of the many variants and must of course be taken with reservations.</p>
+                <ol class="list-decimal ml-6">
+                    <li>The TGD view of fundamental interactions <a href="#ref-btart-TGD2024I">[TGD2024I, TGD2024II (btart)]</a> differs from that of the standard model. The notion of color differs from that of QCD and electroweak gauge potentials correspond to the components of the induced spinor connection of CP<sub>2</sub> <a href="#ref-allb-tgdnewphys">[tgdnewphys1, tgdnnewphys2 (allb)]</a>. A strong correlation between mass, color quantum numbers and electroweak quantum numbers at the fundamental level corresponding to space-time surfaces is predicted <a href="#ref-btart-isospinbreak">[isospinbreak (btart)]</a>. The standard view emerges as an approximation at the QFT limit.</li>
+                    <li>In CP<sub>2</sub> degrees of freedom, well-defined H chirality implies that the H propagator D<sub>F</sub>((m<sub>1</sub>,s<sub>1</sub>),(m<sub>2</sub>,s<sub>2</sub>)) is reduced to a bilocal inner product for the two modes with the same CP<sub>2</sub> chirality defined by the propagator factor associated with the propagator. An important constraint is that the end points are restricted to the space-time surface. If the propagator reduces to the delta function in CP<sub>2</sub> degrees of freedom, as the Euclidean metric suggests, one has s<sub>1</sub>=s<sub>2</sub> with very powerful consequences. Second important point is that in M<sup>4</sup> the propagation is between identical M<sup>4</sup> chiralities by the separate conservation of lepton and quark quantum numbers.</li>
+                    <li>What does one mean with a virtual fermion now? Propagation in H is the natural geometric definition for virtuality. The first naive guess was that the virtual fermions correspond to masses p<sup>2</sup>=Λ<sub>n</sub><sup>2</sup>, Λ<sub>n</sub><sup>2</sup> is the eigenvalue of the CP<sub>2</sub> Dirac operator, as predicted by the H Dirac equation in H.
+                    This however leads to a conclusion that the propagator does not have these masses as poles unless the normalization of the mass shell states is such that poles are there. Furthermore, these masses do not correspond to the masses of physical fermion, which are generated by p-adic thermodynamics. This picture looks therefore unphysical.</li>
+                    <li>The condition that quark and lepton numbers are separately conserved forces us to assume a fixed H-chirality so that fermions are massless in 8-D sense. This implies that the spinor modes are superpositions of modes for which M<sup>4</sup> chirality and CP<sub>2</sub> chirality are well-defined and either the same or opposite depending on whether quark or lepton is in question. Fixed M<sup>4</sup> chirality requires a massless propagation in M<sup>4</sup>. This is a rather dramatic prediction and means that propagation completely separates from the properties and construction of states.
+                    CP<sub>2</sub> has Euclidean signature of metric, which suggests that propagation is not possible at all. The propagator would reduce to a delta function in CP<sub>2</sub>: the end points s<sub>1</sub> and s<sub>2</sub> would be identical for CP<sub>2</sub> propagation. A second dramatic prediction is that, the condition s<sub>1</sub>=s<sub>2</sub> allows for a fixed point s<sub>1</sub> only a discrete set of final points.</li>
+                    <li>The propagation in H is analog of off-mass shell propagation as off-space-time surface propagation. The notion of induced spinor structure however suggests that it might make sense to speak of propagation along the space-time surface as analog of on-mass-shell propagation.
+                    The induced Dirac equation in X<sup>4</sup> is analogous to the massless Dirac equation. The condition s<sub>1</sub>=s<sub>2</sub> however suggests that this propagation is along light-like geodesics of H, whose projection is a geodesic circle of CP<sub>2</sub>. This would give a classical geometric correlate for the fermion propagation even if the space-time propagator might not be needed.</li>
+                </ol>
+            
+                <h4 id="how-physical-color" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">1.1.1 How do the physical color quantum numbers emerge?</h4>
+                <p>It must be taken into account that physical fermions are either color singlets or triplets, not arbitrarily high color partial waves satisfying only the triality condition t=1 for quarks and t=0 for leptons.</p>
+                <p>This is achieved in two ways.</p>
+                <ol class="list-decimal ml-6">
+                    <li>Neutrino-antineutrino ν<sub>L</sub>ν̅<sub>R</sub> pair screens the electroweak charges above weak boson Compton length and could also screen the anomalous parts of color charges.</li>
+                    <li>The solutions Dirac equation are ground states of conformal representations in which the action of a conformal scaling generator generates higher excitations, which can have color quantum numbers which add to those of color partial waves to give rise to color singlets and triplets.</li>
+                </ol>
+                <p>p-Adic thermodynamics <a href="#ref-btart-padmass2022">[padmass2022 (btart)]</a> describes the thermodynamics of the scaling generator, and gives excellent predictions for the particle masses so that conformal algebra is involved in any case.</p>
+                <p>For the proposed form of the H propagator, the construction of the quantum states separates completely from that for the propagator.</p>
+            
+                <h4 id="confinement-scale" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">1.1.2 How could the confinement scale emerge?</h4>
+                <p>In QCD, confinement occurring on some M<sup>4</sup> scale, the confinement scale, is a fundamental concept. Free quarks are the basic dynamical entities below the confinement scale and transform to hadrons above this scale.</p>
+                <ol class="list-decimal ml-6">
+                    <li>In attempts to understand this, the space-time representation of H propagator D<sub>F</sub>((m<sub>1</sub>,s<sub>1</sub>),(m<sub>2</sub>,s<sub>2</sub>)) for the massa propagator M<sup>4</sup> degrees of freedom should be used (see <a href="https://en.wikipedia.org/wiki/Propagator" target="_blank" rel="noopener noreferrer">Wikipedia: Propagator</a>).
+                    One can consider two options depending on whether the propagation occurs in H or in X<sup>4</sup>. What is expected to happen in the case of H propagation, is the following.
+                        <ol class="list-alpha ml-6">
+                            <li>At least in short scales when a<sup>2</sup>=(m<sub>1</sub>-m<sub>2</sub>)<sup>2</sup> (a is Minkowski distance is small enough, the propagator is essentially a delta function δ(s<sub>1</sub>,s<sub>2</sub>) in CP<sub>2</sub> degrees of freedom. This would be a phase where the quarks are free and effectively massless. What is remarkable is that the s<sub>1</sub>=s<sub>2</sub> condition implies that for a given s<sub>1</sub> there is only a discrete set of points that the propagator can connect! At partonic orbits for which CP<sub>2</sub> projection is fixed the number of these points would be large.</li>
+                            <li>If the condition s<sub>1</sub>=s<sub>2</sub> holds true quite generally, the classical non-determinism of the space-time dynamics implies that the number of points satisfying these conditions is reduced during the time evolution and makes propagation impossible for large values of a<sup>2</sup>. This would mean quark confinement. This of course also applies to possible colored excitations of leptons predicted by TGD and for which there is some evidence <a href="#ref-allb-leptc">[leptc (allb)]</a>.</li>
+                        </ol>
+                    </li>
+                    <li>It is reasonable to expect that the p-adic length scale determines the scale at which the confinement occurs. This is where the algebraic geometry of the spacetime surface comes into play.</li>
+                </ol>
+                <p>Here holography=holomorphy vision suggests a concrete approach.</p>
+                <ol class="list-decimal ml-6">
+                    <li>In the holography=holomorphy vision <a href="#ref-btart-Frenkel">[Frenkel, Langlands2025 (btart)]</a>, space-time surfaces corresponds to the roots of polynomial pair f=(f<sub>1</sub>,f<sub>2</sub>): H→C<sup>2</sup> of generalized complex coordinates of H (one hypercomplex coordinate and 3 complex coordinates). They allow as dynamic symmetries the maps g=(g<sub>1</sub>,g<sub>2</sub>): C<sup>2</sup>→C<sup>2</sup> defined as functional compositions f→g∘f.
+                    One can define prime polynomial pairs f as those which do not allow a decomposition f=g∘h. The prime polynomial pairs g=(g<sub>1</sub>,g<sub>2</sub>) can be defined similarly. The pairs (g<sub>1</sub>,Id) are of special interest and in this case the prime polynomials g<sub>1</sub>(p) have prime degree p.</li>
+                    <li>One should study the H propagator D<sub>F</sub>((m<sub>1</sub>,s<sub>1</sub>),(m<sub>2</sub>,s<sub>2</sub>)) for the polynomials g<sub>p</sub> and the functional iterates g<sub>p</sub><sup>∘k</sup>∘f. The integration over CP<sub>2</sub> projections of the end points gives a bilocal inner product of the modes. The constraint s<sub>1</sub>=s<sub>2</sub> reduces it to an ordinary inner product for the CP<sub>2</sub> spinor modes.
+                    The number of point pairs satisfying the constraint s<sub>1</sub>=s<sub>2</sub> depends on the space-time surface. The functional iterates of g<sub>p</sub> involve classical non-determinism identifiable as p-adic non-determinism <a href="#ref-btart-HHtwistor">[HHtwistor (btart)]</a> so that the number space-time points satisfying the constraint s<sub>1</sub>=s<sub>2</sub> decreases as the number k of iteration steps increases. This would make propagation over too long scales impossible. p-Adic length scale could correspond to this scale. Note that very large primes p are involved: for the electron one has p=M<sub>127</sub>=2<sup>127</sup>-1.
+                    The confinement scale can be identified as a p-adic length scale for quarks or hadrons, which is determined by the thermal mass predicted by p-adic thermodynamics. The larger the value of p, the longer the confinement scale.</li>
+                </ol>
+                <p>Concerning the option based on X<sup>4</sup> propagation two observations can be made.</p>
+                <ol class="list-decimal ml-6">
+                    <li>The possibly existing X<sup>4</sup> propagator would be the analog of a massless propagator since the Dirac equation for induced spinor fields in X<sup>4</sup> is a generalization of the massless Dirac equation. This notion makes sense also for the lower dimensional surfaces of X<sup>4</sup> and 1-D light-like curves are natural candidates for fermion lines.</li>
+                    <li>An observation of possible relevance is that the masses of quarks are effectively zero for the propagation along the light-like M<sup>4</sup> geodesics along parton surfaces.</li>
+                </ol>
+            
+                <h4 id="effective-mass-scale" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">1.1.3 How the effective mass scale of a fermion is determined?</h4>
+                <p>There are two basic questions to be answered. Is the p-adic mass scale determined by the spectrum of CP<sub>2</sub> masses or by p-adic thermodynamics? Does the spectrum of CP<sub>2</sub> masses or p-adic thermal masses appear at the level of propagator or only at the level of initial and final states of propagation?</p>
+                <ol class="list-decimal ml-6">
+                    <li>A naive assumption would be that the quark and lepton masses appear in the propagator depend on the spectrum of color excitations m<sup>2</sup>=λ<sub>n</sub><sup>2</sup> for the fermions involved (ν<sub>L</sub>ν̅<sub>R</sub> for the second option). Several arguments suggest this cannot be the case.
+                    p-Adic thermodynamics, in which the basic parameters characterizing the particle are the p-adic prime p and the p-adic temperature T<sub>p</sub>=1/n, works excellently so that it seems that CP<sub>2</sub> mass spectrum does not make itself visible in the propagator. In p-adic thermodynamics, a large p ≈ 2<sup>k</sup>, simplifies enormously and something similar can be expected now as well.</li>
+                    <li>If the propagation takes in H, it is massless for a fixed H chirality so that the eigenvalue spectrum of D(CP<sub>2</sub>) is not visible in propagation. This separation between the structure of states and propagator would be a huge simplification.</li>
+                    <li>Concerning X<sup>4</sup> propagation, the semiclassical description as light-like H geodesics of the geodesic manifold M<sup>4</sup>×S<sup>1</sup>⊂ M<sup>4</sup>×CP<sub>2</sub> could be considered as a model. The masslessness of H would no longer imply masslessness in M<sup>4</sup>. One could say that p-adic thermal excitations deform the light-like geodesics of M<sup>4</sup> to those of M<sup>4</sup>×S<sup>1</sup>⊂ H. Also this suggests that the masses are not visible in the X<sup>4</sup> propagator as also the fact that they do not appear in the X<sup>4</sup> Dirac operator suggests.</li>
+                </ol>
+            
+                <h3 id="plan-of-article" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">1.2 Plan of the article</h3>
+                <p>The plan of the article is as follows.</p>
+                <ol class="list-decimal ml-6">
+                    <li>I have considered several approaches to the calculation of the fermion propagator and in the following I describe the most elegant looking view about the fermion propagation as propagation in H. Assuming a fixed H chirality, the propagator reduces to massless propagator in H and is proportional to delta function in CP<sub>2</sub> so that no propagation occurs in CP<sub>2</sub> degrees of freedom. This has powerful consequences and the existing intuitive picture about fundamental fermion lines as light-like geodesics at partonic 2-surfaces follows. One can also understand color confinement in this picture.</li>
+                    <li>The 4-D propagation along X<sup>4</sup> involves induced spinor structure and my intuitive feeling is that also this perspective is important, at least as semiclassical model. The condition s<sub>1</sub>=s<sub>2</sub> for H propagation suggests that fermion propagation is always 1-dimensional and along a light-like geodesic of H. This would give a very concrete classical view of the propagation even if a 4-D propagator were not useful. In particular, the p-adic thermal massivation could be modelled semi-classically.</li>
+                    <li>Also the problems related to the origin of p-adicity and interpretational problems of p-adic thermodynamics and to the generalized conformal invariance will be discussed in the Appendix.</li>
+                </ol>
+            </section>
+
+            <section id="how-propagation-takes-place" class="mb-12 scroll-mt-custom">
+                <h2 class="text-2xl font-semibold mb-6 border-l-4 border-blue-500 pl-4">2. How does the propagation take place?</h2>
+                <p>I have considered two alternative views concerning what fermion propagation could mean.</p>
+                <ol class="list-decimal ml-6">
+                    <li>Fermions propagate along the 4-D space-time surface X<sup>4</sup> as induced spinor fields and the propagator is defined by the analog of 4-D massless Dirac operator.</li>
+                    <li>Fermions propagate in H and virtuality in geometric sense could mean that they can leave the space-time surface during the propagation. Off mass-shell property would mean off-space-time surface.</li>
+                </ol>
+                <p>Could the two interpretations for the fermion propagation be consistent? The space-time propagation as a 4-D propagation is geometrically much more restricted. Could the propagator code for the information about initial and final quantum states as a kind of quantum-classical correspondence?</p>
+
+                <h3 id="leptons-quarks-quantized" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">2.1 Leptons and quarks as quantized free spinor fields in H</h3>
+                <p>It is good to start with the description of H spinor fields and of the H Dirac equation. This topic is also discussed in Appendix A.</p>
+
+                <h4 id="leptons-quarks-h-spinors" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">2.1.1 Leptons and quarks as H spinors with different H chiralities</h4>
+                <p>Consider first the general theory.</p>
+                <ol class="list-decimal ml-6">
+                    <li>The second quantized spinor field in H=M<sup>4</sup>×CP<sub>2</sub> can be written as superpositions of modes multiplied with a creation or annihilation operator.</li>
+                    <li>Suppose that the spinor fields of H have a definite H-chirality so that they are either leptonic or quark-like, not a superposition of the two: this would violate the superselection rule of charge and fermion number.
+                    One has
+                    <p class="equation">Γ<sub>9</sub>Ψ<sub>ε</sub> = ε Ψ<sub>ε</sub> .</p>
+                    ε =+1/-1 is the H-chirality and quarks and leptons have opposite chiralities.</li>
+                    <li>The Dirac equation is satisfied by the spinor modes of H. They are massless in H but not in M<sup>4</sup>(!). This is essential for the twistorization and the divergence-free nature of the theory.
+                    The Dirac operator is
+                    <p class="equation">D = D(M<sup>4</sup>) + D(CP<sub>2</sub>),</p>
+                    where
+                    <p class="equation">D(M<sup>4</sup>) = γ<sup>k</sup>p<sub>k</sub></p>
+                    is the Dirac operator in M<sup>4</sup> and
+                    <p class="equation">D(CP<sub>2</sub>) = Γ<sup>k</sup>D<sub>k</sub> .</p>
+                    is the Dirac operator in CP<sub>2</sub>. Here D<sub>k</sub> is covariant derivative, which is defined by the spinor connection of CP<sub>2</sub> that encodes electroweak interactions. The Kähler gauge potential A<sub>k</sub> for leptons is 3A<sub>k</sub> and for quarks A<sub>k</sub>. This explains the different electric charges of quarks and leptons.
+                    Twistorialization suggests that M<sup>4</sup> allows the analog of Kähler structure whereas vielbein connection should be trivial by the flatness of the metric. Kähler form should satisfy the analog self-duality meaning that locally it is analogous to mutually orthogonal electric and magnetic fields of the same magnitude.</li>
+                    <li>Quarks correspond to triality t=1 partial waves and leptons to triality t=0 partial waves. These modes are not simply color triplets for physical quarks and color singlets for physical leptons. For physical fermions, a mechanism producing color triplets for quarks and singlets for leptons is needed.
+                    According to the first section of the Appendix, the color partial waves with different charges correspond to color partial waves characterized by an integer pair (p,q). p and q can thought of as giving the numbers of triplets and anti-triplets in the tensor containing the representation in question. The dimension of the color representation is d(p,q) = (1/2)(p+1)(q+1)(p+q+2).
+                    In the case of leptons, one has representations (p,p) for neutrinos and (3+p,p) for charged leptons. The dimensions are (p+1)<sup>2</sup>(p+2) for neutrinos and (3+p+1)(p+1)(p+2) for charged leptons (Mistake in original formula, should be (3+p+1)(p+1)(p+2) or similar based on (p,q) general formula, d(3+p,p) = 1/2 (3+p+1)(p+1)(3+p+p+2) = 1/2 (p+4)(p+1)(2p+5) ). The color representations are the same for both CP<sub>2</sub> chiralities which correspond to opposite M<sup>4</sup> chiralities for a fixed H chirality.
+                    In the case of quarks one has representations (p+1,p) and (p+4,p) for D resp. U type quarks and the corresponding dimensions are 1/2(p+2)(p+1)(2p+3) resp. 1/2(p+5)(p+1)(2p+5). The two CP<sub>2</sub> chiralities are transformed to each other by D(CP<sub>2</sub>): covariantly right-handed neutrino is an exception since it is annihilated by D(CP<sub>2</sub>).</li>
+                    <li>The charge assignable to color partial wave is not a local notion characterized by a spinor index since D(CP<sub>2</sub>) mixes different isospin states, whose identification depends on the choice of the vierbein in CP<sub>2</sub>. This is understandable since the choice of the CP<sub>2</sub> spinor basis is determined apart from a local U(2) rotation. The same problem is encountered in standard model and solved by going to unitary gauge. One can ask whether it might be possible to define the counterpart of the unitary gauge as a global choice of CP<sub>2</sub> vierbein for which the CP<sub>2</sub> spinor is constant or covariantly constant for a given color partial wave.</li>
+                </ol>
+
+                <h4 id="dirac-equation-h" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">2.1.2 Dirac equation in H</h4>
+                <ol class="list-decimal ml-6">
+                    <li>Dirac equation in H says the following
+                    <p class="equation">DΨ<sub>ε</sub> = 0 .</p>
+                    Here ε =+1/-1 refers to quark/lepton.</li>
+                    <li>Solutions to Dirac equation can be constructed by taking a spinor Φ<sub>ε</sub>, which is not a solution of Dirac equation, but satisfies the following conditions:
+                        <ol class="list-alpha ml-6">
+                            <li>H-chirality is well defined.
+                            <p class="equation">Γ<sub>9</sub>Φ<sub>ε</sub> = ε Φ<sub>ε</sub> .</p>
+                            H-chirality ε is the product ε=ε<sub>1</sub>×ε<sub>2</sub> of M<sup>4</sup> chirality ε<sub>1</sub> and CP<sub>2</sub> chirality ε<sub>2</sub>. It is -1 if the M<sup>4</sup> and CP<sub>2</sub> chiralities are opposite and +1 if they are the same.
+                            Consider first the possibility that Φ<sub>ε</sub> is the tensor product of the M<sup>4</sup> spinor and the CP<sub>2</sub> spinor with the same or opposite chirality corresponding to quarks and leptons.</li>
+                            <li>Φ<sub>ε</sub> is M<sup>4</sup> plane wave so that D(M<sup>4</sup>) = γ<sup>k</sup>p<sub>k</sub> is effectively true.</li>
+                            <li>Φ<sub>ε</sub> satisfies the square of the Dirac equation but not the Dirac equation:
+                            <p class="equation">
+D<sup>2</sup>Φ<sub>ε</sub> = 0 ,<br/>
+D(M<sup>4</sup>)<sup>2</sup>Φ<sub>ε</sub> = p<sup>2</sup>Φ<sub>ε</sub> ,<br/>
+D<sup>2</sup>(CP<sub>2</sub>)Φ<sub>ε</sub> = -Λ<sup>2</sup>Φ<sub>ε</sub> .
+                            </p>
+                            An eigenmode of D(M<sup>4</sup>)<sup>2</sup> and D<sup>2</sup>(CP<sub>2</sub>) is therefore in question. We obtain a spectrum Λ<sub>n</sub><sup>2</sup>, the details of which are not relevant in this context.
+                            The mass is quantized:
+                            <p class="equation">p<sup>2</sup> = Λ<sub>n</sub><sup>2</sup> .</p>
+                            </li>
+                        </ol>
+                    </li>
+                    <li>How to obtain the solution of Dirac's equation Ψ<sub>ε</sub>? It is obtained by operating on the spinor Φ<sub>ε</sub> with the Dirac operator D=D(M<sup>2</sup>)+D(CP<sub>2</sub>):
+                    <p class="equation">Ψ<sub>ε</sub> = DΦ<sub>ε</sub> .</p>
+                    The Dirac equation holds
+                    <p class="equation">DΨ = D<sup>2</sup>Ψ<sub>0</sub> = 0 .</p>
+                    </li>
+                </ol>
+                <p>A couple of comments regarding the chiralities are in order.</p>
+                <ol class="list-decimal ml-6">
+                    <li>The spinor Φ<sub>ε</sub> has well-defined M<sup>4</sup> and CP<sub>2</sub> chiralities, but for the spinor DΦ<sub>ε</sub> the chiralities are not well-defined.</li>
+                    <li>Although Φ<sub>ε</sub> can be chosen as the product of the Ψ=ψ⊗φ definite M<sup>4</sup> of the spinor with chirality ψ and the spinor with chirality φ of the definition CP<sub>2</sub>, then DΨ is a superposition
+                    <p class="equation">D(M<sup>4</sup>)ψ⊗φ + ψ⊗D(CP<sub>2</sub>)φ ,</p>
+                    where the H-chiralities have changed because D(M<sup>4</sup>) (D(CP<sub>2</sub>)) changes the chirality of M<sup>4</sup> (CP<sub>2</sub>). It can be said that both M<sup>4</sup> and CP<sub>2</sub> chiralities are mixed when the mass is non-zero.</li>
+                    <li>It turns out that only a right-handed neutrino can have a massless state.</li>
+                </ol>
+
+                <h3 id="propagation-along-x4" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">2.2 Does the propagation take place along space-time surface X<sup>4</sup>?</h3>
+                <p>For the modes of the induced spinor field the propagation would take place along the spacetime surface and possibly also along a related lower-dimensional surface such as a partonic 2-surface and light-like curves along it.</p>
+                <ol class="list-decimal ml-6">
+                    <li>This 4-dimensional (or possibly lower-dimensional) propagator corresponds to the inverse of the Dirac operator for the induced gamma matrices as projection of the 8-D vector formed by H gamma matrices. Induced gamma matrices anticommute to the induced metric.</li>
+                    <li>One can also consider modified gamma matrices determined as contractions of the canonical momentum currents of the classical action with the gamma matrices of H <a href="#ref-allb-cspin">[cspin, wcwnew (allb)]</a>. These do not anticommute to the induced metric but for them 4-D super-conformal symmetry would be exact and classical field equations would appear as a consistency condition guaranteeing hermiticity.
+                    For the induced gamma matrices super-conformal symmetry is violated at the vertices <a href="#ref-btart-whatgravitons">[whatgravitons (btart)]</a>, where the full action makes itself visible: outside the singularities minimal surface property consistent with volume action, giving rise to induced gamma matrices, holds true.</li>
+                    <li>The beauty of this view (also that based on H propagator) is that the constructions of the propagator and of the physical states are completely separated from each other. The propagator is the inverse of the Dirac operator for induced spinors. For H propagator the construction is easy but the situation need not be the same now.</li>
+                    <li>One might hope that holography=holomorphy principle <a href="#ref-btart-Frenkel">[Frenkel, Langlands2025, HHtwistor (btart)]</a> allows the explicit construction of the propagator using complex coordinates assignable to the Hamilton-Jacobi structure involving hypercomplex coordinates (u,v) and complex coordinates (w,w̅) <a href="#ref-btart-HJ">[HJ (btart)]</a>. Hypercomplex coordinates (u,v) would be the analogs of light-like coordinates and the Minkowskian signature would make the propagation possible.
+                    In the Euclidean situation the propagator would be bilinear in holomorphic and antiholomorphic modes h<sub>1</sub>=h<sub>2</sub> would be a delta function singularity. Now the situation is more complex but one might hope that Wick rotation for the second complex coordinate, transforming it to hypercomplex coordinate, could give the propagator.
+                    For light-like curves at partonic orbits identified as fermionic lines, the propagator can be constructed explicitly by a semiclassical argument.</li>
+                </ol>
+                <p>One can criticize this approach.</p>
+                <ol class="list-decimal ml-6">
+                    <li>In the case of Minkowski space it is clear what virtuality of the fermion means for the massless case: the explicit expression for the massless fermion propagator implies the massive virtual modes. For virtual modes with p<sup>2</sup>≠0 p<sup>k</sup>γ<sub>k</sub>Ψ is nonvanishing.</li>
+                    <li>What could the non-vanishing virtual momentum squared correspond to in the recent case? The condition DΨ = (Γ<sup>k</sup>D<sub>k</sub> + Γ<sup>k̅</sup>D<sub>k̅</sub>)Ψ = 0, reduces for the holomorphic modes, satisfying D<sub>k̅</sub>Ψ=0, to the condition Γ<sup>k</sup>Ψ=0. An analogous condition is true for the antiholomorphic modes.
+                    Γ<sup>k</sup>Ψ≠0 should be true for the virtual modes. This condition is consistent with the condition that H chirality is fixed but means mixing of the M<sup>4</sup> chiralities which is the signature of massivation due to the virtual mass.</li>
+                </ol>
+
+                <h3 id="propagation-in-h" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">2.3 Does the propagation occur in H?</h3>
+                <p>The second option is that the propagation takes place in H for the spinor modes of H in such a way that only the endpoints of the propagator D<sub>F</sub>(h<sub>1</sub>,h<sub>2</sub>) are restricted to the space-time surface X<sup>4</sup>. One could say that virtuality in geometric sense for the fermions means that they can leave the space-time surface. The propagation along space-time surface already discussed would mean the analog of on-mass-shell propagation.</p>
+
+                <h4 id="massless-dirac-m4" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">2.3.1 Massless Dirac propagator in M<sup>4</sup></h4>
+                <p>The M<sup>4</sup> case provides a kind of role model. For momentum basis, the inverse of the Dirac operator can be solved algebraically and space-time representation involves integration over virtual momenta with p<sup>2</sup>≠0.</p>
+                <p>The momentum space - and space-time representations of the massless Dirac propagator can be found in the book "An introduction to quantum field theory" by Peskin and Schröder (edition 1995, p. 660) (see <a href="https://physics.stackexchange.com/questions/263846/the-analytical-result-for-free-massless-fermion-propagator" target="_blank" rel="noopener noreferrer">this link</a>) and are given by</p>
+                <ol class="list-decimal ml-6">
+                    <li>The representation of the massless Dirac propagator in momentum space is given by
+                    <p class="equation">S̃<sub>F</sub>(p) = (i γ·p) / (p<sup>2</sup> + iε) .</p>
+                    Here the 1/(x+iε) is a shorthand notation for 1/x ∓ iπδ(x).</li>
+                    <li>The space-time representation of the massless Dirac propagator is obtained from the momentum representation D<sub>F</sub>(p) = ip<sup>k</sup>γ<sub>k</sub>/(p<sup>2</sup>+iε) as Fourier transform
+                    <p class="equation">S<sub>F</sub>(x-y) = ∫ [d<sup>4</sup>p / (2π)<sup>4</sup>] e<sup>-ip·(x-y)</sup> [ (iγ·p) / (p<sup>2</sup>+iε) ] = - [i / (2π<sup>2</sup>)] [ (γ·(x-y)) / |x-y|<sup>4</sup> ] .</p>
+                    This form conforms can be deduced from the scaling invariance.</li>
+                </ol>
+                <p>As one might guess, the propagator has a part, which is a delta function concentrated on the boundary of a double light-cone. The reader can verify this by calculating the 4-D volume integral of S<sub>F</sub>(m=x-y) by using a standard definition of delta function in terms of 4-D volume integral and the basic rules for integrating delta functions.</p>
+                <p>It is advantageous to use spherical coordinates (a,η,θ,φ) related to linear Minkowski coordinates m<sup>k</sup> by the equations</p>
+                <div class="equation">
+                    m<sup>0</sup> = a × cosh(η),<br/>
+                    m<sup>1</sup> = a × sinh(η)cos(θ),<br/>
+                    m<sup>2</sup> = a × sinh(η)sin(θ)cos(φ),<br/>
+                    m<sup>3</sup> = a × sinh(η)sin(θ)sin(φ) .
+                </div>
+                <p>a<sup>2</sup>=m<sup>k</sup>m<sub>k</sub> defines the light-cone proper-time. The line element of the M<sup>4</sup> metric is that for empty Robertson-Walker cosmology ds<sup>2</sup>= da<sup>2</sup>-a<sup>2</sup>(dr<sup>2</sup>/(1+r<sup>2</sup>) -r<sup>2</sup>dΩ<sup>2</sup>). The 4-D volume element is dV<sub>4</sub>= a<sup>3</sup>r<sup>2</sup> dadr sin(θ) dθ dφ.</p>
+                <p>In the integrand of the volume integral, the dependence on a disappears. The integral of the spatial part of m<sup>k</sup>γ<sub>k</sub> over angle coordinates vanishes. The contribution of m<sup>0</sup>γ<sub>0</sub> gives two delta functions corresponding to m<sup>0</sup>±r<sub>M</sub> non-vanishing at the light-cone boundary.</p>
+
+                <h4 id="deduction-h-propagator" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">2.3.2 Deduction of the H propagator</h4>
+                <p>The separate conservation of lepton and quark numbers forces the counterpart of the massless propagator, not only in H but also in M<sup>4</sup>.</p>
+                <ol class="list-decimal ml-6">
+                    <li>The H propagator corresponds to the inverse of the massless Dirac operator of H. It is essential that the modes have a well-defined H-chirality meaning that lepton and quarks numbers are separately conserved.</li>
+                    <li>One could argue that since M<sup>4</sup> masses for spinor modes are given by p<sup>2</sup>=Λ<sub>n</sub><sup>2</sup>, where Λ<sub>n</sub><sup>2</sup> is the eigenvalue of D(CP<sub>2</sub>)<sup>2</sup>, each mode gives rise to a propagator with mass Λ<sub>n</sub><sup>2</sup>. Since Λ<sub>n</sub> corresponds to CP<sub>2</sub> mass scale, only the covariantly constant right-handed neutrino would propagate above CP<sub>2</sub> mass scale! The other modes would propagate only in the CP<sub>2</sub> length scale. Note however that in M<sup>4</sup> massive propagation along light-like geodesics reduces to massless propagation.
+                    The second problem is that for this view the poles at p<sup>2</sup>=Λ<sub>n</sub><sup>2</sup> do not emerge and must be put in by hand as normalization factors for off-mass-shell states. The reason is that the 1/D<sup>2</sup> factor disappears in the matrix elements of D/(D<sup>2</sup>+iε) between the massive H spinor modes Ψ, which are of form Ψ=DΦ. The only exception is the right-handed neutrino, which is covariantly constant in CP<sub>2</sub> degrees of freedom. Only the right-handed neutrino would propagate.
+                    The delicate difference with respect to the ordinary massive propagation in M<sup>4</sup> is that the ordinary massive propagator is given by D<sub>F</sub>=1/(p<sup>k</sup>γ<sub>k</sub>+m) = (p<sup>k</sup>γ<sub>k</sub>-m)/(p<sup>2</sup>-m<sup>2</sup>+iε) by p<sup>2</sup>-m<sup>2</sup>=(p<sup>k</sup>γ<sub>k</sub>+m)(p<sup>k</sup>γ<sub>k</sub>-m). In TGD, a propagator massive in M<sup>4</sup> sense is massless in the 8-D sense and one has D<sub>F</sub>=1/D = D/(D<sup>2</sup>+iε).</li>
+                    <li>What does the fixing the H-chirality implied by the separate conservation of quark and lepton numbers mean? The H-spinor is a combination of two spinors, where the M<sup>4</sup> and CP<sub>2</sub> chiralities ε<sub>1</sub> and ε<sub>2</sub> are well defined and their product ε=ε<sub>1</sub>ε<sub>2</sub> is +1 or -1 depending on whether it is a quark or a lepton. The combinations (1,-1) and (-1,1) and on the other hand (1,1) and (-1,-1) are possible.
+                    But the fixed M<sup>4</sup> chirality means that propagation is like that for a massless fermion in M<sup>4</sup>! The mass spectrum for D(P<sub>2</sub>) does not show itself in the M<sup>4</sup> part of the propagator and the construction of states and of the propagator are completely separate problems. This picture also corresponds to the picture of QCD where massless quarks are assumed as an approximation.</li>
+                    <li>What about the propagation in CP<sub>2</sub> degrees of freedom? It follows directly from the defining condition that the propagator is a delta function in CP<sub>2</sub> degrees of freedom. There is no propagation at all. This just what the Euclidian signature of CP<sub>2</sub> suggests. The matrix elements of the propagator between quantum states constructed from the conformal representations having H spinor modes as ground states are extremely simple and reduce to the same form as in QFTs for fermions with internal quantum numbers.</li>
+                </ol>
+
+                <h4 id="h-propagator-consequences" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">2.3.3 Some consequences</h4>
+                <p>This result has some highly non-trivial consequences.</p>
+                <ol class="list-decimal ml-6">
+                    <li>The H propagation includes the constraint that the end points of the propagator belong to the space-time surface through the fact that h<sub>1</sub> and h<sub>2</sub> are on the same spacetime surface. Since there is no propagation at all in CP<sub>2</sub> the points s<sub>1</sub> and s<sub>2</sub> are identical!
+                    The condition s<sub>1</sub>=s<sub>2</sub> at the spacetime surface gives two complex conditions for s<sub>2</sub> when s<sub>1</sub> is fixed and the result is a discrete set of points on the spacetime surface! Only in these cases does propagation occur. The theory discretizes itself in CP<sub>2</sub> degrees of freedom! Discretization would not be an approximation but a prediction of the theory. This is the basic idea behind the identification of cognitive representation as a number theoretic discretization using points of the embedding space for which H coordinates make sense both as real numbers and numbers in an extension of p-adic numbers.</li>
+                    <li>The light-like parton orbits are in a special role now since the partonic 2-surfaces at the ends of the parton orbit can have a large number of common points if their CP<sub>2</sub> projections are identical. This would explain why they are physically in exceptional position.
+                    The picture of propagation along light-like geodesics suggest by physical intuition is consistent with the condition s<sub>1</sub>=s<sub>2</sub> but a light-like geodesic is not needed for the H-propagator.</li>
+                    <li>From this it should be easy to understand what happens in quark and color confinement (gluons are bound states of quarks and antiquarks in TGD). The classical time evolution involves the failure of classical determinism identifiable as p-adic non-determinism <a href="#ref-btart-Langlands2025">[Langlands2025, HHtwistor (btart)]</a>. There is a sequence of analogs of multifurcations involving non-determinism. In this sequence the number of common points possessed by the initial and final partonic orbits decreases and eventually the propagator amplitude becomes very small. This means color confinement.</li>
+                </ol>
+                <p class="my-4 p-3 bg-yellow-100 border border-yellow-300 rounded-md text-yellow-700"><em>Note: Content from an external file specified in the original LaTeX document (<code>/Users/matpitka/tgdmaterials/texfiles/dirprop1D.tex</code>) would be included here. This content is not available for direct rendering.</em></p>
+            </section>
+
+            <section id="appendix-a" class="mb-12 scroll-mt-custom">
+                <h2 class="text-2xl font-semibold mb-6 border-l-4 border-blue-500 pl-4">Appendix A: About the solutions of Dirac equation in H</h2>
+                <p>This section serves as an Appendix and re-represents information appearing in <a href="#ref-allb-mless">[mless (allb)]</a>. First the TGD view of electroweak and color interactions is compared with the standard view. After that the general solutions of the Dirac equation in H are discussed.</p>
+
+                <h3 id="tgd-vs-standard-model" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">A.1 How does the TGD view of standard model interactions differ from the standard model view?</h3>
+                <p>TGD based vision standard model interactions differs in several respects from the standard view.</p>
+                <ol class="list-decimal ml-6">
+                    <li>In TGD, elementary particles correspond to closed monopole flux tubes as analogs of hadronic strings connecting two Minkowskian space-time sheets by Euclidean wormhole contacts. The light-like orbits of wormhole throats (partonic orbits) carry fermions and antifermions at light curves located at light-like 3-surfaces, which define interfaces between Minkowskian string world regions and Euclidean regions identified as deformed CP<sub>2</sub> type extremals.</li>
+                    <li>The basic difference at the level of H spinor fields is that color quantum numbers are not spin-like but are replaced with color partial waves in CP<sub>2</sub>. Color degrees of freedom are analogous to the rotational degrees of freedom of a rigid body. An infinite number of color partial waves emerges for both quarks and leptons. In TGD, color and electroweak degrees of freedom are strongly correlated as is also clear from the fact that color symmetries correspond to the non-broken symmetries as isometries of CP<sub>2</sub> and electroweak symmetries correspond to the holonomies of CP<sub>2</sub>, which are automatically broken gauge symmetries.
+                    The spectrum of color partial waves in H is different for U and D type quarks and for charged leptons and neutrinos. The triality of the partial wave is zero for leptons and 1 resp. -1 for quarks resp. antiquarks. At the level of fundamental fermions, which do not correspond as such to fermions as elementary particles, there is a strong violation of isospin symmetry.</li>
+                </ol>
+                <p>The physical states are constructed using p-adic thermodynamics <a href="#ref-allb-mless-elvafu">[mless, elvafu (allb)]</a> <a href="#ref-btart-padmass2022">[padmass2022 (btart)]</a> for the scaling generator L<sub>0</sub> of the conformal symmetries extended to the space-time level and involve the action of Kac-Moody type algebras.
+                The basic challenge of the state construction of the physical states is to obtain physical states with correct color quantum numbers.</p>
+                <ol class="list-decimal ml-6">
+                    <li>General irrep of SU(3) is labelled by a pair (p,q) of integers, where p resp. q corresponds intuitively to the number of quarks resp. antiquarks. The dimension of the representation is d(p,q) = (1/2)(p+1)(q+1)(p+q+2).
+                    The spinors assignable to left and right handed neutrino correspond to representations of color group of type (p,p), where the integers and only right-handed neutrino allows singlet (0,0) as covariantly constant CP<sub>2</sub> spinor mode. (1,1) corresponds to octet 8. Charged leptons allow representations of type (3+p,p): p=0 corresponds to decuplet 10.
+                    Note that (0,3) corresponds to 10̅.
+                    Quarks correspond to irreps of type obtained from leptons by adding one quarks that is replacing (p+3,p) with (p+4,p) (p=0 gives d=20) or (p,p) with (p+1,p) (p=1 gives d=42). Antiquarks are obtained by replacing (p,p+3) replaced with (p,p+4) and (p,p) with (p,p+1).</li>
+                    <li>Physical leptons (quarks) are color singlets (triplets). One can imagine two ways to achieve this.
+                        <p><b>Option I:</b> The conformal generators act on the ground state defined by the spinor harmonic of H. Could the tensor product of the conformal generators with spinor modes give a color singlet state for leptons and triplet state for quarks? The constraint that Kac-Moody type generators annihilate the physical states, realizing conformal invariance, might pose severe difficulties.</p>
+                        <p>In fact, TGD leads to the proposal that there is a hierarchical symmetry breaking for conformal half-algebras containing a hierarchy of isomorphic sub-algebras with conformal weights coming as multiplets of the weights of the entire algebra. This would make the gauge symmetry of the subalgebra with weights below given maximal weight to a physical symmetry.</p>
+                        <p><b>Option II:</b> The proposal is that the wormhole throats also contain pairs of left- and right-handed neutrinos guaranteeing that the total electroweak quantum numbers of the string-like closed monopole flux tube representing hadron vanishes. This would make the weak interactions short-ranged with the range determined by the length of the string-like object.</p>
+                        <p>One must study the tensor products of ν<sub>L</sub>ν̅<sub>R</sub> and ν̅<sub>L</sub>ν<sub>R</sub> states with the leptonic (quark) spinor harmonic to see whether it is possible to obtain singlet (triplet) states. The tensor product of a neutrino octet with a neutrino type spinor contains a color singlet. The tensor product 8⊗8 = 1+8<sub>A</sub>+8<sub>S</sub>+10+10̅+27 contains 10̅ and its tensor product with 10 for quark contains a color triplet.</p>
+                    </li>
+                </ol>
+                <p>The ground states for the Super Virasoro representations correspond to spinor harmonics in M<sup>4</sup> × CP<sub>2</sub> characterized by momentum and color quantum numbers. The correlation between color and electro-weak quantum numbers is wrong for the spinor harmonics and these states would be also hyper-massive. One can imagine two mechanisms.</p>
+                <ol class="list-decimal ml-6">
+                    <li>The super-symplectic generators could allow to build color triplet states having negative vacuum conformal weights, and their values are such that p-adic massivation is consistent with the predictions of the earlier model differing from the recent one in the quark sector. In the following the construction and the properties of the color partial waves for fermions and bosons are considered. The discussion follows closely to the discussion of <a href="#ref-bmat-Pope">[Pope (bmat)]</a>.</li>
+                    <li>In the concrete model for elementary particles a pair of left- and right-handed neutrino associated with the monopole flux tube screens weak isospin above weak boson Compton length. This pair could be in such color partial waves that the outcome is leptonic color singlet and quark color triplet.</li>
+                </ol>
+                <p>In the sequel only the color partial waves in H are discussed. This reduces to the discussion of the eigenstates of CP<sub>2</sub> d'Alembertian whose eigestates the spinor harmonics are.</p>
+
+                <h3 id="general-construction-dirac-h" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">A.2 General construction of solutions of Dirac operator of H</h3>
+                <p>The construction of the solutions of massless spinor and other d'Alembertians in M<sup>4</sup><sub>+</sub>×CP<sub>2</sub> is based on the following observations.</p>
+                <ol class="list-decimal ml-6">
+                    <li>d'Alembertian corresponds to a massless wave equation M<sup>4</sup>×CP<sub>2</sub> and thus Kaluza-Klein picture applies, that is M<sup>4</sup><sub>+</sub> mass is generated from the momentum in CP<sub>2</sub> degrees of freedom. This implies mass quantization:
+                    <p class="equation">M<sup>2</sup> = M<sub>n</sub><sup>2</sup> ,</p>
+                    where M<sub>n</sub><sup>2</sup> are eigenvalues of CP<sub>2</sub> Laplacian. Here of course, ordinary field theory is considered. In TGD the vacuum weight changes mass squared spectrum.</li>
+                    <li>In order to get a respectable spinor structure in CP<sub>2</sub> one must couple CP<sub>2</sub> spinors to an odd integer multiple of the Kähler gauge potential. Leptons and quarks correspond to n=3 and n=1 couplings respectively. The spectrum of the electromagnetic charge comes out correctly for leptons and quarks.</li>
+                    <li>Right handed neutrino is covariantly constant solution of CP<sub>2</sub> Laplacian for n=3 coupling to Kähler gauge potential whereas right handed "electron" corresponds to the covariantly constant solution for n=-3. From the covariant constancy it follows that all solutions of the spinor Laplacian are obtained from these two basic solutions by multiplying with an appropriate solution of the scalar Laplacian coupled to Kähler gauge potential with such a coupling that a correct total Kähler charge results. Left handed solutions of spinor Laplacian are obtained simply by multiplying right handed solutions with CP<sub>2</sub> Dirac operator: in this operation the eigenvalues of the mass squared operator are obviously preserved.</li>
+                    <li>The remaining task is to solve scalar Laplacian coupled to an arbitrary integer multiple of Kähler gauge potential. This can be achieved by noticing that the solutions of the massive CP<sub>2</sub> Laplacian can be regarded as solutions of S<sup>5</sup> scalar Laplacian. S<sup>5</sup> can indeed be regarded as a circle bundle over CP<sub>2</sub> and massive solutions of CP<sub>2</sub> Laplacian correspond to the solutions of S<sup>5</sup> Laplacian with exp(isτ) dependence on S<sup>1</sup> coordinate such that s corresponds to the coupling to the Kähler gauge potential:
+                    <p class="equation">s = n/2 .</p>
+                    Thus one obtains
+                    <p class="equation">D<sup>2</sup><sub>5</sub> = (D<sub>μ</sub> - iA<sub>μ</sub>∂<sub>τ</sub>)(D<sup>μ</sup> - iA<sup>μ</sup>∂<sub>τ</sub>) + ∂<sub>τ</sub><sup>2</sup></p>
+                    so that the eigen values of CP<sub>2</sub> scalar Laplacian are
+                    <p class="equation">m<sup>2</sup>(s) = m<sub>5</sub><sup>2</sup> + s<sup>2</sup></p>
+                    for the assumed dependence on τ.</li>
+                    <li>What remains to do, is to find the spectrum of S<sup>5</sup> Laplacian and this is an easy task. All solutions of S<sup>5</sup> Laplacian can be written as homogenous polynomial functions of C<sup>3</sup> complex coordinates Z<sup>k</sup> and their complex conjugates and have a decomposition into the representations of SU(3) acting in natural manner in C<sup>3</sup>.</li>
+                    <li>The solutions of the scalar Laplacian belong to the representations (p,p+s) for s≥0 and to the representations (p+|s|, p) of SU(3) for s≤0. The eigenvalues m<sup>2</sup>(s) and degeneracies d are
+                    <p class="equation">
+m<sup>2</sup>(s) = (2Λ/3)[p<sup>2</sup> + (|s|+2)p + |s|] ,  p>0 ,<br/>
+d = (1/2)(p+1)(p+|s|+1)(2p+|s|+2) .
+                    </p>
+                    Λ denotes the “cosmological constant” of CP<sub>2</sub> (R<sub>ij</sub>= Λs<sub>ij</sub>).</li>
+                </ol>
+
+                <h4 id="solutions-leptonic-spinor" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">A.2.1 Solutions of the leptonic spinor Laplacian</h4>
+                <p>Right handed solutions of the leptonic spinor Laplacian are obtained from the ansatz of form</p>
+                <p class="equation">ν<sub>R</sub> = Φ<sub>s=0</sub> ν<sup>0</sup><sub>R</sub> ,</p>
+                <p>where u<sub>R</sub> is covariantly constant right handed neutrino and Φ scalar with vanishing Kähler charge. Right handed "electron" is obtained from the ansatz</p>
+                <p class="equation">e<sub>R</sub> = Φ<sub>s=3</sub> e<sup>0</sup><sub>R</sub> ,</p>
+                <p>where e<sup>0</sup><sub>R</sub> is covariantly constant for n=-3 coupling to Kähler gauge potential so that scalar function must have Kähler coupling s=n/2=3 a in order to get a correct Kähler charge. The d'Alembert equation reduces to</p>
+                <p class="equation">
+(D<sub>μ</sub>D<sup>μ</sup> - (1 - ε)Λ)Φ = -m<sup>2</sup>Φ ,<br/>
+ε(ν)=1 ,  ε(e)=-1 .
+                </p>
+                <p>The two additional terms correspond to the curvature scalar term and J<sub>kl</sub>Σ<sup>kl</sup> terms in spinor Laplacian. The latter term is proportional to Kähler coupling and of different sign for ν and e, which explains the presence of the sign factor ε in the formula.</p>
+                <p>Right handed neutrinos correspond to (p,p) states with p≥0 with mass spectrum</p>
+                <p class="equation">
+m<sup>2</sup>(ν) = (m<sub>1</sub><sup>2</sup>/3)[p<sup>2</sup> + 2p] ,  p≥0 ,<br/>
+m<sub>1</sub><sup>2</sup> ≡ 2Λ .
+                </p>
+                <p>Right handed “electrons” correspond to (p,p+3) states with mass spectrum</p>
+                <p class="equation">m<sup>2</sup>(e) = (m<sub>1</sub><sup>2</sup>/3)[p<sup>2</sup> + 5p + 6] ,  p≥0 .</p>
+                <p>Left handed solutions are obtained by operating with CP<sub>2</sub> Dirac operator on right handed solutions with one exception: the action of the Dirac operator on the covariantly constant right handed neutrino ((p=0,p=0) state) annihilates it.</p>
+
+                <h4 id="quark-spectrum" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">A.2.2 Quark spectrum</h4>
+                <p>Quarks correspond to the second conserved H-chirality of H-spinors. The construction of the color partial waves for quarks proceeds along similar lines as for leptons. The Kähler coupling corresponds to n=1 (and s=1/2) and right handed U type quark corresponds to a right handed neutrino. U quark type solutions are constructed as solutions of form</p>
+                <p class="equation">U<sub>R</sub> = u<sub>R</sub>Φ<sub>s=-1</sub> ,</p>
+                <p>where u<sub>R</sub> possesses the quantum numbers of covariantly constant right handed neutrino with Kähler charge n=3 (s=3/2). Hence Φ<sub>s</sub> has s=-1. For D<sub>R</sub> one has</p>
+                <p class="equation">D<sub>R</sub> = d<sub>R</sub>Φ<sub>s=2</sub> .</p>
+                <p>d<sub>R</sub> has s=-3/2 so that one must have s=2. For U<sub>R</sub> the representations (p+1,p) with triality one are obtained and p=0 corresponds to color triplet. For D<sub>R</sub> the representations (p,p+2) are obtained and color triplet is missing from the spectrum (p=0 corresponds to 6̅).</p>
+                <p>The CP<sub>2</sub> contributions to masses are given by the formula</p>
+                <p class="equation">
+m<sup>2</sup>(U,p) = (m<sub>1</sub><sup>2</sup>/3)[p<sup>2</sup>+3p+2] ,  p≥0 ,<br/>
+m<sup>2</sup>(D,p) = (m<sub>1</sub><sup>2</sup>/3)[p<sup>2</sup>+4p+4] ,  p≥0 .
+                </p>
+                <p>Left handed quarks are obtained by applying Dirac operator to right handed quark states and mass formulas and color partial wave spectrum are the same as for right handed quarks.</p>
+                <p>The color contributions to p-adic mass squared are integer valued if m<sub>0</sub><sup>2</sup>/3 is taken as a fundamental p-adic unit of mass squared. This choice has an obvious relevance for p-adic mass calculations since canonical identification does not commute with a division by integer. More precisely, the images of number xp in canonical identification has a value of order 1 when x is a non-trivial rational whereas for x=np the value is n/p and extremely is small for physically interesting primes. This choice does not however affect the spectrum of massless states but can affect the spectrum of light states in case of electro-weak gauge bosons.</p>
+            </section>
+
+            <section id="foundational-questions-sec" class="mb-12 scroll-mt-custom">
+                <h2 class="text-2xl font-semibold mb-6 border-l-4 border-blue-500 pl-4">3. Foundational questions</h2>
+                <p>There are several foundational questions involved. What is the origin of the p-adicity? What is the justification of p-adic thermodynamics and what does it have a counterpart at quantum level? What are the poorly understood aspects of p-adic thermodynamics? What is the understanding of generalized superconformal representations and possible interpretational and technical problems.</p>
+
+                <h3 id="questions-padic-thermo" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">3.1 Questions related to the p-adic thermodynamics</h3>
+                <p>The nice feature of both approaches is that the propagators carry a minimum amount of information about the quantum states at the 3-surfaces to which the end points of the propagator are associated. Therefore the construction of physical states with correct total color quantum numbers do not affect the propagators. One also circumvents the problem how to take into account the massivation by p-adic thermodynamics at the level of the fermionic propagators.</p>
+                <p>This construction says nothing about how physical fermions are constructed and how the get their masses via p-adic thermodynamics.</p>
+
+                <h4 id="origin-padic-thermo" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">3.1.1 The origin of p-adic thermodynamics</h4>
+                <p>The understanding of the origin of p-adic thermodynamics is the first challenge.</p>
+                <ol class="list-decimal ml-6">
+                    <li>In p-adic thermodynamics, the scaling generator L<sub>0</sub> takes the role of energy as a generator of time translations. Ordinary 2-D conformal invariance requires that physical states are annihilated by L<sub>0</sub>. All states created by L<sub>0</sub> would correspond to gauge degrees of freedom. This cannot be the case in p-adic thermodynamics.
+                    In TGD, the conformal algebras are replaced by half-algebras <a href="#ref-btart-wcwsymm">[wcwsymm (btart)]</a>, which allow an infinite hierarchy of sub-algebras isomorphic to the full algebra, which means that a finite-dimensional sub-algebra transforms from gauge algebra to a dynamical symmetry algebra and p-adic thermodynamics applies to states in this finite-dimensional state space.</li>
+                    <li>In the 2-D version of the p-adic thermodynamics, the ground state is necessarily tachyonic with a negative conformal weight representing the mass squared. The physical ground state with a vanishing mass squared is obtained by applying conformal generators with a positive conformal weight. Where do the generators with tachyonic conformal weight come from?
+                        <ol class="list-alpha ml-6">
+                            <li>p-Adic thermodynamics in its recent formulation <a href="#ref-btart-padmass2022">[padmass2022 (btart)]</a> answers this question by extending the conformal algebra from dimension 2 to dimension 4 so that one has hypercomplex and complex coordinate and there are conformal weights associated with both of them. The 4-dimensional conformal invariance is realized in holography=holomorphy (H-H) vision involving the notion of Hamilton-Jacobi structure in an essential way <a href="#ref-brart-HJ">[HJ (brart)]</a>. There are conformal weights associated with hypercomplex resp. complex coordinates and the corresponding conformal weights are non-negative resp. negative. Their sum vanishes for massless ground states.</li>
+                            <li>M<sup>8</sup>-H duality <a href="#ref-btart-TGDcritics">[TGDcritics, HHtwistor (btart)]</a> provides further insights to the tachyon problem. In M<sup>8</sup>, the momentum space M<sup>4</sup> corresponds to a quaternionic subspace of octonions realized as the normal space of point y of the 4-surfaces Y<sup>4</sup>⊂ M<sup>8</sup>. The point y carries the fermion. The 8-D mass squared always vanishes but the M<sup>4</sup> part is in general non-vanishing. For some points y∈Y<sup>4</sup> the normal space M<sup>4</sup> is such that the E<sup>4</sup> part of the 8-momentum vanishes and the particle is massless in M<sup>4</sup> sense. This is the counterpart for the cancellation of the two conformal weights at the level of H.</li>
+                        </ol>
+                    </li>
+                </ol>
+
+                <h4 id="problem-superconformal" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">3.1.2 A possible problem with super-conformal representations</h4>
+                <p>What about the higher conformal excitations giving rise to the p-adic thermal mass? There does not seem to be any point or need to modify the massless propagators since they are associated with the ground state of the super-conformal representations. There is however a problem.</p>
+                <p>In string models the super generators G<sub>n</sub> of Ramond representation and G<sub>n+1/2</sub> of Neveu-Schwarz representation define the analog of the Dirac operator. The anticommutators {G<sub>m</sub>,G<sub>n</sub><sup>†</sup>} and {G<sub>m+1/2</sub>,G<sub>n+1/2</sub><sup>†</sup>} give Virasoro generators L<sub>n</sub>. In the Ramond representation one has G<sub>0</sub>= p<sup>k</sup>γ<sub>k</sub> +G<sub>vib,0</sub>. The Ramond representation therefore contains the ordinary Dirac operator acting in cm degrees of freedom.</p>
+                <p>In p-adic thermodynamics <a href="#ref-allb-mless-padmass2022">[mless, padmass2022 (allb)]</a> based on the TGD view of conformal invariance <a href="#ref-btart-wcwsymm">[wcwsymm (btart)]</a>, the Majorana option is not possible. Since the ordinary gamma matrices do not carry a fermion number, the Ramond formula of G would involve generators with a vanishing fermion number and non-vanishing fermion number. Same applies also to G<sub>n</sub>.</p>
+                <ol class="list-decimal ml-6">
+                    <li>A possible solution of the problem is that super generators and their Hermitian conjugates define two kinds of supergenerators. For Ramond representation, this would also include the counterparts of ordinary gamma matrices. The algebra creating the states would involve only non-negative conformal weights and possess a fractal hierarchy of included sub-algebras isomorphic to the entire algebra.</li>
+                    <li>Could G<sub>0</sub> is non-hermitian so that both G<sub>0</sub> resp. G<sub>0</sub><sup>†</sup> carrying a fermion number 1 resp. -1 are allowed. The counterparts of M<sup>4</sup> gamma matrices would be analogous to fermionic creation and annihilation operators, which would correspond to a complex structure in center-or mass degrees of freedom.
+                    Could the Hamilton-Jacobi structure <a href="#ref-btart-HJ">[HJ (btart)]</a> for M<sup>4</sup> based on hyper-complex and complex structure make this possible. The conjugation for complex coordinate and its hypercomplex counterpart would correspond to the hermitian conjugation for the operators γ<sub>u</sub> and γ<sub>w</sub> producing γ<sub>u</sub><sup>†</sup>=γ<sub>v</sub> and γ<sub>w</sub><sup>†</sup>=γ<sub>w̅</sub> for both leptonic and quark-like representations. These gamma matrices would act as quantum operators.</li>
+                    <li>Or are only Neveu-Schwarz representations for which all generators G<sub>n+1/2</sub> can carry a well-defined fermion number possible? The problem is that in p-adic mass calculations fermions correspond to Ramond representations with different degeneracies for states with a given conformal weight.</li>
+                    <li>Could zero energy ontology (ZEO) <a href="#ref-alb-zeoquestions">[zeoquestions (alb)]</a> <a href="#ref-btart-zeocriticality">[zeocriticality (btart)]</a> come to rescue? Could these states be regarded as superpositions of pairs of states at opposite boundaries CD with opposite fermion numbers so that there would be no conflict with the superselection rule for fermion numbers. Could the time-like entanglement between the states at the boundaries of causal diamond (CD) relate to the p-adic thermodynamics or rather, its square root. What about the relationship to the model of superconductivity in terms of quantum coherent states of Cooper pairs?</li>
+                </ol>
+
+                <h4 id="origin-padicity" class="text-lg font-semibold mt-6 mb-3 scroll-mt-custom">3.1.3 Questions related to the origin of p-adicity</h4>
+                <p>One can also make ontological questions related to p-adicity.</p>
+                <ol class="list-decimal ml-6">
+                    <li>What is the origin of the p-adicity? H-H vision <a href="#ref-btart-Langlands2025">[Langlands2025, HHtwistor (btart)]</a> has led to a considerable progress in the attempts to understand the origin of p-adicity and the p-adic length scale hypothesis. The notion of functional p-adic numbers suggests how the p-adicization and adelization emerge. One can even ask whether it is necessary to introduce the p-adic and adelic variants of the embedding space in this approach.</li>
+                    <li>p-Adic thermodynamics is a statistical description and must be an approximation to a genuine quantal description. Quantum TGD can be formally regarded as a square root of thermodynamics at a quantum critical temperature defined by the Kähler coupling strength <a href="#ref-allb-UandM">[UandM, vNeumannnew (allb)]</a>. Could it make sense to speak of a square root of p-adic thermodynamics in which thermal probabilities correspond to quantal probabilities. Thermal state would be replaced by a quantum state. Very naively, thermodynamic weights would be replaced with their complex square roots, that is ordinary square roots involving a phase factor.</li>
+                </ol>
+
+                <h3 id="8d-relativity" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">3.2 Does 8-dimensionality imply 8-dimensional relativity?</h3>
+                <p>One cannot avoid the question whether 8-dimensionality implies an 8-D generalization of relativity.</p>
+                <ol class="list-decimal ml-6">
+                    <li>The completely new element is that at M<sup>8</sup> level M<sup>4</sup> as normal space is not fixed but dynamical: could one speak of relativity for mass squared? The Lorentz boosts of this relativity could correspond to the Lorentz group SO(1,7) of M<sup>8</sup>. Also G<sub>2</sub> as a subgroup affects the M<sup>4</sup> mass squared values since it does not leave quaternionic subspace M<sup>4</sup> invariant although it does not affect the energy.</li>
+                    <li>Masslessness in the 8-D sense at M<sup>8</sup> level forces us to challenge the assumption that the particles always have a well-defined 4-D mass squared. As a matter of fact, p-adic thermodynamics and its possible quantum variant as a square root of thermodynamics <a href="#ref-allb-UandM-vNeumannnew">[UandM, vNeumannnew (allb)]</a> already does this. Could one think that mass is more like a transversal or longitudinal momentum squared and depends on the state of motion characterized by the normal space of Y<sup>4</sup>?</li>
+                    <li>What about color quantum numbers: could 8-D relativity apply even to them. This would change dramatically the views of color. In M<sup>8</sup>, SO(4) acting on E<sup>4</sup>⊂ M<sup>8</sup> is the counterpart of SU(3) acting in CP<sub>2</sub>⊂ H and also as a subgroup SU(3)⊂ G<sub>2</sub> of octonion automorphisms leaving invariant the octonion unit defining M<sup>4</sup> time direction in the normal space. M<sup>4</sup> as a quaternionic normal space of Y<sup>4</sup> varies and therefore also the subgroup SU(3)⊂ G<sub>2</sub>. Suppose that one replaces normal space-with a new one by deforming Y<sup>4</sup> such that the point y∈E<sup>4</sup> is not affected. What happens?
+                    I have asked whether SO(4)-SU(3) duality between hadron physics and QCD type physics could correspond to M<sup>8</sup>-H duality <a href="#ref-btart-M8H">[M8H1, M8H2, TGDcritics, HHtwistor (btart)]</a>. Could M<sup>8</sup>-H duality map the 2 Cartan quantum numbers of SO(4) representations appearing in M<sup>8</sup> spinor harmonics to those of SU(3) representations of H spinor harmonics. Could the representations of SU(3) be restricted to the U(2) subgroup of the covering group of SO(4) in accordance with the left-right asymmetry of the standard model?
+                    Suppose that SO(1,7) and also G<sub>2</sub> transformations affect the SO(4) representations. If so, then by M<sup>8</sup>-H duality in the proposed form they also affect the SU(3) color partial waves for H spinors. By color confinement this is however not easy to observe.</li>
+                </ol>
+
+                <h3 id="m8-h-duality-consistency" class="text-xl font-semibold mt-8 mb-4 scroll-mt-custom">3.3 Is the proposed picture consistent with M<sup>8</sup>-H duality</h3>
+                <p>M<sup>8</sup>-H duality <a href="#ref-btart-TGDcritics-HHtwistor">[TGDcritics, HHtwistor (btart)]</a> plays a central role in TGD. Therefore one can also worry about whether octotwistors, which for physical states must reduce in some sense to quaternionic twistors, are a well-defined notion. The octonionic spinors must reduce to quaternionic spinors for the physical states in some sense. Massless Dirac equation must be satisfied and the analogs of the chirality conditions for H, M<sup>4</sup> and CP<sub>2</sub> must make sense.</p>
+                <p>In the sequel the massless octonionic Dirac equation will be discussed.</p>
+                <ol class="list-decimal ml-6">
+                    <li>Octonionic and quaternionic spinors are very much analogous to the 2-spinors appearing in the definition of twistors since γ<sup>0</sup> in the Dirac equation is replaced with a real octonion unit. The masslessness condition is obtained when Minkowski inner product is defined as the real part for the product of octonions. The counterparts of sigma matrices are identified as quaternions and octonions and matrix representations for the quaternionic units are not used. This allows the introduction of a commuting imaginary unit i doubling the number of degrees of freedom and replacing octospinors with their complexified counterparts.</li>
+                    <li>The octonionic Dirac equation looks like the ordinary Dirac equation but with gamma matrices replaced with octonionic units. The quaternionic Dirac equation involves quaternionic units but it is essential that they are not represented as matrices. This allows the introduction of imaginary uni i commuting with the quaternionic and octonionic units and implies double of the degrees of freedom so that one can have analogs of complex spinors.
+                    The octonionic units are analogs of Pauli sigma matrices and the first problem is caused by the lacking anticommutativity of the real unit with other octonion units. The Dirac equation however makes sense also in this case.</li>
+                    <li>The 8-D masslessness condition must correspond to the condition that the real part of the square of Dirac operator on spinors vanishes. For momentum eigenstates this gives the usual algebraic conditions for masslessness.</li>
+                    <li>H spinors have a defined H-chirality guaranteeing separate conservation of quark and lepton numbers. H-chirality ε is a product ε=ε<sub>1</sub>ε<sub>2</sub> of M<sup>4</sup> and CP<sub>2</sub> chiralities. Alls these chiralities should be definable also at the level of M<sup>8</sup>. Also the octonionic Dirac equation for H spinors should be consistent with the chirality condition.
+                        <ol class="list-alpha ml-6">
+                            <li>The decomposition of octonion units to quaternion units {1,I<sub>k</sub>|k=1,2,3} and co-quaternion units I<sub>4</sub>{1,I<sub>k</sub>|k=1,2,3} suggests the identification of the counterpart of Γ<sub>9</sub>. The matrix Γ<sub>9</sub> is defined as the product of H gamma matrices satisfies Γ<sub>9</sub><sup>2</sup>=-1, anticommutes with H gamma matrices. H chirality corresponds to the eigenvalue of iΓ<sub>9</sub> equal to ε=±1. The eigen spinors with chirality ε are of the form (1+εiΓ<sub>9</sub>)Ψ<sub>0</sub>.
+                            The spinors with fixed H-chirality are tensor products of spinors of fixed M<sup>4</sup> chirality and CP<sub>2</sub> chirality and the product of these chiralities defines H-chirality.</li>
+                            <li>The operator iI<sub>4</sub>, satisfying (iI<sub>4</sub>)<sup>2</sup>=1, is a good guess for the counterpart of Γ<sub>9</sub> for the octonionic spinors. The octospinors with a fixed M<sup>8</sup> chirality ε should be of the form (1+εiI<sub>4</sub>)Ψ<sub>0</sub>. It is easy to check that for an octospinor of form Ψ<sub>ε</sub>=Ψ<sub>a</sub>+I<sub>4</sub>Ψ<sub>b</sub> having a fixed chirality ε, one obtains
+                            <p class="equation">Ψ<sub>b</sub> = iεΨ<sub>a</sub></p>
+                            so that the spinor is determined completely by its quaternionic part. Perhaps this might be regarded as a realization of quaterniocity.</li>
+                            <li>One can decompose also the quaternionic spinors to two parts corresponding to the decomposition to complex subspace spanned by {1,I<sub>1</sub>} and co-complex subspace spanned by {I<sub>2</sub>,I<sub>3</sub>}. This allows us to define M<sup>4</sup> chirality and its E<sup>4</sup> counterpart.</li>
+                        </ol>
+                    </li>
+                    <li>Octonionic Dirac equation for the momentum eigenstates can be decomposed to a sum of quaternionic and co-quaternionic parts
+                    <p class="equation">DΨ = (p<sup>k</sup><sub>1</sub>I<sub>k</sub> + I<sub>4</sub>p<sup>k</sup><sub>2</sub>I<sub>k</sub>)Ψ = 0 .</p>
+                    The real part of D<sup>2</sup> gives the Minkowskian mass shell condition p<sub>1</sub><sup>2</sup>-p<sub>2</sub><sup>2</sup>=0.
+                    The Dirac equation for the Ψ<sub>ε</sub>= (1+iεI<sub>4</sub>)Ψ<sub>0</sub> gives
+                    <p class="equation">
+DΨ<sub>0</sub> = (p<sup>k</sup><sub>1</sub>I<sub>k</sub> + I<sub>4</sub>p<sup>k</sup><sub>2</sub>I<sub>k</sub>)Ψ<sub>0</sub> + D̃Ψ̃<sub>0</sub> = 0 .<br/>
+D̃ = (p̃<sup>k</sup><sub>1</sub>I<sub>k</sub> + I<sub>4</sub>p̃<sup>k</sup><sub>2</sub>I<sub>k</sub>) .
+                    </p>
+                    Tilde means a conjugation of quaternionic imaginary units. This gives two separate equations? Are they consistent? By multiplying the equation with tildes by 1=-I<sub>2</sub><sup>2</sup> from left and transporting the second I<sub>4</sub> through the equation to right, one obtains the equation -I<sub>2</sub>(p<sup>k</sup><sub>1</sub>I<sub>k</sub> + I<sub>4</sub>p<sup>k</sup><sub>2</sub>I<sub>k</sub>)Ψ<sub>0</sub>I<sub>5</sub>=0. The two equations are therefore consistent.</li>
+                </ol>
+            </section>
+
+            <section id="acknowledgements" class="mb-12 scroll-mt-custom">
+                <h2 class="text-2xl font-semibold mb-6 border-l-4 border-blue-500 pl-4">Acknowledgements</h2>
+                <p>The discussions with the Zoom group (Marko Manninen, Tuomas Sorakivi, Ville-Veli Saari and Rode Majakka) have been very useful since they have forced to explain various TGD related concepts. The attempt to calculate the fermionic Dirac propagator with the assistance of GPT together with Tuomas forced to formulate this notion precisely and this led to some surprising conclusions discussed in this article.</p>
+            </section>
+
+            <section id="references-sec" class="mb-12 scroll-mt-custom">
+                <h2 class="text-2xl font-semibold mb-6 border-l-4 border-blue-500 pl-4">References</h2>
+                <p><em>Note: The bibliography for this article was specified using local <code>\input</code> commands in the original LaTeX document (e.g., <code>\input{/Users/matpitka/tgdmaterials/bibartgrafiat/bibdirprop}</code>). These files are not accessible here, so a full reference list cannot be generated. The in-text citation markers have been preserved.</em></p>
+                <div id="citation-markers">
+                    <p id="ref-btart-TGD2024I">btart-TGD2024I, TGD2024II</p>
+                    <p id="ref-allb-tgdnewphys">allb-tgdnewphys1, tgdnnewphys2</p>
+                    <p id="ref-btart-isospinbreak">btart-isospinbreak</p>
+                    <p id="ref-allb-leptc">allb-leptc</p>
+                    <p id="ref-btart-padmass2022">btart-padmass2022</p>
+                    <p id="ref-btart-Frenkel">btart-Frenkel, Langlands2025</p>
+                    <p id="ref-btart-HHtwistor">btart-HHtwistor</p>
+                    <p id="ref-allb-cspin">allb-cspin, wcwnew</p>
+                    <p id="ref-btart-whatgravitons">btart-whatgravitons</p>
+                    <p id="ref-btart-HJ">btart-HJ</p>
+                    <p id="ref-allb-mless">allb-mless</p>
+                    <p id="ref-allb-mless-elvafu">allb-mless, elvafu</p>
+                    <p id="ref-bmat-Pope">bmat-Pope</p>
+                    <p id="ref-btart-wcwsymm">btart-wcwsymm</p>
+                    <p id="ref-brart-HJ">brart-HJ</p>
+                    <p id="ref-btart-TGDcritics">btart-TGDcritics, HHtwistor</p>
+                    <p id="ref-alb-zeoquestions">alb-zeoquestions</p>
+                    <p id="ref-btart-zeocriticality">btart-zeocriticality</p>
+                    <p id="ref-btart-Langlands2025">btart-Langlands2025, HHtwistor</p>
+                    <p id="ref-allb-UandM">allb-UandM, vNeumannnew</p>
+                    <p id="ref-allb-UandM-vNeumannnew">allb-UandM, vNeumannnew</p>
+                    <p id="ref-btart-M8H">btart-M8H1, M8H2, TGDcritics, HHtwistor</p>
+                    <p id="ref-btart-TGDcritics-HHtwistor">btart-TGDcritics, HHtwistor</p>
+                </div>
+            </section>
+
+            <footer class="mt-16 pt-8 border-t text-center text-sm text-gray-500">
+                <p>&copy; <span id="currentYear"></span>. Content adapted from LaTeX source. Website generated by AI.</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileNavButton = document.getElementById('mobileNavButton');
+            const navigationSidebar = document.getElementById('navigationSidebar');
+            const articleTocContainer = document.getElementById('article-toc');
+            const mainTocContainer = document.getElementById('generated-toc-main');
+            
+            // Generate Table of Contents for sidebar and main content area
+            const sectionsForToc = document.querySelectorAll('main section[id] > h2, main section[id] > h3, main section[id] > h4');
+            let tocHtml = '<ul class="space-y-1">';
+            let mainTocHtml = '<ul class="list-disc space-y-1">';
+
+            sectionsForToc.forEach(header => {
+                const id = header.parentElement.id || header.id; // Prefer section ID, fallback to header ID
+                if (!id) return; // Skip if no ID
+
+                const level = parseInt(header.tagName.substring(1), 10); // H2 -> 2, H3 -> 3
+                const title = header.textContent;
+                let listItemClass = 'nav-link hover:text-blue-700';
+                let mainListItemClass = 'text-blue-600 hover:text-blue-800 underline';
+                
+                if (level === 2) { // Main section
+                    tocHtml += `<li><a href="#${id}" class="${listItemClass} font-semibold">${title}</a></li>`;
+                    mainTocHtml += `<li class="ml-0"><a href="#${id}" class="${mainListItemClass} font-semibold">${title}</a></li>`;
+                } else if (level === 3) { // Subsection
+                    tocHtml += `<li class="ml-3"><a href="#${id}" class="${listItemClass} text-sm">${title}</a></li>`;
+                    mainTocHtml += `<li class="ml-4"><a href="#${id}" class="${mainListItemClass} text-sm">${title}</a></li>`;
+                } else if (level === 4) { // Subsubsection
+                    tocHtml += `<li class="ml-6"><a href="#${id}" class="${listItemClass} text-xs">${title}</a></li>`;
+                     mainTocHtml += `<li class="ml-8"><a href="#${id}" class="${mainListItemClass} text-xs">${title}</a></li>`;
+                }
+            });
+            tocHtml += '</ul>';
+            mainTocHtml += '</ul>';
+            if(articleTocContainer) articleTocContainer.innerHTML = tocHtml;
+            if(mainTocContainer) mainTocContainer.innerHTML = mainTocHtml;
+
+            const navLinks = navigationSidebar.querySelectorAll('a.nav-link');
+            const allSections = document.querySelectorAll('main section[id], main h3[id], main h4[id]'); // Include h3/h4 with IDs as potential targets
+
+            // Function to update active nav link
+            const updateActiveNavLink = () => {
+                let currentSectionId = '';
+                const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+                const viewportHeight = window.innerHeight;
+                // Threshold for determining "in view" - e.g., when top 1/3 of viewport is reached
+                const threshold = viewportHeight / 3; 
+
+                allSections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                     // Make section active if its top is within a certain range of the viewport top
+                    if (scrollPosition >= sectionTop - threshold) {
+                        currentSectionId = section.id;
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active-nav-link');
+                    if (link.getAttribute('href') === `#${currentSectionId}`) {
+                        link.classList.add('active-nav-link');
+                    }
+                });
+            };
+            
+            if (mobileNavButton && navigationSidebar) {
+                mobileNavButton.addEventListener('click', () => {
+                    if (navigationSidebar.classList.contains('-translate-x-full')) {
+                        navigationSidebar.classList.remove('-translate-x-full');
+                        navigationSidebar.classList.add('translate-x-0');
+                    } else { 
+                        navigationSidebar.classList.remove('translate-x-0');
+                        navigationSidebar.classList.add('-translate-x-full');
+                    }
+                });
+            }
+
+            navigationSidebar.querySelectorAll('a.nav-link').forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault(); 
+                    const href = link.getAttribute('href');
+                    const targetId = href.substring(1); 
+                    const targetElement = document.getElementById(targetId);
+
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        if (history.pushState) {
+                            history.pushState(null, null, href);
+                        } else {
+                            location.hash = href;
+                        }
+                        navLinks.forEach(lnk => lnk.classList.remove('active-nav-link'));
+                        link.classList.add('active-nav-link');
+                    } else {
+                        console.warn('Target element not found for link:', href);
+                    }
+
+                    if (window.innerWidth < 1024 && navigationSidebar) { 
+                        if (!navigationSidebar.classList.contains('-translate-x-full')) {
+                             navigationSidebar.classList.add('-translate-x-full');
+                             navigationSidebar.classList.remove('translate-x-0');
+                        }
+                    }
+                });
+            });
+            
+            const currentYearElement = document.getElementById('currentYear');
+            if (currentYearElement) {
+                currentYearElement.textContent = new Date().getFullYear();
+            }
+
+            window.addEventListener('scroll', updateActiveNavLink);
+            updateActiveNavLink(); // Initial check
+
+            // Citation link handling (dummy for now, as full bibtex isn't processed)
+            // This makes the citation text clickable and scrolls to the placeholder reference area.
+            document.querySelectorAll('a[href^="#ref-"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const refId = link.getAttribute('href').substring(1);
+                    const refPlaceholder = document.getElementById(refId);
+                    if (refPlaceholder) {
+                         refPlaceholder.scrollIntoView({behavior: 'smooth', block: 'center'});
+                         // Optionally highlight the placeholder
+                         refPlaceholder.style.backgroundColor = 'yellow';
+                         setTimeout(() => { refPlaceholder.style.backgroundColor = ''; }, 2000);
+                    } else {
+                        // If specific placeholder not found, scroll to general references section
+                        const refsSection = document.getElementById('references-sec');
+                        if(refsSection) refsSection.scrollIntoView({behavior: 'smooth', block: 'start'});
+                    }
+                });
+            });
+
+        }); // End of DOMContentLoaded
+    </script>
+
+</body>
+</html>

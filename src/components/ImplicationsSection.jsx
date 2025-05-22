@@ -33,15 +33,8 @@ export default function ImplicationsSection() {
           ref={subSection1ContentRef} 
           className={`diagram-adjacent-text-container content-text ${subSection1ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
-          <div className={`diagram-card md:col-span-1 order-first ${subSection1ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
-            <img 
-              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Novel+Physics"
-              alt="Diagram of Novel Physical Phenomena in TGD"
-              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
-            />
-            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Novel Physical Phenomena</p>
-          </div>
-          <div className={`diagram-adjacent-text md:col-span-1 order-last ${subSection1ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+          {/* Text on the left */}
+          <div className={`diagram-adjacent-text md:col-span-1 order-first ${subSection1ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
             <dl>
               <dt>Hierarchy of Planck Constants (h_eff):</dt>
               <dd>Predicts macroscopic quantum coherence in biological systems, potentially observable as novel bio-electromagnetic effects.</dd>
@@ -52,6 +45,15 @@ export default function ImplicationsSection() {
               <dt>p-Adic Physics:</dt>
               <dd>Could lead to a physical basis for understanding intentionality and cognitive processes, potentially testable through their influence on physical systems.</dd>
             </dl>
+          </div>
+          {/* Diagram on the right */}
+          <div className={`diagram-card md:col-span-1 order-last ${subSection1ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Novel+Physics"
+              alt="Diagram of Novel Physical Phenomena in TGD"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Novel Physical Phenomena</p>
           </div>
         </div>
       </div>
@@ -68,7 +70,17 @@ export default function ImplicationsSection() {
           ref={subSection2ContentRef} 
           className={`diagram-adjacent-text-container content-text ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
-          <div className={`diagram-adjacent-text md:col-span-1 ${subSection2ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+          {/* Diagram on the left */}
+          <div className={`diagram-card md:col-span-1 order-first ${subSection2ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+            <img 
+              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Consciousness+%26+Biology"
+              alt="Diagram of TGD Implications for Consciousness and Biology"
+              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
+            />
+            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Consciousness & Biology</p>
+          </div>
+          {/* Text on the right */}
+          <div className={`diagram-adjacent-text md:col-span-1 order-last ${subSection2ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
             <dl>
               <dt>Nature of Subjective Experience:</dt>
               <dd>TGD offers a framework where subjective experience is primary, linked to quantum jumps and the hierarchy of selves.</dd>
@@ -79,14 +91,6 @@ export default function ImplicationsSection() {
               <dt>Evolution of Consciousness:</dt>
               <dd>The TGD framework suggests that evolution involves not just biological adaptation but also an increase in the complexity and levels of consciousness, driven by the expansion of the h_eff hierarchy.</dd>
             </dl>
-          </div>
-          <div className={`diagram-card md:col-span-1 ${subSection2ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
-            <img 
-              src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Consciousness+%26+Biology"
-              alt="Diagram of TGD Implications for Consciousness and Biology"
-              className="diagram-placeholder rounded-lg shadow-md border border-gray-300 bg-gray-50 w-full h-full object-cover"
-            />
-            <p className="diagram-caption text-center text-sm text-gray-500 mt-7 italic">TGD: Consciousness & Biology</p>
           </div>
         </div>
       </div>
