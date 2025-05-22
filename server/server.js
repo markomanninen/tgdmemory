@@ -28,6 +28,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
 // Serve the explanations-cache directory as static files
 app.use('/explanations-cache', express.static(path.join(__dirname, 'explanations-cache')));
 
@@ -46,6 +49,92 @@ async function ensurePublicCacheDir() {
 
 // Call this when the server starts
 ensurePublicCacheDir();
+
+// Direct cache access endpoint
+app.get('/cache/:cacheKey', async (req, res) => {
+  try {
+    const { cacheKey } = req.params;
+    
+    if (!cacheKey) {
+      return res.status(400).json({ error: 'Cache key is required' });
+    }
+    
+    console.log(`Cache request for key: ${cacheKey}`);
+    
+    // First try server cache
+    try {
+      const serverCacheFilePath = path.join(__dirname, 'explanations-cache', `${cacheKey}.json`);
+      const cachedData = await fs.readFile(serverCacheFilePath, 'utf8');
+      
+      try {
+        const parsedData = JSON.parse(cachedData);
+        console.log('Returning cached explanation from server cache');
+        // Set appropriate cache headers - allow client caching for 1 day
+        res.set('Cache-Control', 'public, max-age=86400');
+        res.set('Content-Type', 'application/json');
+        return res.json(parsedData);
+      } catch (parseError) {
+        console.error('Error parsing server cache file:', parseError);
+        return res.status(500).json({ error: 'Invalid cache file format' });
+      }
+    } catch (serverCacheError) {
+      // No server cache, try public cache
+      try {
+        const publicCacheFilePath = path.join(publicCachePath, `${cacheKey}.json`);
+        const publicCachedData = await fs.readFile(publicCacheFilePath, 'utf8');
+        
+        try {
+          const parsedData = JSON.parse(publicCachedData);
+          console.log('Returning cached explanation from public cache');
+          // Set appropriate cache headers - allow client caching for 1 day
+          res.set('Cache-Control', 'public, max-age=86400');
+          res.set('Content-Type', 'application/json');
+          return res.json(parsedData);
+        } catch (parseError) {
+          console.error('Error parsing public cache file:', parseError);
+          return res.status(500).json({ error: 'Invalid cache file format' });
+        }
+      } catch (publicCacheError) {
+        // No cache found in either location
+        console.log('No cache found for key:', cacheKey);
+        // Add special cache headers to prevent false positives
+        res.set('Cache-Control', 'no-store');
+        res.set('Content-Type', 'application/json');
+        return res.status(404).json({ error: 'Cache not found', cacheKey });
+      }
+    }
+  } catch (error) {
+    console.error('Error in /cache/:cacheKey endpoint:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Helper function to generate a consistent cache key
+function generateCacheKey(latex, title) {
+  try {
+    const input = latex + (title || '');
+    
+    // Convert to UTF-8 bytes and create full hex representation
+    const fullHex = Buffer.from(input).toString('hex');
+    
+    // Create a more distinctive hash that considers the full equation content
+    const hashLength = fullHex.length;
+    
+    // Take parts from different sections to ensure uniqueness
+    const prefix = fullHex.substring(0, 4); // Beginning of equation (common part)
+    const middle = hashLength > 20 ? 
+      fullHex.substring(Math.floor(hashLength / 2) - 4, Math.floor(hashLength / 2) + 4) : // Middle of equation (unique part)
+      fullHex.substring(4, Math.min(12, hashLength - 4));
+    const suffix = fullHex.substring(Math.max(0, hashLength - 4)); // End of equation + title
+    
+    // Combine the parts to create a 16-character hash
+    return prefix + middle + suffix;
+  } catch (error) {
+    console.error('Error generating cache key:', error);
+    // Fallback to simple substring in case of error
+    return Buffer.from(input).toString('hex').substring(0, 16);
+  }
+}
 
 // Helper function to save an explanation to cache
 async function saveToCache(cacheKey, explanation) {
@@ -70,6 +159,57 @@ async function saveToCache(cacheKey, explanation) {
   }
 }
 
+// Debug endpoint for checking cache state
+app.get('/debug/cache', async (req, res) => {
+  try {
+    const serverCacheDir = path.join(__dirname, 'explanations-cache');
+    const publicCacheDir = publicCachePath;
+    
+    // Check if directories exist
+    const serverDirExists = await fs.stat(serverCacheDir).then(() => true).catch(() => false);
+    const publicDirExists = await fs.stat(publicCacheDir).then(() => true).catch(() => false);
+    
+    // Read directory contents if they exist
+    let serverFiles = [];
+    let publicFiles = [];
+    
+    if (serverDirExists) {
+      serverFiles = await fs.readdir(serverCacheDir);
+    }
+    
+    if (publicDirExists) {
+      publicFiles = await fs.readdir(publicCacheDir);
+    }
+    
+    // Return debug information
+    res.json({
+      cacheDirectories: {
+        server: {
+          path: serverCacheDir,
+          exists: serverDirExists,
+          fileCount: serverFiles.length,
+          files: serverFiles.slice(0, 10) // Show only first 10 files
+        },
+        public: {
+          path: publicCacheDir,
+          exists: publicDirExists,
+          fileCount: publicFiles.length,
+          files: publicFiles.slice(0, 10) // Show only first 10 files
+        }
+      },
+      serverInfo: {
+        port: PORT,
+        nodeEnv: process.env.NODE_ENV || 'development',
+        publicPath: path.join(__dirname, '..', 'public'),
+        publicPathExists: await fs.stat(path.join(__dirname, '..', 'public')).then(() => true).catch(() => false)
+      }
+    });
+  } catch (error) {
+    console.error('Error in debug endpoint:', error);
+    res.status(500).json({ error: 'Error retrieving cache debug information' });
+  }
+});
+
 // Primary explanation endpoint using OpenAI
 app.post('/api/explain', async (req, res) => {
   try {
@@ -80,7 +220,7 @@ app.post('/api/explain', async (req, res) => {
     }
 
     // Generate a simple hash key for caching
-    const cacheKey = Buffer.from(latex + (title || '')).toString('hex').substring(0, 16);
+    const cacheKey = generateCacheKey(latex, title);
     
     // Check if we have a cached explanation
     try {
@@ -126,8 +266,8 @@ app.post('/api/explain-with-gemini', async (req, res) => {
       return res.status(503).json({ error: 'Gemini API is not configured. Set GOOGLE_API_KEY environment variable.' });
     }
 
-    // Generate a simple hash key for caching
-    const cacheKey = Buffer.from(`gemini-${latex}-${title || ''}`).toString('hex').substring(0, 16);
+    // Generate a consistent hash key for caching with the gemini prefix
+    const cacheKey = generateCacheKey(`gemini-${latex}`, title);
     
     // Check if we have a cached explanation
     try {

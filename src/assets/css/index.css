@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind typography;
 
 /* Force the left panel to be visible on large screens */
 @media (min-width: 1024px) {
@@ -25,7 +26,7 @@
   }
 
   .equation-explainer-trigger {
-    @apply absolute top-1/2 right-0 -translate-y-1/2 p-1 w-8 h-8 flex items-center justify-center bg-sky-100 text-sky-700 rounded-full cursor-pointer opacity-0 transition-opacity duration-300 text-sm font-bold;
+    @apply absolute top-1/2 right-0 -translate-y-1/2 p-1 w-8 h-8 flex items-center justify-center bg-sky-100 text-sky-700 rounded-full cursor-pointer opacity-0 transition-opacity duration-300 text-sm font-bold shadow-sm;
     /* Positioned at the right edge of its container. */
   }
 
@@ -34,16 +35,40 @@
   }
 
   .equation-explainer-trigger:hover {
-    @apply bg-sky-200;
+    @apply bg-sky-200 scale-110 shadow-sm;
+    transition: transform 0.2s ease;
+  }
+  
+  .equation-explainer-trigger:active {
+    @apply bg-sky-300 scale-95;
+    transition: transform 0.1s ease;
+  }
+  
+  /* Add a subtle pulse animation to draw attention to the explainer button */
+  @keyframes pulse-light {
+    0% {
+      box-shadow: 0 0 0 0 rgba(186, 230, 253, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 6px rgba(186, 230, 253, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(186, 230, 253, 0);
+    }
+  }
+  
+  .equation-explainer-trigger.pulse {
+    animation: pulse-light 2s infinite;
   }
 
   /* Modal Styles (re-defining here for clarity, ensure they don't conflict with other modal styles if you have them) */
   .modal-overlay {
-    @apply fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4;
+    @apply fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4 backdrop-blur-sm;
   }
 
   .modal-content {
     @apply bg-white p-6 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] flex flex-col;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
   }
 
   .modal-header {
@@ -55,17 +80,244 @@
   }
 
   .modal-close-button {
-    @apply text-gray-600 hover:text-gray-900 text-3xl font-bold leading-none cursor-pointer; /* Added cursor-pointer for consistency */
+    @apply text-gray-600 hover:text-gray-900 text-3xl font-bold leading-none cursor-pointer transition-colors duration-200;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  
+  .modal-close-button:hover {
+    @apply bg-gray-100;
   }
 
   .modal-body {
-    @apply overflow-y-auto flex-grow;
-    /* Styles for content within the modal body, like the equation display */
+    @apply overflow-y-auto flex-grow px-2;
   }
-  .modal-body .p-2.border.border-gray-200 { /* Targeting the div holding the LaTeX equation */
-    @apply bg-gray-50 mb-4 text-base overflow-x-auto;
+  
+  /* Enhanced equation display */
+  .equation-display {
+    @apply bg-gray-50 border border-gray-200 rounded-md mb-6 p-4 text-base overflow-x-auto shadow-sm;
+    display: flex;
+    justify-content: center;
+    position: relative;
   }
-  .modal-body code { /* Styling for the raw LaTeX display */
-    @apply bg-gray-100 p-1 rounded text-xs break-all;
+  
+  /* Add a subtle hover effect for the equation display */
+  .equation-display:hover {
+    @apply bg-gray-100 border-gray-300;
+    transition: all 0.3s ease;
+  }
+  
+  /* Improve the appearance of MathJax-rendered equations */
+  .equation-display mjx-container {
+    @apply mx-auto my-2;
+    min-width: 0 !important;
+  }
+  
+  /* Add a "copy equation" button on hover */
+  .equation-display::after {
+    content: "📋";
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    padding: 2px 4px;
+  }
+  
+  .equation-display:hover::after {
+    opacity: 0.7;
+  }
+  
+  .equation-display:hover::after:hover {
+    opacity: 1;
+  }
+  
+  /* Explanation container with typography plugin */
+  .explanation-container {
+    @apply px-4 prose max-w-none;
+  }
+  
+  /* Custom styling for MathJax elements */
+  .explanation-content mjx-container {
+    @apply inline-block align-middle mx-1;
+  }
+  
+  /* Raw LaTeX code display at bottom */
+  .modal-body code {
+    @apply bg-gray-100 px-2 py-1 rounded text-xs font-mono break-all border border-gray-200;
+  }
+  
+  /* Styling for mathematical variables in text */
+  .explanation-content mjx-container {
+    @apply inline-block align-middle;
+  }
+  
+  /* Custom scrollbar for the modal */
+  .modal-body::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .modal-body::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded;
+  }
+  
+  .modal-body::-webkit-scrollbar-thumb {
+    @apply bg-sky-200 rounded hover:bg-sky-300;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Loading state for the equation explanation */
+  .explanation-loading {
+    @apply flex justify-center items-center py-8 text-sky-600;
+  }
+  
+  .explanation-loading-spinner {
+    @apply animate-spin h-8 w-8 mr-2 border-4 border-sky-200 rounded-full border-t-sky-600;
+  }
+  
+  /* Enhanced explanation content styling */
+  .explanation-content {
+    @apply prose prose-sky max-w-none text-gray-800 leading-relaxed;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Better heading styles for explanation content */
+  .explanation-content h2, 
+  .explanation-content h3 {
+    @apply text-sky-800 font-semibold mt-6 mb-3 border-b border-sky-100 pb-2;
+  }
+  
+  .explanation-content h2 {
+    @apply text-xl;
+  }
+  
+  .explanation-content h3 {
+    @apply text-lg;
+  }
+  
+  /* Paragraph styling for explanation content */
+  .explanation-content p {
+    @apply my-4 text-gray-700;
+  }
+  
+  /* List styling in explanation content */
+  .explanation-content ul, 
+  .explanation-content ol {
+    @apply my-4 pl-5;
+  }
+  
+  .explanation-content li {
+    @apply my-1;
+  }
+  
+  /* Emphasis on important math terms */
+  .explanation-content strong {
+    @apply text-sky-900;
+  }
+  
+  /* Error message styling */
+  .explanation-content .text-red-600 {
+    @apply font-semibold;
+  }
+  
+  /* Enhanced loading state */
+  .explanation-loading {
+    @apply flex flex-col justify-center items-center py-10 text-sky-600;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+  }
+  
+  .explanation-loading-spinner {
+    @apply animate-spin h-10 w-10 mb-4 border-4 border-sky-200 rounded-full border-t-sky-600;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .explanation-loading span {
+    @apply text-sky-700 font-medium;
+  }
+  
+  /* Custom blockquote for important notes */
+  .explanation-content blockquote {
+    @apply bg-sky-50 border-l-4 border-sky-400 pl-4 py-2 my-4 text-sky-900 rounded-r italic;
+  }
+  
+  /* Code and math highlight styles */
+  .explanation-content code:not(.raw-latex) {
+    @apply bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono text-sky-800 border border-gray-200;
+  }
+  
+  .raw-latex {
+    @apply text-xs text-gray-500 font-mono bg-gray-50 p-1 rounded block overflow-x-auto border border-gray-200 mt-1;
+  }
+  
+  /* Print styles for the equation explanation */
+  @media print {
+    .modal-overlay {
+      @apply bg-white static p-0;
+      position: static !important;
+    }
+    
+    .modal-content {
+      @apply shadow-none max-h-full;
+    }
+    
+    .modal-close-button {
+      @apply hidden;
+    }
+  }
+
+  .equation-display {
+    position: relative;
+  }
+
+  .equation-display .copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #6b7280;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .equation-display:hover .copy-button {
+    opacity: 1;
+  }
+
+  .equation-display .copy-button:hover {
+    background-color: #e5e7eb;
+    color: #374151;
+  }
+
+  .equation-display .copy-button.copied {
+    background-color: #10b981;
+    color: white;
+    border-color: #059669;
   }
 }

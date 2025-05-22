@@ -1,15 +1,21 @@
 Project Structure and Line Counts
 =================================
-Generated on: Tue May 20 13:40:40 EEST 2025
+Generated on: Thu May 22 19:28:02 EEST 2025
 
 .
 ./index.html
 ./tailwind.config.js
+./.DS_Store
 ./LICENSE
+./init.sh
 ./node_modules
+./server
 ./vite.config.js
 ./docs
+./EQUATION_EXPLANATION.md
 ./README.md
+./clean_caches.sh
+./GETTING_STARTED.md
 ./public
 ./.gitignore
 ./package-lock.json
@@ -17,31 +23,78 @@ Generated on: Tue May 20 13:40:40 EEST 2025
 ./scripts
 ./.github
 ./App.jsx
+./test_equation_server.sh
 ./.git
 ./postcss.config.js
 ./src
 
 -----------------------------------
     14 ./index.html
-    12 ./tailwind.config.js
-     8 ./vite.config.js
-     0 ./README.md
-    29 ./package.json
+    54 ./tailwind.config.js
+    13 ./server/nodemon.json
+   332 ./server/server.js
+   113 ./server/gemini-integration.js
+    86 ./server/clean-caches.js
+   139 ./server/README.md
+     0 ./server/explanations-cache/5c62c656e6472034.json
+     0 ./server/explanations-cache/5c62e647b6572038.json
+     0 ./server/explanations-cache/5c62c656e6472033.json
+     0 ./server/explanations-cache/5c627073696c2036.json
+     0 ./server/explanations-cache/5c62647b65712035.json
+     0 ./server/explanations-cache/5c626e7d205c2037.json
+     0 ./server/explanations-cache/5c626567696e7b65.json
+     0 ./server/explanations-cache/5c6256e647b62032.json
+     0 ./server/explanations-cache/5c62f5c657072031.json
+    26 ./server/package.json
+   112 ./server/test-gemini-flash.js
+   179 ./server/test-model-comparison.js
+   105 ./server/test-openai-nano.js
+    16 ./server/.env.example
+    96 ./server/openai-integration.js
+     7 ./vite.config.js
+   118 ./EQUATION_EXPLANATION.md
+    69 ./README.md
+    82 ./GETTING_STARTED.md
+   685 ./public/dirac_propagator.html
+    30 ./public/abstract.html
+     0 ./public/explanations-cache/5c62c656e6472034.json
+     0 ./public/explanations-cache/5c62e647b6572038.json
+     0 ./public/explanations-cache/5c62c656e6472033.json
+     0 ./public/explanations-cache/5c627073696c2036.json
+     0 ./public/explanations-cache/5c62647b65712035.json
+     0 ./public/explanations-cache/5c626e7d205c2037.json
+     0 ./public/explanations-cache/5c626567696e7b65.json
+     0 ./public/explanations-cache/5c6256e647b62032.json
+     0 ./public/explanations-cache/5c62f5c657072031.json
+     0 ./public/introduction.html
+   851 ./public/memory_research.html
+    38 ./package.json
     42 ./.github/workflows/deploy.yml
-   113 ./App.jsx
+   117 ./App.jsx
      6 ./postcss.config.js
-   218 ./src/index.css
-    31 ./src/components/Header.jsx
+   267 ./src/index.css
+    35 ./src/components/Header.jsx
    155 ./src/components/IntroSection.jsx
     90 ./src/components/TgdCoreSection.jsx
+    19 ./src/components/PagesMenu.jsx
     68 ./src/components/ContactSection.jsx
     40 ./src/components/TableModal.jsx
     38 ./src/components/QmLimitationsSection.jsx
-    95 ./src/components/ImplicationsSection.jsx
-   155 ./src/components/TgdMemorySection.jsx
+    99 ./src/components/ImplicationsSection.jsx
+   169 ./src/components/TgdMemorySection.jsx
     40 ./src/components/ConclusionSection.jsx
     30 ./src/hooks/useIntersectionObserver.js
-    10 ./src/main.jsx
+    13 ./src/main.jsx
+    83 ./src/pages/dirac_propagator/sections/appendix_b.html
+    15 ./src/pages/dirac_propagator/sections/abstract.html
+   174 ./src/pages/dirac_propagator/sections/how_propagation_takes_place.html
+    31 ./src/pages/dirac_propagator/sections/model_for_4d_propagation.html
+   125 ./src/pages/dirac_propagator/sections/foundational_questions.html
+     2 ./src/pages/dirac_propagator/sections/acknowledgements.html
+    43 ./src/pages/dirac_propagator/sections/references.html
+    70 ./src/pages/dirac_propagator/sections/introduction.html
+   117 ./src/pages/dirac_propagator/sections/appendix_a.html
+    70 ./src/pages/dirac_propagator/index.html
 -----------------------------------
-Total Files Found: 20
-Total Lines Found: 1194
+Total Files Found: 66
+Total Lines Found: 5123

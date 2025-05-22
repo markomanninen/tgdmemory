@@ -33,6 +33,7 @@ async function compareModelOutputs() {
       let systemMessage;
       let prompt;
 
+    /*
       if (modelName.includes('nano')) {
         systemMessage = "You're a math expert explaining equations concisely using HTML with LaTeX in $ or $$ delimiters.";
         
@@ -64,6 +65,28 @@ Provide a clear, step-by-step explanation of this equation, including:
 
 Format the response using HTML paragraphs and include appropriate mathematical notation.`;
       }
+*/
+    
+    systemMessage = `You're a math expert explaining equations concisely using HTML with LaTeX in $ or $$ delimiters.`;
+    
+    prompt = `Explain this math equation:
+TITLE: ${title}
+LATEX: ${latex}
+
+Include:
+1. Symbol meanings
+2. Conceptual significance
+3. Context in ${title?.split(' - ')[0] || 'physics/mathematics'}
+4. Brief example if appropriate
+
+Important formatting guidelines:
+- DO NOT include title, head, html, or body tags
+- DO NOT repeat the equation itself - it's already displayed
+- DO NOT include the title of the equation as a heading
+- DO NOT start with "The equation is given by:" or similar text
+- Start directly with the explanation using h3 headings for sections
+- Use HTML formatting with paragraphs
+- Use LaTeX in $ or $$ for math.`;
       
       const startTime = Date.now();
       const response = await openai.chat.completions.create({
