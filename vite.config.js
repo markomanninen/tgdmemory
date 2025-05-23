@@ -1,9 +1,9 @@
 // vite.config.js
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
-import { resolve } from 'path';
 import glob from 'glob'; // Import the default export from glob
+import { resolve } from 'path';
 import { fileURLToPath } from 'url'; // Needed for __dirname in ES modules
+import { defineConfig } from 'vite';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = resolve(__filename, '..');
@@ -18,7 +18,7 @@ const pageEntryPoints = glob.sync('src/pages/**/*.html').reduce((acc, file) => {
   return acc;
 }, {});
 
-export default defineConfig(({ command }) => {
+export default defineConfig(({ command, mode }) => {
   const config = {
     plugins: [react()],
     build: {
@@ -31,8 +31,19 @@ export default defineConfig(({ command }) => {
     }
   };
 
-  if (command === 'build') {
+  // Set base path only for GitHub Pages deployment, not for local preview
+  if (command === 'build' && process.env.GITHUB_ACTIONS) {
     config.base = '/tgdmemory/';
+    // Ensure static assets are properly resolved with base path
+    config.experimental = {
+      renderBuiltUrl(filename, { hostType }) {
+        if (hostType === 'js') {
+          return { js: `"/tgdmemory/${filename}"` };
+        }
+        return `/tgdmemory/${filename}`;
+      }
+    };
   }
+  
   return config;
 });
