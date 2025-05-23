@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
+import CommentableContent from './src/components/CommentableContent';
 import ConclusionSection from './src/components/ConclusionSection';
 import ContactSection from './src/components/ContactSection';
 import Header from './src/components/Header';
 import ImplicationsSection from './src/components/ImplicationsSection';
 import IntroSection from './src/components/IntroSection';
 import PagesMenu from './src/components/PagesMenu';
+import ProtectedRoute from './src/components/ProtectedRoute';
 import TgdCoreSection from './src/components/TgdCoreSection';
 import TgdMemorySection from './src/components/TgdMemorySection';
+import AdminDashboard from './src/pages/AdminDashboard';
+import AdminDebug from './src/pages/AdminDebug';
+import LoginPage from './src/pages/LoginPage';
+import RegisterPage from './src/pages/RegisterPage';
 
 // Main content component for the home page
 const MainContent = ({ sections, activeSection, scrollToSection, headerHeight }) => (
@@ -83,16 +89,30 @@ export default function App() {
       />
       <Routes>
         <Route path="/" element={
-          <MainContent
-            sections={sections}
-            activeSection={activeSection}
-            scrollToSection={scrollToSection}
-            headerHeight={headerHeight}
-          />
+          <CommentableContent pageUrl="/">
+            <MainContent
+              sections={sections}
+              activeSection={activeSection}
+              scrollToSection={scrollToSection}
+              headerHeight={headerHeight}
+            />
+          </CommentableContent>
         } />
         <Route path="/pages" element={
           // PagesMenu will be rendered below the global Header
           <PagesMenu />
+        } />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/admin" element={
+          <ProtectedRoute requiredRoles={["admin"]}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/debug" element={
+          <ProtectedRoute requiredRoles={["admin"]}>
+            <AdminDebug />
+          </ProtectedRoute>
         } />
       </Routes>
 

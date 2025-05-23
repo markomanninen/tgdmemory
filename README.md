@@ -29,6 +29,7 @@ Visit http://localhost:5173/ in your browser to see the project.
 
 - [Getting Started Guide](./GETTING_STARTED.md) - Basic setup and usage
 - [Equation Explanation System](./EQUATION_EXPLANATION.md) - Detailed information about the equation explanation system
+- [Admin Troubleshooting](./ADMIN_TROUBLESHOOTING.md) - Solving issues with the admin dashboard
 
 ## Project Structure
 
