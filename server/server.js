@@ -6,6 +6,11 @@ const path = require('path');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose'); // Added Mongoose
 const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
+const winston = require('winston');
 
 
 // Load environment variables from .env file
@@ -22,29 +27,240 @@ console.log('GEMINI_MODEL:', process.env.GEMINI_MODEL || 'Not set (will use defa
 // Import integrations after environment is loaded
 console.log('Importing API integrations...');
 const { generateExplanationWithOpenAI } = require('./openai-integration');
-const { generateExplanationWithGemini } = require('./gemini-integration');
+const { generateExplanationWithGemini, initializeGemini } = require('./gemini-integration');
 const Comment = require('./models/Comment');
 const User = require('./models/User'); // Make sure User model is imported
 console.log('API integrations imported');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const isProd = process.env.NODE_ENV === 'production';
+
+// Configure Express to trust proxy - required when behind a reverse proxy like Nginx
+// This allows express-rate-limit to use X-Forwarded-For header for client IP
+app.set('trust proxy', 1);
+
+// Configure logging
+const logger = winston.createLogger({
+  level: isProd ? 'info' : 'debug',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.errors({ stack: true }),
+    winston.format.json()
+  ),
+  defaultMeta: { service: 'tgdmemory-server' },
+  transports: [
+    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'logs/combined.log' }),
+  ],
+});
+
+if (!isProd) {
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple()
+  }));
+}
+
+// Handle log rotation signals in production
+if (isProd) {
+  process.on('SIGUSR1', () => {
+    logger.info('Received SIGUSR1 signal, rotating logs...');
+    
+    // Close and reopen log files
+    logger.clear();
+    logger.add(new winston.transports.File({ filename: 'logs/error.log', level: 'error' }));
+    logger.add(new winston.transports.File({ filename: 'logs/combined.log' }));
+    
+    logger.info('Log rotation completed');
+  });
+}
+
+// Graceful shutdown handling
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received, shutting down gracefully...');
+  
+  // Close database connection
+  mongoose.connection.close(() => {
+    logger.info('MongoDB connection closed');
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  logger.info('SIGINT received, shutting down gracefully...');
+  
+  mongoose.connection.close(() => {
+    logger.info('MongoDB connection closed');
+    process.exit(0);
+  });
+});
 
 // Connect to MongoDB
 if (process.env.MONGODB_URI) {
   mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('MongoDB connected successfully.'))
-    .catch(err => console.error('MongoDB connection error:', err));
+    .then(() => {
+      logger.info('MongoDB connected successfully.');
+      console.log('MongoDB connected successfully.');
+    })
+    .catch(err => {
+      logger.error('MongoDB connection error:', err);
+      console.error('MongoDB connection error:', err);
+    });
 } else {
-  console.error('MONGODB_URI is not defined in .env file. Cannot connect to database.');
+  const message = 'MONGODB_URI is not defined in .env file. Cannot connect to database.';
+  logger.error(message);
+  console.error(message);
 }
 
-// Middleware - Allow all origins in development
-app.use(cors());
-app.use(express.json());
+// Production middleware
+if (isProd) {
+  // Use Helmet for security headers
+  // Note: Disable HSTS and upgrade-insecure-requests for Docker containers that may be accessed via HTTP
+  app.use(helmet({
+    contentSecurityPolicy: {
+      useDefaults: false,
+      directives: {
+        defaultSrc: ["'self'", "http:", "https:"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "http:", "https:", "cdn.jsdelivr.net", "*.jsdelivr.net"],
+        styleSrc: ["'self'", "'unsafe-inline'", "http:", "https:", "cdn.jsdelivr.net", "*.jsdelivr.net"],
+        imgSrc: ["'self'", "data:", "http:", "https:", "cdn.jsdelivr.net", "*.jsdelivr.net"],
+        fontSrc: ["'self'", "data:", "http:", "https:", "cdn.jsdelivr.net", "*.jsdelivr.net"],
+        connectSrc: ["'self'", "http:", "https:", "cdn.jsdelivr.net", "*.jsdelivr.net"],
+        workerSrc: ["'self'", "blob:", "cdn.jsdelivr.net", "*.jsdelivr.net"],
+        // Note: blockAllMixedContent has been removed as it's deprecated in CSP Level 3
+        // Explicitly disable upgrading HTTP to HTTPS
+        upgradeInsecureRequests: null
+      },
+    },
+    // Disable HSTS (Strict-Transport-Security) to allow HTTP access
+    hsts: false,
+    // Do not force HTTPS for referrer policy
+    referrerPolicy: { policy: 'no-referrer-when-downgrade' }
+  }));
+  
+  // Enable compression
+  app.use(compression());
+  
+  // HTTP request logging
+  app.use(morgan('combined', {
+    stream: { write: message => logger.info(message.trim()) }
+  }));
+} else {
+  // Development logging
+  app.use(morgan('dev'));
+  
+  // Apply basic helmet CSP in development mode too
+  app.use(helmet({
+    contentSecurityPolicy: {
+      useDefaults: false,
+      directives: {
+        defaultSrc: ["'self'", "http:", "https:"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "http:", "https:", "cdn.jsdelivr.net", "*.jsdelivr.net"],
+        styleSrc: ["'self'", "'unsafe-inline'", "http:", "https:", "cdn.jsdelivr.net", "*.jsdelivr.net"],
+        imgSrc: ["'self'", "data:", "http:", "https:", "cdn.jsdelivr.net", "*.jsdelivr.net"],
+        fontSrc: ["'self'", "data:", "http:", "https:", "cdn.jsdelivr.net", "*.jsdelivr.net"],
+        connectSrc: ["'self'", "http:", "https:", "cdn.jsdelivr.net", "*.jsdelivr.net"],
+        workerSrc: ["'self'", "blob:", "cdn.jsdelivr.net", "*.jsdelivr.net"],
+        upgradeInsecureRequests: null
+      },
+    },
+    // Disable HSTS in development too
+    hsts: false
+  }));
+}
+
+// Rate limiting
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: isProd ? 100 : 1000, // Limit each IP to 100 requests per windowMs in production
+  message: {
+    error: 'Too many requests from this IP, please try again later.',
+    retryAfter: 15 * 60 // 15 minutes in seconds
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Skip rate limiting for OPTIONS (preflight) requests
+  skip: (req) => req.method === 'OPTIONS'
+});
+
+// Special test limiter with much lower limits for testing rate limiting functionality
+const testLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5, // Limit each IP to 5 requests per minute
+  message: {
+    error: 'Rate limit reached during testing.',
+    retryAfter: 60 // 1 minute in seconds
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => req.method === 'OPTIONS'
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: isProd ? 5 : 50, // Limit each IP to 5 auth attempts per windowMs in production
+  message: {
+    error: 'Too many authentication attempts from this IP, please try again later.',
+    retryAfter: 15 * 60
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Skip rate limiting for OPTIONS (preflight) requests
+  skip: (req) => req.method === 'OPTIONS'
+});
+
+// Apply rate limiting to all API routes
+app.use('/api', apiLimiter);
+
+// Configure CORS based on environment
+const corsOptions = isProd ? {
+  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+} : {
+  origin: [
+    // Monitoring dashboard
+    'http://localhost:3030', 
+    'https://localhost:3030',
+    // Main app server
+    'http://localhost:3000', 
+    'https://localhost:3000',
+    // Vite dev server (default port)
+    'http://localhost:5173',
+    'https://localhost:5173',
+    // Direct localhost access
+    'http://localhost', 
+    'https://localhost',
+    // IPv4 localhost
+    'http://127.0.0.1:3030',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:5173',
+    'https://127.0.0.1:3030',
+    'https://127.0.0.1:3000',
+    'https://127.0.0.1:5173'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+app.use(express.json({ limit: '1mb' })); // Limit payload size
+
+// Legacy security headers (kept for compatibility, helmet handles most of these)
+if (isProd) {
+  app.use((req, res, next) => {
+    // Additional custom headers if needed
+    res.setHeader('X-Powered-By', 'TGD Memory'); // Custom server identifier
+    next();
+  });
+}
 
 // Serve static files from the public directory
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.static(path.join(__dirname, '..', 'public'), {
+  maxAge: isProd ? '1d' : 0 // Use caching in production
+}));
 
 // Create a public path outside the server directory to make cache accessible by the front-end
 const publicCachePath = path.join(__dirname, '..', 'public', 'explanations-cache');
@@ -232,7 +448,7 @@ app.post('/api/explain-with-gemini', async (req, res) => {
 // --- Authentication Routes ---
 
 // Register a new user
-app.post('/api/auth/register', async (req, res) => {
+app.post('/api/auth/register', authLimiter, async (req, res) => {
   try {
     const { username, email, password, roles } = req.body;
 
@@ -274,7 +490,7 @@ app.post('/api/auth/register', async (req, res) => {
 });
 
 // Login user
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -679,13 +895,107 @@ app.delete('/api/comments/admin/:commentId', authMiddleware, authorizeRoles('adm
 });
 
 
-// Simple ping endpoint for health checks
-app.get('/api/ping', (req, res) => {
+// Health check endpoints
+app.get('/api/ping', testLimiter, (req, res) => {
   res.status(200).json({ 
     status: 'ok', 
     message: 'Server is running', 
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+// Comprehensive health check endpoint
+app.get('/api/health', async (req, res) => {
+  const healthCheck = {
+    timestamp: new Date().toISOString(),
+    status: 'ok',
+    environment: process.env.NODE_ENV || 'development',
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
+    services: {}
+  };
+
+  try {
+    // Check MongoDB connection
+    if (mongoose.connection.readyState === 1) {
+      healthCheck.services.mongodb = { status: 'connected', connection: 'healthy' };
+    } else {
+      healthCheck.services.mongodb = { 
+        status: 'disconnected', 
+        connection: 'unhealthy',
+        readyState: mongoose.connection.readyState 
+      };
+      healthCheck.status = 'degraded';
+    }
+
+    // Check cache directory
+    try {
+      await fs.access(publicCachePath);
+      healthCheck.services.cache = { status: 'accessible', path: publicCachePath };
+    } catch (error) {
+      healthCheck.services.cache = { status: 'inaccessible', error: error.message };
+      healthCheck.status = 'degraded';
+    }
+
+    // Check API integrations (basic availability check)
+    healthCheck.services.openai = { 
+      configured: !!process.env.OPENAI_API_KEY,
+      model: process.env.OPENAI_MODEL || 'gpt-3.5-turbo'
+    };
+    
+    healthCheck.services.gemini = { 
+      configured: !!process.env.GOOGLE_API_KEY,
+      model: process.env.GEMINI_MODEL || 'gemini-pro'
+    };
+
+    res.status(healthCheck.status === 'ok' ? 200 : 503).json(healthCheck);
+  } catch (error) {
+    logger.error('Health check failed:', error);
+    res.status(503).json({
+      timestamp: new Date().toISOString(),
+      status: 'error',
+      message: 'Health check failed',
+      error: error.message,
+      environment: process.env.NODE_ENV || 'development'
+    });
+  }
+});
+
+// Readiness probe (for container orchestration)
+app.get('/api/ready', async (req, res) => {
+  try {
+    // Check if the server is ready to accept traffic
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({
+        status: 'not ready',
+        message: 'Database connection not established',
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    res.status(200).json({
+      status: 'ready',
+      message: 'Server is ready to accept traffic',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(503).json({
+      status: 'not ready',
+      message: 'Server readiness check failed',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// Liveness probe (for container orchestration)
+app.get('/api/live', (req, res) => {
+  res.status(200).json({
+    status: 'alive',
+    message: 'Server is alive',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
   });
 });
 

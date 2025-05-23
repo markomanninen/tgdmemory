@@ -19,6 +19,8 @@ const pageEntryPoints = glob.sync('src/pages/**/*.html').reduce((acc, file) => {
 }, {});
 
 export default defineConfig(({ command, mode }) => {
+  const isProd = mode === 'production';
+  
   const config = {
     plugins: [react()],
     build: {
@@ -26,6 +28,35 @@ export default defineConfig(({ command, mode }) => {
         input: {
           main: resolve(__dirname, 'index.html'),
           ...pageEntryPoints
+        },
+        output: {
+          manualChunks: isProd ? {
+            'vendor': ['react', 'react-dom', 'react-router-dom'],
+            'ui': ['tailwindcss']
+          } : undefined
+        }
+      },
+      // Production optimizations
+      minify: isProd ? 'terser' : false,
+      terserOptions: isProd ? {
+        compress: {
+          drop_console: true,
+          drop_debugger: true
+        },
+        format: {
+          comments: false
+        }
+      } : undefined,
+      sourcemap: !isProd,
+      chunkSizeWarningLimit: 1000 // Increase warning limit for larger chunks
+    },
+    server: {
+      https: false, // Force HTTP instead of HTTPS
+      strictPort: true, // Don't try other ports if 3000 is in use
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3000',
+          changeOrigin: true
         }
       }
     }

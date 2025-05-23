@@ -5,20 +5,26 @@ const API_URL = process.env.NODE_ENV === 'development'
   ? 'http://localhost:3000/api' // Your backend server URL for development
   : '/api'; // Relative path for production (if frontend is served by the same server or proxied)
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const apiClient = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 seconds timeout to prevent indefinite waiting
+  timeout: isProd ? 30000 : 10000, // 30 seconds in production, 10 seconds in development
 });
 
 // Interceptor to add JWT token to requests
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
-    console.log(`API Request: ${config.method.toUpperCase()} ${config.url}`);
-    console.log(`Token exists: ${!!token}`);
+    
+    // Only log in development mode
+    if (!isProd) {
+      console.log(`API Request: ${config.method.toUpperCase()} ${config.url}`);
+      console.log(`Token exists: ${!!token}`);
+    }
     
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
@@ -26,7 +32,7 @@ apiClient.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.error('Request interceptor error:', error);
+    if (!isProd) console.error('Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
@@ -34,7 +40,10 @@ apiClient.interceptors.request.use(
 // Response interceptor for logging and error handling
 apiClient.interceptors.response.use(
   (response) => {
-    console.log(`API Response: ${response.status} ${response.config.method.toUpperCase()} ${response.config.url}`);
+    // Only log in development mode
+    if (!isProd) {
+      console.log(`API Response: ${response.status} ${response.config.method.toUpperCase()} ${response.config.url}`);
+    }
     return response;
   },
   (error) => {
@@ -43,28 +52,30 @@ apiClient.interceptors.response.use(
     if (error.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
-      console.error('Response error:', {
-        status: error.response.status,
-        data: error.response.data,
-        url: error.config?.url
-      });
+      if (!isProd) {
+        console.error('Response error:', {
+          status: error.response.status,
+          data: error.response.data,
+          url: error.config?.url
+        });
+      }
       
       errorMessage = error.response.data?.message || 
                     `Server error: ${error.response.status} ${error.response.statusText}`;
       
       // Handle token errors specifically
       if (error.response.status === 401) {
-        console.log('Unauthorized access - Token may be invalid or expired');
+        if (!isProd) console.log('Unauthorized access - Token may be invalid or expired');
         // You could perform auto-logout here if needed
         // localStorage.removeItem('token');
       }
     } else if (error.request) {
       // The request was made but no response was received
-      console.error('Request error (no response):', error.request);
+      if (!isProd) console.error('Request error (no response):', error.request);
       errorMessage = 'No response from server. Please check your network connection.';
     } else {
       // Something happened in setting up the request that triggered an Error
-      console.error('Request setup error:', error.message);
+      if (!isProd) console.error('Request setup error:', error.message);
       errorMessage = error.message;
     }
     

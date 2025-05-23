@@ -49,6 +49,25 @@ curl -X POST http://localhost:3000/api/auth/login \
   -d '{"email":"your_email@example.com","password":"your_password"}'
 ```
 
+### 3. Check Rate Limiting 
+
+If you're experiencing "Too many requests" errors, you may have hit rate limits:
+
+```bash
+# Test if rate limiting is in effect
+curl -I http://localhost:3000/api/users
+```
+
+Look for headers like `X-RateLimit-Remaining` or a 429 status code which indicates rate limiting.
+
+To test rate limiting functionality:
+```bash
+# Run the rate limiting test script
+./test_rate_limiting.sh
+```
+
+Rate limiting configuration can be adjusted in `server/server.js` for different environments.
+
 If successful, you'll receive a token. Save it:
 
 ```bash

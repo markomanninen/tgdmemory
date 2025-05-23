@@ -1,0 +1,751 @@
+#!/bin/bash
+
+# Monitoring Dashboard Setup for TGD Memory
+# Sets up a simple web-based monitoring dashboard
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DASHBOARD_DIR="$SCRIPT_DIR/monitoring-dashboard"
+DASHBOARD_PORT="${DASHBOARD_PORT:-3030}"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Function to create dashboard HTML
+create_dashboard_html() {
+    mkdir -p "$DASHBOARD_DIR"
+    
+    cat > "$DASHBOARD_DIR/index.html" << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TGD Memory - Monitoring Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #2d2d2d;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #3d5afe;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            color: #3d5afe;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .main-content {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: #2d2d2d;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #404040;
+            transition: transform 0.2s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            border-color: #3d5afe;
+        }
+
+        .metric-card h3 {
+            color: #3d5afe;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #404040;
+        }
+
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: #ccc;
+        }
+
+        .metric-value {
+            font-weight: bold;
+        }
+
+        .status-ok { color: #4caf50; }
+        .status-warning { color: #ff9800; }
+        .status-error { color: #f44336; }
+
+        .logs-section {
+            background: #2d2d2d;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #404040;
+            margin-top: 2rem;
+        }
+
+        .logs-section h3 {
+            color: #3d5afe;
+            margin-bottom: 1rem;
+        }
+
+        .log-entry {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.85rem;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: #1a1a1a;
+            border-radius: 4px;
+            border-left: 3px solid #404040;
+        }
+
+        .log-error {
+            border-left-color: #f44336;
+            background: #2d1a1a;
+        }
+
+        .log-warning {
+            border-left-color: #ff9800;
+            background: #2d2a1a;
+        }
+
+        .log-info {
+            border-left-color: #2196f3;
+            background: #1a252d;
+        }
+
+        .controls {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: #3d5afe;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5472fd;
+        }
+
+        .btn-secondary {
+            background: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #777;
+        }
+
+        .refresh-indicator {
+            display: inline-block;
+            margin-left: 0.5rem;
+            color: #3d5afe;
+        }
+
+        .timestamp {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .loading {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .chart-container {
+            height: 200px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TGD Memory Monitoring Dashboard</h1>
+        <div class="subtitle">
+            Real-time application monitoring and health status
+            <span class="timestamp" id="lastUpdate">Last updated: Never</span>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="controls">
+            <button class="btn" onclick="refreshData()">
+                Refresh Data <span id="refreshIcon">🔄</span>
+            </button>
+            <button class="btn btn-secondary" onclick="toggleAutoRefresh()">
+                <span id="autoRefreshText">Enable Auto-refresh</span>
+            </button>
+            <button class="btn btn-secondary" onclick="clearLogs()">Clear Logs</button>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Application Status</h3>
+                <div class="metric-item">
+                    <span class="metric-label">Status:</span>
+                    <span class="metric-value" id="appStatus">Checking...</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Response Time:</span>
+                    <span class="metric-value" id="responseTime">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Environment:</span>
+                    <span class="metric-value" id="environment">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Uptime:</span>
+                    <span class="metric-value" id="uptime">-</span>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <h3>System Resources</h3>
+                <div class="metric-item">
+                    <span class="metric-label">CPU Usage:</span>
+                    <span class="metric-value" id="cpuUsage">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Memory Usage:</span>
+                    <span class="metric-value" id="memoryUsage">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Disk Usage:</span>
+                    <span class="metric-value" id="diskUsage">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Load Average:</span>
+                    <span class="metric-value" id="loadAverage">-</span>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <h3>Database & Cache</h3>
+                <div class="metric-item">
+                    <span class="metric-label">MongoDB:</span>
+                    <span class="metric-value" id="mongoStatus">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Cache Files:</span>
+                    <span class="metric-value" id="cacheFiles">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Cache Size:</span>
+                    <span class="metric-value" id="cacheSize">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">API Services:</span>
+                    <span class="metric-value" id="apiServices">-</span>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <h3>Performance Metrics</h3>
+                <div class="metric-item">
+                    <span class="metric-label">Requests/min:</span>
+                    <span class="metric-value" id="requestsPerMin">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Error Rate:</span>
+                    <span class="metric-value" id="errorRate">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Avg Response:</span>
+                    <span class="metric-value" id="avgResponse">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Active Users:</span>
+                    <span class="metric-value" id="activeUsers">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="logs-section">
+            <h3>Recent Activity Logs</h3>
+            <div id="logsContainer">
+                <div class="log-entry log-info">
+                    Dashboard initialized - waiting for data...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let autoRefreshInterval = null;
+        let isAutoRefresh = false;
+
+        // Configuration
+        const API_BASE = window.location.protocol + '//' + window.location.hostname + ':3000';
+        const REFRESH_INTERVAL = 5000; // 5 seconds
+
+        // Utility functions
+        function formatUptime(seconds) {
+            const days = Math.floor(seconds / 86400);
+            const hours = Math.floor((seconds % 86400) / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            
+            if (days > 0) return `${days}d ${hours}h ${minutes}m`;
+            if (hours > 0) return `${hours}h ${minutes}m`;
+            return `${minutes}m`;
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function addLogEntry(message, level = 'info') {
+            const logsContainer = document.getElementById('logsContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${level}`;
+            logEntry.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${message}`;
+            
+            logsContainer.insertBefore(logEntry, logsContainer.firstChild);
+            
+            // Keep only the last 50 log entries
+            const logs = logsContainer.querySelectorAll('.log-entry');
+            if (logs.length > 50) {
+                logsContainer.removeChild(logs[logs.length - 1]);
+            }
+        }
+
+        // API functions
+        async function fetchHealthData() {
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                throw new Error(`Health check failed: ${error.message}`);
+            }
+        }
+
+        async function fetchMetrics() {
+            try {
+                // Try to fetch performance metrics if available
+                const response = await fetch(`${API_BASE}/api/metrics`);
+                if (response.ok) {
+                    return await response.json();
+                }
+            } catch (error) {
+                // Metrics endpoint might not exist, return empty object
+            }
+            return {};
+        }
+
+        // Update functions
+        function updateApplicationStatus(data) {
+            const statusElement = document.getElementById('appStatus');
+            const environmentElement = document.getElementById('environment');
+            const uptimeElement = document.getElementById('uptime');
+
+            if (data.status === 'ok') {
+                statusElement.innerHTML = '<span class="status-ok">🟢 Healthy</span>';
+            } else if (data.status === 'degraded') {
+                statusElement.innerHTML = '<span class="status-warning">🟡 Degraded</span>';
+            } else {
+                statusElement.innerHTML = '<span class="status-error">🔴 Error</span>';
+            }
+
+            environmentElement.textContent = data.environment || 'Unknown';
+            uptimeElement.textContent = data.uptime ? formatUptime(data.uptime) : 'Unknown';
+        }
+
+        function updateSystemResources(data) {
+            // These would come from system metrics if available
+            document.getElementById('cpuUsage').textContent = 'N/A';
+            document.getElementById('memoryUsage').textContent = data.memory ? 
+                `${Math.round(data.memory.heapUsed / 1024 / 1024)}MB` : 'N/A';
+            document.getElementById('diskUsage').textContent = 'N/A';
+            document.getElementById('loadAverage').textContent = 'N/A';
+        }
+
+        function updateDatabaseCache(data) {
+            const mongoElement = document.getElementById('mongoStatus');
+            const servicesElement = document.getElementById('apiServices');
+
+            if (data.services?.mongodb?.status === 'connected') {
+                mongoElement.innerHTML = '<span class="status-ok">🟢 Connected</span>';
+            } else {
+                mongoElement.innerHTML = '<span class="status-error">🔴 Disconnected</span>';
+            }
+
+            // API services status
+            let apiCount = 0;
+            if (data.services?.openai?.configured) apiCount++;
+            if (data.services?.gemini?.configured) apiCount++;
+            
+            servicesElement.innerHTML = `<span class="status-ok">${apiCount}/2 Available</span>`;
+
+            document.getElementById('cacheFiles').textContent = 'N/A';
+            document.getElementById('cacheSize').textContent = 'N/A';
+        }
+
+        function updatePerformanceMetrics(data) {
+            // These would come from actual metrics collection
+            document.getElementById('requestsPerMin').textContent = 'N/A';
+            document.getElementById('errorRate').textContent = 'N/A';
+            document.getElementById('avgResponse').textContent = 'N/A';
+            document.getElementById('activeUsers').textContent = 'N/A';
+        }
+
+        // Main refresh function
+        async function refreshData() {
+            const refreshIcon = document.getElementById('refreshIcon');
+            refreshIcon.className = 'loading';
+            refreshIcon.textContent = '⟳';
+
+            try {
+                addLogEntry('Fetching application data...', 'info');
+                
+                const startTime = performance.now();
+                const healthData = await fetchHealthData();
+                const endTime = performance.now();
+                const responseTime = Math.round(endTime - startTime);
+
+                document.getElementById('responseTime').textContent = `${responseTime}ms`;
+
+                // Update all sections
+                updateApplicationStatus(healthData);
+                updateSystemResources(healthData);
+                updateDatabaseCache(healthData);
+                updatePerformanceMetrics(healthData);
+
+                // Update timestamp
+                document.getElementById('lastUpdate').textContent = 
+                    `Last updated: ${new Date().toLocaleTimeString()}`;
+
+                addLogEntry('Data refreshed successfully', 'info');
+
+            } catch (error) {
+                addLogEntry(`Error refreshing data: ${error.message}`, 'error');
+                
+                // Update status to show error
+                document.getElementById('appStatus').innerHTML = 
+                    '<span class="status-error">🔴 Connection Error</span>';
+            } finally {
+                refreshIcon.className = '';
+                refreshIcon.textContent = '🔄';
+            }
+        }
+
+        // Auto-refresh toggle
+        function toggleAutoRefresh() {
+            const button = document.getElementById('autoRefreshText');
+            
+            if (isAutoRefresh) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+                isAutoRefresh = false;
+                button.textContent = 'Enable Auto-refresh';
+                addLogEntry('Auto-refresh disabled', 'info');
+            } else {
+                autoRefreshInterval = setInterval(refreshData, REFRESH_INTERVAL);
+                isAutoRefresh = true;
+                button.textContent = 'Disable Auto-refresh';
+                addLogEntry(`Auto-refresh enabled (${REFRESH_INTERVAL/1000}s interval)`, 'info');
+            }
+        }
+
+        // Clear logs
+        function clearLogs() {
+            const logsContainer = document.getElementById('logsContainer');
+            logsContainer.innerHTML = '<div class="log-entry log-info">Logs cleared</div>';
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            addLogEntry('Monitoring dashboard initialized', 'info');
+            refreshData();
+            
+            // Auto-enable refresh after initial load
+            setTimeout(() => {
+                toggleAutoRefresh();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
+EOF
+}
+
+# Function to create a simple dashboard server
+create_dashboard_server() {
+    cat > "$DASHBOARD_DIR/server.js" << 'EOF'
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+
+const app = express();
+const PORT = process.env.DASHBOARD_PORT || 3030;
+
+// Serve static dashboard files
+app.use(express.static(__dirname));
+
+// API endpoint for metrics (if we want to add server-side metrics)
+app.get('/api/dashboard-metrics', (req, res) => {
+    // This could include additional metrics that aren't available from the main app
+    const metrics = {
+        timestamp: new Date().toISOString(),
+        dashboard_uptime: process.uptime(),
+        node_version: process.version,
+        platform: process.platform,
+        memory_usage: process.memoryUsage()
+    };
+    
+    res.json(metrics);
+});
+
+// Health check for the dashboard itself
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        service: 'monitoring-dashboard',
+        timestamp: new Date().toISOString()
+    });
+});
+
+app.listen(PORT, () => {
+    console.log(`TGD Memory Monitoring Dashboard running on http://localhost:${PORT}`);
+    console.log('Dashboard features:');
+    console.log('- Real-time application monitoring');
+    console.log('- Health status tracking');
+    console.log('- Performance metrics visualization');
+    console.log('- Activity logs');
+});
+EOF
+
+    # Create package.json for dashboard
+    cat > "$DASHBOARD_DIR/package.json" << 'EOF'
+{
+  "name": "tgdmemory-monitoring-dashboard",
+  "version": "1.0.0",
+  "description": "Monitoring dashboard for TGD Memory application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
+EOF
+}
+
+# Function to setup dashboard
+setup_dashboard() {
+    echo -e "${BLUE}Setting up TGD Memory Monitoring Dashboard${NC}"
+    echo "============================================="
+    
+    # Create dashboard files
+    echo -e "${BLUE}Creating dashboard files...${NC}"
+    create_dashboard_html
+    create_dashboard_server
+    
+    # Install dependencies
+    echo -e "${BLUE}Installing dashboard dependencies...${NC}"
+    cd "$DASHBOARD_DIR"
+    
+    if command -v npm >/dev/null 2>&1; then
+        npm install
+        echo -e "${GREEN}✓ Dashboard dependencies installed${NC}"
+    else
+        echo -e "${YELLOW}⚠ npm not found, you'll need to install dependencies manually${NC}"
+    fi
+    
+    cd "$SCRIPT_DIR"
+    
+    # Create startup script
+    cat > "$DASHBOARD_DIR/start-dashboard.sh" << EOF
+#!/bin/bash
+cd "\$(dirname "\${BASH_SOURCE[0]}")"
+echo "Starting TGD Memory Monitoring Dashboard..."
+PORT=${DASHBOARD_PORT} node server.js
+EOF
+    
+    chmod +x "$DASHBOARD_DIR/start-dashboard.sh"
+    
+    echo -e "${GREEN}✓ Monitoring dashboard setup complete${NC}"
+    echo ""
+    echo "Dashboard location: $DASHBOARD_DIR"
+    echo "To start the dashboard:"
+    echo "  cd $DASHBOARD_DIR"
+    echo "  npm start"
+    echo ""
+    echo "Or use the startup script:"
+    echo "  $DASHBOARD_DIR/start-dashboard.sh"
+    echo ""
+    echo "Dashboard will be available at: http://localhost:${DASHBOARD_PORT}"
+}
+
+# Function to start dashboard
+start_dashboard() {
+    echo -e "${BLUE}Starting monitoring dashboard...${NC}"
+    
+    if [ ! -d "$DASHBOARD_DIR" ]; then
+        echo -e "${YELLOW}Dashboard not found. Setting up first...${NC}"
+        setup_dashboard
+    fi
+    
+    cd "$DASHBOARD_DIR"
+    
+    # Check if dependencies are installed
+    if [ ! -d "node_modules" ]; then
+        echo -e "${BLUE}Installing dependencies...${NC}"
+        npm install
+    fi
+    
+    echo -e "${GREEN}Starting dashboard on port ${DASHBOARD_PORT}...${NC}"
+    echo "Open http://localhost:${DASHBOARD_PORT} in your browser"
+    echo "Press Ctrl+C to stop the dashboard"
+    echo ""
+    
+    PORT="$DASHBOARD_PORT" node server.js
+}
+
+# Function to create PM2 ecosystem for dashboard
+create_pm2_config() {
+    cat > "$DASHBOARD_DIR/ecosystem.config.js" << EOF
+module.exports = {
+  apps: [{
+    name: 'tgdmemory-dashboard',
+    script: 'server.js',
+    cwd: '${DASHBOARD_DIR}',
+    env: {
+      NODE_ENV: 'development',
+      DASHBOARD_PORT: ${DASHBOARD_PORT}
+    },
+    env_production: {
+      NODE_ENV: 'production',
+      DASHBOARD_PORT: ${DASHBOARD_PORT}
+    },
+    instances: 1,
+    autorestart: true,
+    watch: false,
+    max_memory_restart: '100M',
+    log_file: '${SCRIPT_DIR}/logs/dashboard.log',
+    error_file: '${SCRIPT_DIR}/logs/dashboard-error.log',
+    out_file: '${SCRIPT_DIR}/logs/dashboard-out.log',
+    log_date_format: 'YYYY-MM-DD HH:mm:ss Z'
+  }]
+};
+EOF
+    
+    echo -e "${GREEN}✓ PM2 configuration created for dashboard${NC}"
+    echo "To start with PM2: pm2 start $DASHBOARD_DIR/ecosystem.config.js"
+}
+
+# Main function
+main() {
+    local command="$1"
+    shift
+    
+    case "$command" in
+        "setup")
+            setup_dashboard "$@"
+            ;;
+        "start")
+            start_dashboard "$@"
+            ;;
+        "pm2")
+            create_pm2_config "$@"
+            ;;
+        *)
+            echo "Usage: $0 {setup|start|pm2} [options]"
+            echo ""
+            echo "Commands:"
+            echo "  setup    Set up the monitoring dashboard"
+            echo "  start    Start the dashboard server"
+            echo "  pm2      Create PM2 configuration for dashboard"
+            echo ""
+            echo "Environment Variables:"
+            echo "  DASHBOARD_PORT    Port for dashboard (default: 3030)"
+            echo ""
+            echo "Examples:"
+            echo "  $0 setup"
+            echo "  $0 start"
+            echo "  DASHBOARD_PORT=4000 $0 start"
+            exit 1
+            ;;
+    esac
+}
+
+# Run main function if script is executed directly
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi

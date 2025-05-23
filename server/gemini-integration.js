@@ -1,24 +1,30 @@
 // gemini-integration.js - Google Gemini API integration for equation explanations
-const { GoogleGenAI } = require('@google/genai');
 
 // Initialize the Gemini client with your API key
 let geminiModel;
 let genAI;
-if (process.env.GOOGLE_API_KEY) {
-  genAI = new GoogleGenAI({
-    apiKey: process.env.GOOGLE_API_KEY,
-  });
-  
-  // Use only the model specified in the environment variable
-  const modelName = process.env.GEMINI_MODEL || "gemini-2.5-flash-preview-05-20";
-  
-  try {
-    console.log(`Initializing Gemini model: ${modelName}`);
-    geminiModel = modelName;
-    console.log(`Successfully initialized Gemini model: ${modelName}`);
-  } catch (error) {
-    console.error(`Failed to initialize Gemini model ${modelName}:`, error.message);
-    console.error('Equation explanations with Gemini will not work. Check your GEMINI_MODEL configuration.');
+let GoogleGenAI;
+
+// Dynamically import the ES module and initialize
+async function initializeGemini() {
+  if (process.env.GOOGLE_API_KEY && !GoogleGenAI) {
+    try {
+      const module = await import('@google/genai');
+      GoogleGenAI = module.GoogleGenAI;
+      genAI = new GoogleGenAI({
+        apiKey: process.env.GOOGLE_API_KEY,
+      });
+      
+      // Use only the model specified in the environment variable
+      const modelName = process.env.GEMINI_MODEL || "gemini-2.5-flash-preview-05-20";
+      
+      console.log(`Initializing Gemini model: ${modelName}`);
+      geminiModel = modelName;
+      console.log(`Successfully initialized Gemini model: ${modelName}`);
+    } catch (error) {
+      console.error(`Failed to initialize Gemini:`, error.message);
+      console.error('Equation explanations with Gemini will not work. Check your GEMINI_MODEL configuration.');
+    }
   }
 }
 
@@ -31,6 +37,9 @@ if (process.env.GOOGLE_API_KEY) {
  */
 async function generateExplanationWithGemini(latex, title) {
   try {
+    // Initialize Gemini if not already done
+    await initializeGemini();
+    
     if (!geminiModel || !genAI) {
       throw new Error('Gemini model not initialized. Please set GOOGLE_API_KEY.');
     }
@@ -110,4 +119,4 @@ Important formatting guidelines:
   }
 }
 
-module.exports = { geminiModel, generateExplanationWithGemini };
+module.exports = { geminiModel, generateExplanationWithGemini, initializeGemini };
