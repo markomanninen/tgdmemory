@@ -49,9 +49,17 @@ async function createConsistentCacheKey(latex, title) {
     // Combine the parts to create a 16-character hash
     return prefix + middle + suffix;
   } catch (error) {
-    console.error('Error creating consistent cache key:', error);
-    // Fall back to simpleHash if the modern approach fails
-    return simpleHash(latex + (title || ''));
+    console.error('Error creating consistent cache key (primary logic failed, using fallback):', error);
+    // Fallback logic: mimics server's Buffer.from(input).toString('hex').substring(0, 16)
+    const input = latex + (title || '');
+    const encoder = new TextEncoder(); // Should be available in modern browsers
+    const data = encoder.encode(input);
+    let fullHex = '';
+    for (let i = 0; i < data.length; i++) {
+      const byteHex = data[i].toString(16);
+      fullHex += (byteHex.length === 1 ? '0' + byteHex : byteHex);
+    }
+    return fullHex.substring(0, 16);
   }
 }
 
@@ -72,6 +80,21 @@ function simpleHash(str) {
   }
   // Convert to a positive hex string
   return Math.abs(hash).toString(16);
+}
+
+/**
+ * Determines the base URL for API calls based on the environment.
+ * @returns {string} The base URL for the API.
+ */
+function getApiBaseUrl() {
+  if (import.meta.env.PROD) {
+    // In production, no dynamic API calls should be made.
+    // Static cache is the only source.
+    return null;
+  } else {
+    // In development, use localhost:3000 for the API server
+    return 'http://localhost:3000';
+  }
 }
 
 function showExplanation(latexEquation, rawTitleFromAttribute, clickedContainerElement) {
@@ -291,9 +314,12 @@ async function fetchAndDisplayExplanation(latexEquation, equationFullTitle, expl
   `;
   explanationContainerElement.innerHTML = loadingHTML;
   
+  const apiBaseUrl = getApiBaseUrl();
+
   try {
     // Try both potential cache locations (client-side and server-side)
-    const clientCacheUrl = `/explanations-cache/${cacheKey}.json`;
+    // clientCacheUrl remains a root-relative path. Vite should handle prepending the base path in production.
+    const clientCacheUrl = `/explanations-cache/${cacheKey}.json`; 
     console.log(`Checking client cache for key: ${cacheKey} at ${clientCacheUrl}`);
     
     try {
@@ -377,16 +403,34 @@ async function fetchAndDisplayExplanation(latexEquation, equationFullTitle, expl
           cacheError.message.includes('Invalid content type')) {
         console.warn('The dev server returned HTML instead of a 404 for the missing cache file.');
         console.warn('This is a known issue with Vite and other dev servers - it\'s not a real error.');
-        console.log('Continuing to server cache...');
       }
-    }
-    
-    // Try server API cache endpoint as a backup
-    try {
-      const serverCacheUrl = `http://localhost:3000/cache/${cacheKey}`;
-      console.log(`Checking server cache at: ${serverCacheUrl}`);
-      
-      const serverCacheResponse = await fetch(serverCacheUrl, {
+
+      // If in production (apiBaseUrl is null) and static cache failed (this catch block was entered),
+      // show message and stop.
+      if (apiBaseUrl === null) {
+        console.log('Production mode: Static cache failed. No API fallback.');
+        explanationContainerElement.innerHTML = `
+          <div class="explanation-content">
+            <h3 class="text-yellow-600">Explanation Not Available</h3>
+            <p class="text-gray-700">A pre-generated explanation for this equation could not be found.</p>
+            <p class="text-xs text-gray-500 mt-2">This is expected if the explanation has not been cached yet.</p>
+          </div>
+        `;
+        return; // Exit function, no further attempts
+      }
+      console.log('Continuing to server-side checks (dev mode or non-HTML error in prod).');
+    } // End of client cache catch block
+
+    // The following blocks will only execute if apiBaseUrl is not null (i.e., development mode)
+    // OR if client cache succeeded in production (in which case we would have returned already).
+    // If apiBaseUrl is null AND client cache failed, we returned above.
+    if (apiBaseUrl) {
+      // Try server API cache endpoint as a backup
+      try {
+        const serverCacheUrl = `${apiBaseUrl}/cache/${cacheKey}`;
+        console.log(`Checking server cache at: ${serverCacheUrl}`);
+        
+        const serverCacheResponse = await fetch(serverCacheUrl, {
         method: 'GET',
         headers: {
           'Cache-Control': 'no-cache',
@@ -416,14 +460,14 @@ async function fetchAndDisplayExplanation(latexEquation, equationFullTitle, expl
       }
     } catch (serverError) {
       console.log('Server cache unavailable:', serverError.message);
-    }
-    
-    // Then try primary API
-    try {
-      const apiUrl = 'http://localhost:3000/api/explain';
-      console.log('Fetching explanation from primary API...');
+      }
       
-      const response = await fetch(apiUrl, {
+      // Then try primary API
+      try {
+        const apiUrl = `${apiBaseUrl}/api/explain`;
+        console.log('Fetching explanation from primary API...');
+        
+        const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -458,14 +502,14 @@ async function fetchAndDisplayExplanation(latexEquation, equationFullTitle, expl
       }
     } catch (primaryApiError) {
       console.warn('Primary API failed, trying fallback:', primaryApiError.message);
-    }
-    
-    // Finally try fallback API
-    try {
-      const fallbackUrl = 'http://localhost:3000/api/explain-with-gemini';
-      console.log('Fetching explanation from fallback API...');
+      }
       
-      const fallbackResponse = await fetch(fallbackUrl, {
+      // Finally try fallback API
+      try {
+        const fallbackUrl = `${apiBaseUrl}/api/explain-with-gemini`;
+        console.log('Fetching explanation from fallback API...');
+        
+        const fallbackResponse = await fetch(fallbackUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -510,8 +554,8 @@ async function fetchAndDisplayExplanation(latexEquation, equationFullTitle, expl
           <div class="mt-4 p-3 bg-gray-50 border border-gray-200 rounded">
             <h4 class="text-sm font-medium text-gray-700">Troubleshooting:</h4>
             <ul class="text-sm text-gray-600 pl-5 mt-2 list-disc">
-              <li>Check that the equation explanation server is running</li>
-              <li>Verify that API keys are set in server/.env file</li>
+              <li>If in development, check that the local server is running at ${apiBaseUrl}</li>
+              <li>Verify that API keys are set in server/.env file (for development)</li>
               <li>See EQUATION_EXPLANATION.md for more help</li>
             </ul>
           </div>
@@ -529,8 +573,28 @@ async function fetchAndDisplayExplanation(latexEquation, equationFullTitle, expl
         <div class="mt-4 p-3 bg-gray-50 border border-gray-200 rounded">
           <h4 class="text-sm font-medium text-gray-700">Troubleshooting:</h4>
           <ul class="text-sm text-gray-600 pl-5 mt-2 list-disc">
-            <li>Check that the equation explanation server is running at http://localhost:3000</li>
-            <li>Verify that API keys are set in server/.env file</li>
+              <li>If in development, check that the local server is running (expected at ${apiBaseUrl})</li>
+            <li>Verify that API keys are set in server/.env file (for development)</li>
+            <li>Check the browser console for more detailed error messages</li>
+            <li>See EQUATION_EXPLANATION.md for more help</li>
+          </ul>
+        </div>
+      </div>
+    `;
+    } // End of if(apiBaseUrl) - this ensures dev-only API calls are wrapped
+  } catch (error) { // This is the outermost catch for any unexpected errors NOT caught by inner blocks
+    console.error('Error in fetchAndDisplayExplanation:', error);
+    explanationContainerElement.innerHTML = `
+      <div class="explanation-content">
+        <h3 class="text-red-600">Error Occurred</h3>
+        <p class="text-red-500">An error occurred while fetching the explanation.</p>
+        <p class="text-gray-700">Error details: ${escapeHtml(error.message || 'Unknown error')}</p>
+        
+        <div class="mt-4 p-3 bg-gray-50 border border-gray-200 rounded">
+          <h4 class="text-sm font-medium text-gray-700">Troubleshooting:</h4>
+          <ul class="text-sm text-gray-600 pl-5 mt-2 list-disc">
+              <li>If in development, check that the local server is running (expected at ${apiBaseUrl})</li>
+            <li>Verify that API keys are set in server/.env file (for development)</li>
             <li>Check the browser console for more detailed error messages</li>
             <li>See EQUATION_EXPLANATION.md for more help</li>
           </ul>
