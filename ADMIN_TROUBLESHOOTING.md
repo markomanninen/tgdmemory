@@ -128,6 +128,29 @@ If you're still experiencing issues:
 2. Run the project in development mode to see more detailed error messages
 3. Contact the developer with details of your issue
 
+## Login Problems
+
+If you cannot log in to the admin dashboard:
+
+1. **Verify default credentials**
+   - Default admin email: `admin@tgdmemory.com`
+   - Default password: `admin123`
+   - These are created when the MongoDB container is first initialized
+   - See [User Management Guide](./docs/USER_MANAGEMENT.md) for more details
+
+2. **Check MongoDB connection**
+   Verify the database is running and the admin user exists:
+   ```bash
+   # Check if MongoDB container is running
+   docker-compose ps mongodb
+   
+   # Check if admin user exists in the database
+   docker-compose exec mongodb mongosh admin -u admin -p your_password --eval "db.getSiblingDB('tgdmemory').users.findOne({roles: {\\$in: ['admin']}})"
+   ```
+
+3. **Reset admin password if needed**
+   If you've forgotten the admin password, follow the password reset procedure in the [User Management Guide](./docs/USER_MANAGEMENT.md).
+
 ## Advanced Troubleshooting
 
 For developers:

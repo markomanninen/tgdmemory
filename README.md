@@ -32,6 +32,15 @@ Visit http://localhost:5173/ in your browser to see the project.
 - [Admin Troubleshooting](./ADMIN_TROUBLESHOOTING.md) - Solving issues with the admin dashboard
 - [Rate Limiting](./docs/RATE_LIMITING.md) - Information about the rate limiting implementation
 
+## Default Login Credentials
+
+When the application is first deployed, a default admin user is created with the following credentials:
+
+- Email: `admin@tgdmemory.com`
+- Password: `admin123`
+
+**IMPORTANT**: For security reasons, please change these default credentials immediately after your first login.
+
 ## Project Structure
 
 - `/src` - Main source code for the presentation

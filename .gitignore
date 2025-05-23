@@ -135,4 +135,24 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# OS specific files
 .DS_Store
+
+# SSL certificates and private keys
+*.pem
+*.key
+*.crt
+*.cer
+nginx/ssl/
+
+# Test results and validation logs
+test-results/
+validation_*.log
+
+# Metrics data
+metrics/
+
+# Environment files for different setups
+.env.*
+!.env.template
+!.env.example
