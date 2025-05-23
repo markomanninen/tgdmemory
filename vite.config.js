@@ -34,15 +34,6 @@ export default defineConfig(({ command, mode }) => {
   // Set base path only for GitHub Pages deployment, not for local preview
   if (command === 'build' && process.env.GITHUB_ACTIONS) {
     config.base = '/tgdmemory/';
-    // Ensure static assets are properly resolved with base path
-    config.experimental = {
-      renderBuiltUrl(filename, { hostType }) {
-        if (hostType === 'js') {
-          return { js: `"/tgdmemory/${filename}"` };
-        }
-        return `/tgdmemory/${filename}`;
-      }
-    };
   }
   
   return config;

@@ -98,6 +98,20 @@ function getApiBaseUrl() {
   }
 }
 
+/**
+ * Gets the correct base path for static assets based on the current environment
+ * @returns {string} The base path for static assets
+ */
+function getBasePath() {
+  // Check if we're on GitHub Pages
+  if (window.location.hostname === 'markomanninen.github.io' && 
+      window.location.pathname.startsWith('/tgdmemory/')) {
+    return '/tgdmemory';
+  }
+  // For local development and other deployments
+  return '';
+}
+
 function showExplanation(latexEquation, rawTitleFromAttribute, clickedContainerElement) {
   console.log("showExplanation called with LaTeX:", latexEquation, "rawTitle:", rawTitleFromAttribute, "element:", clickedContainerElement); // DEBUG updated
   const modal = document.getElementById('equationExplanationModal');
@@ -500,8 +514,9 @@ async function fetchAndDisplayExplanation(latexEquation, equationFullTitle, expl
 
   try { // Added outer try block
     // Try both potential cache locations (client-side and server-side)
-    // clientCacheUrl remains a root-relative path. Vite should handle prepending the base path in production.
-    const clientCacheUrl = `/explanations-cache/${cacheKey}.json`; 
+    // Use the correct base path for the cache URL
+    const basePath = getBasePath();
+    const clientCacheUrl = `${basePath}/explanations-cache/${cacheKey}.json`; 
     console.log(`Checking client cache for key: ${cacheKey} at ${clientCacheUrl}`);
     
     try {
