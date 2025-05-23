@@ -24,26 +24,12 @@ console.log('API integrations imported');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-
-// More specific CORS configuration
-const corsOptions = {
-  origin: ['http://localhost:4173', 'http://localhost:5173', 'http://127.0.0.1:4173', 'http://127.0.0.1:5173'], // Allow your Vite dev and preview ports
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-};
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Enable pre-flight requests for all routes
-
+// Middleware - Allow all origins in development
+app.use(cors());
 app.use(express.json());
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, '..', 'public')));
-
-// Serve the explanations-cache directory as static files
-app.use('/explanations-cache', express.static(path.join(__dirname, 'explanations-cache')));
 
 // Create a public path outside the server directory to make cache accessible by the front-end
 const publicCachePath = path.join(__dirname, '..', 'public', 'explanations-cache');
@@ -72,47 +58,29 @@ app.get('/cache/:cacheKey', async (req, res) => {
     
     console.log(`Cache request for key: ${cacheKey}`);
     
-    // First try server cache
+    // Try to read from the public cache directory
     try {
-      const serverCacheFilePath = path.join(__dirname, 'explanations-cache', `${cacheKey}.json`);
-      const cachedData = await fs.readFile(serverCacheFilePath, 'utf8');
+      const publicCacheFilePath = path.join(publicCachePath, `${cacheKey}.json`);
+      const publicCachedData = await fs.readFile(publicCacheFilePath, 'utf8');
       
       try {
-        const parsedData = JSON.parse(cachedData);
-        console.log('Returning cached explanation from server cache');
+        const parsedData = JSON.parse(publicCachedData);
+        console.log('Returning cached explanation from public cache');
         // Set appropriate cache headers - allow client caching for 1 day
         res.set('Cache-Control', 'public, max-age=86400');
         res.set('Content-Type', 'application/json');
         return res.json(parsedData);
       } catch (parseError) {
-        console.error('Error parsing server cache file:', parseError);
+        console.error('Error parsing public cache file:', parseError);
         return res.status(500).json({ error: 'Invalid cache file format' });
       }
-    } catch (serverCacheError) {
-      // No server cache, try public cache
-      try {
-        const publicCacheFilePath = path.join(publicCachePath, `${cacheKey}.json`);
-        const publicCachedData = await fs.readFile(publicCacheFilePath, 'utf8');
-        
-        try {
-          const parsedData = JSON.parse(publicCachedData);
-          console.log('Returning cached explanation from public cache');
-          // Set appropriate cache headers - allow client caching for 1 day
-          res.set('Cache-Control', 'public, max-age=86400');
-          res.set('Content-Type', 'application/json');
-          return res.json(parsedData);
-        } catch (parseError) {
-          console.error('Error parsing public cache file:', parseError);
-          return res.status(500).json({ error: 'Invalid cache file format' });
-        }
-      } catch (publicCacheError) {
-        // No cache found in either location
-        console.log('No cache found for key:', cacheKey);
-        // Add special cache headers to prevent false positives
-        res.set('Cache-Control', 'no-store');
-        res.set('Content-Type', 'application/json');
-        return res.status(404).json({ error: 'Cache not found', cacheKey });
-      }
+    } catch (publicCacheError) {
+      // No cache found in public cache
+      console.log('No cache found for key:', cacheKey);
+      // Add special cache headers to prevent false positives
+      res.set('Cache-Control', 'no-store');
+      res.set('Content-Type', 'application/json');
+      return res.status(404).json({ error: 'Cache not found', cacheKey });
     }
   } catch (error) {
     console.error('Error in /cache/:cacheKey endpoint:', error);
@@ -150,22 +118,17 @@ function generateCacheKey(latex, title) {
 // Helper function to save an explanation to cache
 async function saveToCache(cacheKey, explanation) {
   try {
-    // Save to server cache directory
-    const cacheDir = path.join(__dirname, 'explanations-cache');
-    const cacheFilePath = path.join(cacheDir, `${cacheKey}.json`);
-    
-    await fs.mkdir(cacheDir, { recursive: true });
-    await fs.writeFile(cacheFilePath, JSON.stringify({ explanation }));
-    console.log(`Cached explanation at ${cacheFilePath}`);
-    
-    // Also save to public cache directory for direct frontend access
+    // Save to public cache directory for direct frontend access
+    // ensurePublicCacheDir() is called at server startup, so the directory should exist.
+    // We can add an explicit mkdir here for robustness if desired, but it might be redundant.
+    // await fs.mkdir(publicCachePath, { recursive: true }); 
     const publicFilePath = path.join(publicCachePath, `${cacheKey}.json`);
     await fs.writeFile(publicFilePath, JSON.stringify({ explanation }));
-    console.log(`Also cached explanation at ${publicFilePath} for frontend access`);
+    console.log(`Cached explanation at ${publicFilePath} (public cache)`);
     
     return true;
   } catch (error) {
-    console.error('Error saving to cache:', error);
+    console.error('Error saving to public cache:', error);
     return false;
   }
 }
@@ -173,20 +136,13 @@ async function saveToCache(cacheKey, explanation) {
 // Debug endpoint for checking cache state
 app.get('/debug/cache', async (req, res) => {
   try {
-    const serverCacheDir = path.join(__dirname, 'explanations-cache');
     const publicCacheDir = publicCachePath;
     
-    // Check if directories exist
-    const serverDirExists = await fs.stat(serverCacheDir).then(() => true).catch(() => false);
+    // Check if directory exists
     const publicDirExists = await fs.stat(publicCacheDir).then(() => true).catch(() => false);
     
-    // Read directory contents if they exist
-    let serverFiles = [];
+    // Read directory contents if it exists
     let publicFiles = [];
-    
-    if (serverDirExists) {
-      serverFiles = await fs.readdir(serverCacheDir);
-    }
     
     if (publicDirExists) {
       publicFiles = await fs.readdir(publicCacheDir);
@@ -195,12 +151,6 @@ app.get('/debug/cache', async (req, res) => {
     // Return debug information
     res.json({
       cacheDirectories: {
-        server: {
-          path: serverCacheDir,
-          exists: serverDirExists,
-          fileCount: serverFiles.length,
-          files: serverFiles.slice(0, 10) // Show only first 10 files
-        },
         public: {
           path: publicCacheDir,
           exists: publicDirExists,
@@ -235,12 +185,12 @@ app.post('/api/explain', async (req, res) => {
     
     // Check if we have a cached explanation
     try {
-      const cacheFilePath = path.join(__dirname, 'explanations-cache', `${cacheKey}.json`);
+      const cacheFilePath = path.join(publicCachePath, `${cacheKey}.json`);
       const cachedData = await fs.readFile(cacheFilePath, 'utf8');
       const { explanation } = JSON.parse(cachedData);
       
       if (explanation) {
-        console.log('Returning cached explanation');
+        console.log('Returning cached explanation from public cache');
         return res.json({ explanation });
       }
     } catch (cacheError) {
@@ -282,12 +232,12 @@ app.post('/api/explain-with-gemini', async (req, res) => {
     
     // Check if we have a cached explanation
     try {
-      const cacheFilePath = path.join(__dirname, 'explanations-cache', `${cacheKey}.json`);
+      const cacheFilePath = path.join(publicCachePath, `${cacheKey}.json`);
       const cachedData = await fs.readFile(cacheFilePath, 'utf8');
       const { explanation } = JSON.parse(cachedData);
       
       if (explanation) {
-        console.log('Returning cached Gemini explanation');
+        console.log('Returning cached Gemini explanation from public cache');
         return res.json({ explanation });
       }
     } catch (cacheError) {
@@ -316,8 +266,19 @@ app.listen(PORT, () => {
   console.log(`Equation explanation server running on port ${PORT}`);
   console.log(`- Primary explanation endpoint: http://localhost:${PORT}/api/explain`);
   console.log(`- Fallback explanation endpoint: http://localhost:${PORT}/api/explain-with-gemini`);
-  console.log(`- Cache directory: ${path.join(__dirname, 'explanations-cache')}`);
-  console.log(`- Public cache directory: ${publicCachePath}`);
+  console.log(`- Cache directory (served from public): ${publicCachePath}`);
+
+  // server.js - inside app.listen, for temporary key generation
+  const tempLatex1 = "\\sigma_1";
+  const tempTitle1 = "Sigma One";
+  const tempKey1 = generateCacheKey(tempLatex1, tempTitle1);
+  console.log(`DEV_ONLY_KEY_1 for (${tempLatex1}, ${tempTitle1}): ${tempKey1}`);
+
+  const tempLatex2 = "\\alpha_2";
+  const tempTitle2 = "Alpha Two";
+  const tempKey2 = generateCacheKey(tempLatex2, tempTitle2);
+  console.log(`DEV_ONLY_KEY_2 for (${tempLatex2}, ${tempTitle2}): ${tempKey2}`);
+  // End of temporary snippet
   
   if (!process.env.OPENAI_API_KEY) {
     console.warn('Warning: OPENAI_API_KEY not set. Primary API will not work.');

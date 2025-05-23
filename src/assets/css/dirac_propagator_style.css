@@ -15,6 +15,11 @@ body {
     padding-bottom: 0.3em;
     border-bottom: 1px solid #e2e8f0; /* Add a light border under h2 */
 }
+.modal-header .prose h2 {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
 .prose section h2.text-2xl {
     margin-top: 0; /* First h2 in a section might not need extra top margin if section has margin */
 }
