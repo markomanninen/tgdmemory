@@ -31,7 +31,7 @@ export default function ImplicationsSection() {
         </h4>
         <div 
           ref={subSection1ContentRef} 
-          className={`diagram-adjacent-text-container content-text ${subSection1ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+          className={`diagram-adjacent-text-container unified-content ${subSection1ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
           {/* Text on the left */}
           <div className={`diagram-adjacent-text md:col-span-1 order-first ${subSection1ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
@@ -68,7 +68,7 @@ export default function ImplicationsSection() {
         </h4>
         <div 
           ref={subSection2ContentRef} 
-          className={`diagram-adjacent-text-container content-text ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+          className={`diagram-adjacent-text-container unified-content ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
           {/* Diagram on the left */}
           <div className={`diagram-card md:col-span-1 order-first ${subSection2ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>

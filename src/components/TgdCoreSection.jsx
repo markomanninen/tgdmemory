@@ -30,7 +30,7 @@ export default function TgdCoreSection() {
         </h4>
         <div 
           ref={subSection1ContentRef} 
-          className={`diagram-adjacent-text-container content-text ${subSection1ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+          className={`diagram-adjacent-text-container unified-content ${subSection1ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
           <div className={`diagram-adjacent-text md:col-span-1 ${subSection1ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
             <dl>
@@ -63,7 +63,7 @@ export default function TgdCoreSection() {
         </h4>
         <div 
           ref={subSection2ContentRef} 
-          className={`diagram-adjacent-text-container content-text ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+          className={`diagram-adjacent-text-container unified-content ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
           <div className={`diagram-card md:col-span-1 order-first ${subSection2ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
             <img 

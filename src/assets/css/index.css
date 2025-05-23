@@ -61,26 +61,61 @@
     animation: pulse-light 2s infinite;
   }
 
-  /* Modal Styles (re-defining here for clarity, ensure they don't conflict with other modal styles if you have them) */
+  /* Unified Modal Styles (Plain CSS for static pages) */
+  /* These are translated from the Tailwind @apply rules in src/index.css */
+  /* Ensure Tailwind CDN is linked in HTML for utility classes like 'hidden' to work */
+
   .modal-overlay {
-    @apply fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4 backdrop-blur-sm;
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-color: rgba(0, 0, 0, 0.8); /* Tailwind: bg-black bg-opacity-80 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50; /* Tailwind: z-50 */
+    padding: 1rem; /* Tailwind: p-4 */
+    /* Tailwind: backdrop-blur-sm. Note: backdrop-filter support can vary. */
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
   }
 
   .modal-content {
-    @apply bg-white p-6 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] flex flex-col;
+    background-color: #fff; /* Tailwind: bg-white */
+    padding: 1.5rem; /* Tailwind: p-6 */
+    border-radius: 0.5rem; /* Tailwind: rounded-lg */
+    /* Custom shadow from src/index.css, similar to Tailwind's shadow-xl */
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    max-width: 56rem; /* Tailwind: max-w-4xl */
+    width: 100%; /* Tailwind: w-full */
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column; /* Tailwind: flex-col */
   }
 
   .modal-header {
-    @apply flex justify-between items-center border-b border-gray-200 pb-3 mb-4;
+    display: flex;
+    justify-content: space-between; /* Tailwind: justify-between */
+    align-items: center; /* Tailwind: items-center */
+    border-bottom: 1px solid #e5e7eb; /* Tailwind: border-b border-gray-200 */
+    padding-bottom: 0.75rem; /* Tailwind: pb-3 */
+    margin-bottom: 1rem; /* Tailwind: mb-4 */
   }
 
   .modal-title {
-    @apply text-2xl font-semibold text-sky-800;
+    font-size: 1.5rem; /* Tailwind: text-2xl */
+    line-height: 2rem;
+    font-weight: 600; /* Tailwind: font-semibold */
+    color: #075985; /* Tailwind: text-sky-800 */
   }
 
   .modal-close-button {
-    @apply text-gray-600 hover:text-gray-900 text-3xl font-bold leading-none cursor-pointer transition-colors duration-200;
+    color: #4b5563; /* Tailwind: text-gray-600 */
+    font-size: 1.875rem; /* Tailwind: text-3xl */
+    font-weight: 700; /* Tailwind: font-bold */
+    line-height: 1; /* Tailwind: leading-none */
+    cursor: pointer;
+    transition-property: color, background-color; /* Tailwind: transition-colors */
+    transition-duration: 200ms; /* Tailwind: duration-200 */
     height: 40px;
     width: 40px;
     display: flex;
@@ -88,15 +123,37 @@
     justify-content: center;
     border-radius: 50%;
   }
-  
+
   .modal-close-button:hover {
-    @apply bg-gray-100;
+    color: #111827; /* Tailwind: hover:text-gray-900 */
+    background-color: #f3f4f6; /* Tailwind: hover:bg-gray-100 */
   }
 
   .modal-body {
-    @apply overflow-y-auto flex-grow px-2;
+    overflow-y: auto;
+    flex-grow: 1; /* Tailwind: flex-grow */
+    padding-left: 0.5rem; /* Tailwind: px-2 */
+    padding-right: 0.5rem; /* Tailwind: px-2 */
   }
-  
+
+  /* Custom scrollbar for modals (plain CSS, consistent with src/index.css) */
+  .modal-body::-webkit-scrollbar {
+    width: 8px;
+  }
+  .modal-body::-webkit-scrollbar-track {
+    background-color: #f3f4f6; /* Tailwind: bg-gray-100 */
+    border-radius: 0.25rem; /* Tailwind: rounded */
+  }
+  .modal-body::-webkit-scrollbar-thumb {
+    background-color: #bae6fd; /* Tailwind: bg-sky-200 */
+    border-radius: 0.25rem; /* Tailwind: rounded */
+    transition: background-color 0.3s ease;
+  }
+  .modal-body::-webkit-scrollbar-thumb:hover {
+    background-color: #7dd3fc; /* Tailwind: hover:bg-sky-300 */
+  }
+  /* End of Unified Modal Styles (Plain CSS) */
+
   /* Enhanced equation display */
   .equation-display {
     @apply bg-gray-50 border border-gray-200 rounded-md mb-6 p-4 text-base overflow-x-auto shadow-sm;
@@ -158,20 +215,6 @@
   /* Styling for mathematical variables in text */
   .explanation-content mjx-container {
     @apply inline-block align-middle;
-  }
-  
-  /* Custom scrollbar for the modal */
-  .modal-body::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  .modal-body::-webkit-scrollbar-track {
-    @apply bg-gray-100 rounded;
-  }
-  
-  .modal-body::-webkit-scrollbar-thumb {
-    @apply bg-sky-200 rounded hover:bg-sky-300;
-    transition: background-color 0.3s ease;
   }
   
   /* Loading state for the equation explanation */

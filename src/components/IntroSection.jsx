@@ -48,7 +48,7 @@ export default function IntroSection() {
       
       <div 
         ref={introParagraphRef}
-        className={`content-text space-y-6 ${introParagraphVisible ? 'animate-fadeInUp' : 'opacity-0'} animation-delay-400`}
+        className={`unified-content space-y-6 ${introParagraphVisible ? 'animate-fadeInUp' : 'opacity-0'} animation-delay-400`}
       >
         <p>
           Memory, the capacity for encoding, storing, and retrieving information, is a fundamental aspect of human cognition. It underpins identity, learning, and adaptation. Traditional investigations within psychology and neuroscience have provided significant insights into its biological substrates and behavioral manifestations.
@@ -66,7 +66,7 @@ export default function IntroSection() {
         </h3>
         <div 
           ref={challengesContentRef} 
-          className={`diagram-adjacent-text-container content-text ${challengesContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+          className={`diagram-adjacent-text-container unified-content ${challengesContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
           <div className={`diagram-adjacent-text md:col-span-1 ${challengesContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
             <dl>
@@ -104,7 +104,7 @@ export default function IntroSection() {
         </h3>
         <div 
             ref={limitationsContentRef}
-            className={`diagram-adjacent-text-container content-text ${limitationsContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+            className={`diagram-adjacent-text-container unified-content ${limitationsContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
             <div 
                 className={`diagram-card md:col-span-1 order-first ${limitationsContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}
@@ -135,7 +135,7 @@ export default function IntroSection() {
 
       <div 
         ref={transitionParagraphRef}
-        className={`content-text mt-10 pt-6 ${transitionParagraphVisible ? 'animate-fadeInUp' : 'opacity-0'} animation-delay-200`}
+        className={`unified-content mt-10 pt-6 ${transitionParagraphVisible ? 'animate-fadeInUp' : 'opacity-0'} animation-delay-200`}
       >
         <p>
           <b>Prompt an inquiry</b>: Is a more fundamental revision of physical principles necessary to fully address the multifaceted nature of memory? This presentation will examine Topological Geometrodynamics (TGD), developed by Matti Pitkänen, as a distinct theoretical framework proposing memory as an integral aspect of spacetime and consciousness.

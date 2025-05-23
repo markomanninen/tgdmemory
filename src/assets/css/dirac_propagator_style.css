@@ -3,34 +3,8 @@ body {
     font-family: 'Georgia', serif; /* Example: more academic-looking font */
 }
 
-.prose { /* Tailwind prose adjustments if needed */
-    max-width: 80ch; /* Adjust for optimal reading length */
-}
-
-.prose h1, .prose h2, .prose h3, .prose h4 {
-    margin-top: 1.5em; /* Add top margin for spacing */
-    margin-bottom: 0.75em; /* Add bottom margin */
-}
-.prose h2 {
-    padding-bottom: 0.3em;
-    border-bottom: 1px solid #e2e8f0; /* Add a light border under h2 */
-}
-.modal-header .prose h2 {
-    border-bottom: none;
-    margin-bottom: 0;
-}
-
-.prose section h2.text-2xl {
-    margin-top: 0; /* First h2 in a section might not need extra top margin if section has margin */
-}
-.prose p {
-    margin-bottom: 1em;
-    line-height: 1.7;
-}
-
-.prose ol, .prose ul {
-    margin-bottom: 1em;
-}
+/* Custom .prose styling REMOVED to allow Tailwind CDN prose to take effect via 'academic-content' class */
+/* The 'academic-content' class in dirac_propagator/index.html applies Tailwind's 'prose prose-sky max-w-none'. */
 
 /* Center equations */
 .equation {
@@ -74,3 +48,280 @@ body {
 #mobile-toc-panel.hidden {
     transform: translateX(-100%);
 }
+
+/* =========================
+   MODAL STYLES FOR STATIC PAGES
+   Derived from main src/index.css
+   ========================= */
+
+.modal-overlay {
+  position: fixed;
+  top: 0; 
+  right: 0; 
+  bottom: 0; 
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8); /* bg-black bg-opacity-80 */
+  display: none; /* Changed from flex to none to ensure hidden by default */
+  align-items: center; /* items-center */
+  justify-content: center; /* justify-center */
+  z-index: 50; /* z-50 */
+  padding: 1rem; /* p-4 */
+  /* backdrop-blur-sm - Note: backdrop-filter support varies */
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+/* The .hidden class (display: none !important;) is provided by the Tailwind CDN linked in the HTML */
+
+.modal-content {
+  background-color: #fff; /* bg-white */
+  padding: 1.5rem; /* p-6 */
+  border-radius: 0.5rem; /* rounded-lg */
+  /* Custom shadow from src/index.css, similar to Tailwind's shadow-xl */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  /* max-w-4xl from src/index.css. Specific instances like in dirac_propagator/index.html use Tailwind utility max-w-2xl which will override this if smaller. */
+  max-width: 56rem; 
+  width: 100%; /* w-full */
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column; /* flex-col */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between; /* justify-between */
+  align-items: center; /* items-center */
+  border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+  padding-bottom: 0.75rem; /* pb-3 */
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+.modal-title {
+  font-size: 1.5rem; /* text-2xl */
+  line-height: 2rem;
+  font-weight: 600; /* font-semibold */
+  color: #075985; /* text-sky-800 */
+}
+
+.modal-close-button {
+  color: #4b5563; /* text-gray-600 */
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: 700; /* font-bold */
+  line-height: 1; /* leading-none */
+  cursor: pointer;
+  transition-property: color, background-color; /* transition-colors */
+  transition-duration: 200ms; /* duration-200 */
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.modal-close-button:hover {
+  color: #111827; /* hover:text-gray-900 */
+  background-color: #f3f4f6; /* hover:bg-gray-100 */
+}
+
+.modal-body {
+  overflow-y: auto;
+  flex-grow: 1; /* flex-grow */
+  padding-left: 0.5rem; /* px-2 */
+  padding-right: 0.5rem; /* px-2 */
+}
+
+/* Custom scrollbar for modals (plain CSS, consistent with src/index.css) */
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+.modal-body::-webkit-scrollbar-track {
+  background-color: #f3f4f6; /* bg-gray-100 */
+  border-radius: 0.25rem; /* rounded */
+}
+.modal-body::-webkit-scrollbar-thumb {
+  background-color: #bae6fd; /* bg-sky-200 */
+  border-radius: 0.25rem; /* rounded */
+  transition: background-color 0.3s ease;
+}
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background-color: #7dd3fc; /* hover:bg-sky-300 */
+}
+
+/* Plain CSS for .unified-content and its children */
+/* These styles are translated from the Tailwind @apply rules in the main src/index.css */
+/* They ensure that content using .unified-content (like the modal body) is styled correctly on this static page. */
+
+.unified-content {
+  color: #1f2937; /* text-gray-800 */
+  line-height: 1.625; /* leading-relaxed */
+}
+.unified-content h1 {
+  font-size: 1.875rem; /* text-3xl */
+  /* line-height: 2.25rem; */ /* Redundant with leading-tight */
+  font-weight: 700; /* font-bold */
+  color: #075985; /* text-sky-800 */
+  margin-bottom: 1.5rem; /* mb-6 */
+  line-height: 1.25; /* leading-tight */
+}
+@media (min-width: 768px) { /* md: */
+  .unified-content h1 {
+    font-size: 2.25rem; /* text-4xl */
+    /* line-height: 2.5rem; */ /* Redundant with leading-tight */
+  }
+}
+.unified-content h2 {
+  font-size: 1.5rem; /* text-2xl */
+  line-height: 2rem;
+  font-weight: 600; /* font-semibold */
+  color: #0369a1; /* text-sky-700 */
+  margin-top: 2rem; /* mt-8 */
+  margin-bottom: 1rem; /* mb-4 */
+  padding-bottom: 0.5rem; /* pb-2 */
+  border-bottom: 1px solid #e0f2fe; /* border-sky-100 */
+}
+.unified-content h3 {
+  font-size: 1.25rem; /* text-xl */
+  line-height: 1.75rem;
+  font-weight: 600; /* font-semibold */
+  color: #0369a1; /* text-sky-700 */
+  margin-top: 1.5rem; /* mt-6 */
+  margin-bottom: 0.75rem; /* mb-3 */
+}
+.unified-content h4 {
+  font-size: 1.125rem; /* text-lg */
+  line-height: 1.75rem;
+  font-weight: 600; /* font-semibold */
+  color: #0284c7; /* text-sky-600 */
+  margin-top: 1rem; /* mt-4 */
+  margin-bottom: 0.75rem; /* mb-3 */
+}
+.unified-content p {
+  margin-bottom: 1rem; /* mb-4 */
+  font-size: 1rem; /* text-base */
+  /* line-height: 1.5rem; */ /* Redundant with leading-relaxed */
+  color: #374151; /* text-gray-700 */
+  line-height: 1.625; /* leading-relaxed */
+}
+@media (min-width: 768px) { /* md: */
+  .unified-content p {
+    font-size: 1.125rem; /* text-lg */
+    /* line-height: 1.75rem; */ /* Redundant with leading-relaxed */
+  }
+}
+.unified-content ul, 
+.unified-content ol {
+  margin-bottom: 1rem; /* mb-4 */
+  padding-left: 1.5rem; /* pl-6, Tailwind's pl-6 is 1.5rem */
+}
+.unified-content ul li + li, 
+.unified-content ol li + li {
+    margin-top: 0.5rem; /* space-y-2 */
+}
+.unified-content ul {
+  list-style-type: disc; /* list-disc */
+}
+.unified-content ol {
+  list-style-type: decimal; /* list-decimal */
+}
+.unified-content li {
+  margin-bottom: 0.25rem; /* mb-1 */
+}
+.unified-content a {
+  color: #0284c7; /* text-sky-600 */
+  text-decoration: underline;
+}
+.unified-content a:hover {
+  color: #0369a1; /* text-sky-700 */
+}
+.unified-content code {
+  background-color: #f3f4f6; /* bg-gray-100 */
+  font-size: 0.875em; /* text-sm (relative to parent) */
+  padding: 0.125em 0.375em; /* Adjusted from px-1 py-0.5 for em scaling */
+  border-radius: 0.25rem; /* rounded */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* font-mono */
+  color: #0369a1; /* text-sky-700, assuming from context, was not in original unified-content snippet */
+  border: 1px solid #e5e7eb; /* border-gray-200 */
+}
+.unified-content pre {
+  background-color: #1f2937; /* bg-gray-800 */
+  color: #f3f4f6; /* text-gray-100 */
+  font-size: 0.875em; /* text-sm (relative to parent) */
+  padding: 1rem; /* p-4 */
+  border-radius: 0.375rem; /* rounded-md */
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* font-mono */
+}
+.unified-content pre code { /* Reset code style inside pre for syntax highlighting */
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font-size: inherit; /* Ensure pre code inherits pre's font size */
+  border-radius: 0;
+}
+.unified-content blockquote {
+  border-left: 4px solid #0ea5e9; /* border-l-4 border-sky-500 */
+  padding-left: 1rem; /* pl-4 */
+  font-style: italic;
+  margin-top: 1rem;    /* my-4 */
+  margin-bottom: 1rem; /* my-4 */
+  padding-top: 0.5rem;    /* py-2 */
+  padding-bottom: 0.5rem; /* py-2 */
+  color: #4b5563; /* text-gray-600 */
+}
+
+/* Modal body specific overrides for .unified-content */
+.modal-body .unified-content h1 {
+  font-size: 1.5rem; /* text-2xl, smaller than page h1 */
+  /* line-height: 2rem; */ /* Redundant */
+}
+@media (min-width: 768px) { /* md: */
+  .modal-body .unified-content h1 {
+    font-size: 1.5rem; /* text-2xl, stays same, no md:text-4xl override */
+    /* line-height: 2rem; */ /* Redundant */
+  }
+}
+.modal-body .unified-content h2 {
+  font-size: 1.25rem; /* text-xl, smaller than page h2 */
+  /* line-height: 1.75rem; */ /* Redundant */
+}
+
+/* Explainable Equations Styling */
+.explainable-equation-container {
+  position: relative;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.equation-explainer-trigger {
+  position: absolute;
+  top: 50%;
+  right: -0.5rem;
+  transform: translateY(-50%);
+  padding: 0.25rem;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e0f2fe; /* bg-sky-100 */
+  color: #0369a1; /* text-sky-700 */
+  border-radius: 9999px; /* rounded-full */
+  cursor: pointer;
+  font-weight: 700; /* font-bold */
+  font-size: 0.875rem; /* text-sm */
+  opacity: 0; /* Invisible by default */
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.explainable-equation-container:hover .equation-explainer-trigger {
+  opacity: 1; /* Show on hover */
+  background-color: #bae6fd; /* bg-sky-200 */
+}
+
+.equation-explainer-trigger:hover {
+  background-color: #7dd3fc; /* bg-sky-300 */
+}
+
+/* END OF UNIFIED CONTENT STYLES */

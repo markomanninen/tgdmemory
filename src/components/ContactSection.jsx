@@ -10,7 +10,7 @@ export default function ContactSection() {
   return (
     <section id="contact" className="slide-section py-16 md:py-24 bg-sky-50" aria-labelledby="contact-title">
       <h2 id="contact-title" ref={titleRef} className={`slide-title ${titleVisible ? 'animate-fadeInDown' : 'opacity-0'}`}>Contacts &amp; Resources</h2>
-      <div className="content-text max-w-4xl mx-auto space-y-12">
+      <div className="unified-content max-w-4xl mx-auto space-y-12">
         <div ref={contact1Ref} className={`p-6 bg-white rounded-lg shadow-lg ${contact1Visible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
           <h3 className="text-2xl font-semibold text-sky-700 mb-3">Marko T. Manninen</h3>
           <p className="mb-1"><a href="tel:+358505882868" className="hover:text-sky-600">+358 50 5882868</a></p>

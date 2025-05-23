@@ -119,6 +119,10 @@ function showExplanation(latexEquation, rawTitleFromAttribute, clickedContainerE
   const modalBody = document.getElementById('equationExplanationModalBody');
   
   if (modal && modalTitleElement && modalBody) {
+    // First ensure modal is visible by removing hidden class and setting display to flex
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
+    document.body.classList.add('overflow-hidden'); // Prevent background scrolling
     // Try to determine equation number from MathJax elements first
     let equationNumber = 0;
     
@@ -252,7 +256,7 @@ function showExplanation(latexEquation, rawTitleFromAttribute, clickedContainerE
     // Set the modal content with both the equation and a placeholder for the explanation
     modalBody.innerHTML = `
     <div class="bg-gradient-to-br from-slate-50 to-blue-50 border border-slate-200 rounded-xl p-2 mb-6 shadow-sm equation-display">
-      <div class="flex items-start justify-between mb-4">
+      <div class="flex items-start justify-between">
         <button class="copy-button group flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-blue-600 hover:bg-white rounded-lg transition-all duration-200 border border-transparent hover:border-blue-200 hover:shadow-sm ml-auto" 
                 title="Copy equation" data-latex="${escapeHtml(latexEquation || '')}">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:scale-110">
@@ -262,12 +266,12 @@ function showExplanation(latexEquation, rawTitleFromAttribute, clickedContainerE
           <span class="transition-colors">Copy</span>
         </button>
       </div>
-      <div class="text-lg overflow-x-auto py-2">
+      <div class="text-lg overflow-x-auto">
         ${latexToDisplayInModal || 'No LaTeX equation provided'}
       </div>
     </div>
     
-    <div id="equationExplanationContent" class="explanation-container bg-white rounded-xl shadow-sm">
+    <div id="equationExplanationContent" class="explanation-container unified-content bg-white rounded-xl shadow-sm">
       <div class="explanation-loading flex flex-col items-center justify-center py-12 px-6">
         <div class="physics-spinner mb-4">
           <div class="atom-container">
@@ -436,7 +440,8 @@ function showExplanation(latexEquation, rawTitleFromAttribute, clickedContainerE
   `;
     
     // Show the modal
-    modal.classList.remove('hidden');
+    modal.classList.remove('hidden'); // Keep for semantics
+    modal.style.display = 'flex'; // Explicitly set display to flex to show
     modalBody.scrollTop = 0; 
     
     // First typeset just the equation
@@ -467,8 +472,12 @@ function showExplanation(latexEquation, rawTitleFromAttribute, clickedContainerE
 function closeExplanationModal() {
   const modal = document.getElementById('equationExplanationModal');
   if (modal) {
-    modal.classList.add('hidden');
+    console.log("Closing modal"); // DEBUG
+    modal.classList.add('hidden'); // Keep for semantics
+    modal.style.display = 'none'; // Explicitly set display to none to hide
     document.body.classList.remove('overflow-hidden'); // Allow scrolling when modal is closed
+  } else {
+    console.error("Modal element not found when trying to close it");
   }
 }
 
@@ -693,24 +702,25 @@ async function fetchAndDisplayExplanation(latexEquation, equationFullTitle, expl
             <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
               <h4 class="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-              </svg>
-              How to Fix
-            </h4>
-            <ul class="text-sm text-slate-600 space-y-2">
-              <li class="flex items-start gap-2">
-                <span class="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
-                <span>Add CORS middleware to your server at ${apiBaseUrl}</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <span class="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
-                <span>Allow origin: <code class="bg-slate-100 px-1 py-0.5 rounded text-xs">http://localhost:5174</code></span>
-              </li>
-              <li class="flex items-start gap-2">
-                <span class="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
-                <span>See EQUATION_EXPLANATION.md for setup instructions</span>
-              </li>
-            </ul>
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zm-1 8a1 1 0 000-2v-3a1 1 0 00-1-1H9a1 1 0 100 2v3a1 1 0 001 1h1z" clip-rule="evenodd" />
+                </svg>
+                How to Fix
+              </h4>
+              <ul class="text-sm text-slate-600 space-y-2">
+                <li class="flex items-start gap-2">
+                  <span class="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
+                  <span>Add CORS middleware to your server at ${apiBaseUrl}</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
+                  <span>Allow origin: <code class="bg-slate-100 px-1 py-0.5 rounded text-xs">http://localhost:5174</code></span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
+                  <span>See EQUATION_EXPLANATION.md for setup instructions</span>
+                </li>
+              </ul>
+            </div>
           </div>
         `;
         return; // Exit early on CORS error
@@ -781,24 +791,25 @@ async function fetchAndDisplayExplanation(latexEquation, equationFullTitle, expl
             <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
               <h4 class="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-              </svg>
-              How to Fix
-            </h4>
-            <ul class="text-sm text-slate-600 space-y-2">
-              <li class="flex items-start gap-2">
-                <span class="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
-                <span>Add CORS middleware to your server at ${apiBaseUrl}</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <span class="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
-                <span>Allow origin: <code class="bg-slate-100 px-1 py-0.5 rounded text-xs">http://localhost:5174</code></span>
-              </li>
-              <li class="flex items-start gap-2">
-                <span class="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
-                <span>See EQUATION_EXPLANATION.md for setup instructions</span>
-              </li>
-            </ul>
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zm-1 8a1 1 0 000-2v-3a1 1 0 00-1-1H9a1 1 0 100 2v3a1 1 0 001 1h1z" clip-rule="evenodd" />
+                </svg>
+                How to Fix
+              </h4>
+              <ul class="text-sm text-slate-600 space-y-2">
+                <li class="flex items-start gap-2">
+                  <span class="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
+                  <span>Add CORS middleware to your server at ${apiBaseUrl}</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
+                  <span>Allow origin: <code class="bg-slate-100 px-1 py-0.5 rounded text-xs">http://localhost:5174</code></span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="w-1.5 h-1.5 bg-slate-400 rounded-full mt-2 flex-shrink-0"></span>
+                  <span>See EQUATION_EXPLANATION.md for setup instructions</span>
+                </li>
+              </ul>
+            </div>
           </div>
         `;
         return; // Exit early on CORS error
@@ -937,6 +948,14 @@ async function fetchAndDisplayExplanation(latexEquation, equationFullTitle, expl
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Make sure modal is initially hidden when page loads
+  const modal = document.getElementById('equationExplanationModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+    console.log("Modal hidden on page load"); // DEBUG
+  }
+
   // Event Delegation for copy buttons
   document.body.addEventListener('click', function(event) {
     const copyButton = event.target.closest('.copy-button');
