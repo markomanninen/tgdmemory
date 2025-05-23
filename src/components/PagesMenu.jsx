@@ -1,5 +1,5 @@
 const PagesMenu = () => {
-  const diracLink = `${import.meta.env.BASE_URL}pages/dirac_propagator/index.html`;
+  const diracLink = `${import.meta.env.BASE_URL}src/pages/dirac_propagator/index.html`;
 
   return (
     <div className="container mx-auto px-4 py-8 pt-24">
