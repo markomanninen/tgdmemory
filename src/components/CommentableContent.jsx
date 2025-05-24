@@ -5,7 +5,52 @@ import CommentSidebar from './CommentSidebar';
 const CommentableContent = ({ children, pageUrl }) => {
   const [showCommentSidebar, setShowCommentSidebar] = useState(false);
   const [currentPageUrl, setCurrentPageUrl] = useState(pageUrl || window.location.pathname);
+  const [popupPosition, setPopupPosition] = useState(null);
   const { selectedText, selectionDetails, clearSelection, hasSelection } = useTextSelection();
+
+  // Helper function to calculate optimal popup position (called once when selection is made)
+  const calculatePopupPosition = (selectionDetails) => {
+    if (!selectionDetails) return null;
+    
+    const popupHeight = 120; // Approximate height of the popup
+    const popupWidth = 320;
+    const padding = 16;
+    
+    const rect = selectionDetails.boundingRect;
+    const viewportHeight = window.innerHeight;
+    const viewportWidth = window.innerWidth;
+    
+    // Determine if popup should be above or below selection
+    const spaceBelow = viewportHeight - (rect.top + rect.height);
+    const spaceAbove = rect.top;
+    const showAbove = spaceBelow < popupHeight + padding && spaceAbove > popupHeight + padding;
+    
+    // Calculate position relative to viewport (fixed positioning)
+    const top = showAbove 
+      ? Math.max(padding, rect.top - popupHeight - 8)
+      : Math.max(padding, rect.top + rect.height + 8);
+    
+    const left = Math.max(padding, Math.min(
+      rect.left,
+      viewportWidth - popupWidth - padding
+    ));
+    
+    return {
+      top: `${top}px`,
+      left: `${left}px`,
+      showAbove
+    };
+  };
+
+  // Calculate and store popup position when selection changes
+  useEffect(() => {
+    if (hasSelection && selectionDetails && !showCommentSidebar) {
+      const position = calculatePopupPosition(selectionDetails);
+      setPopupPosition(position);
+    } else {
+      setPopupPosition(null);
+    }
+  }, [hasSelection, selectionDetails, showCommentSidebar]);
 
   useEffect(() => {
     if (!pageUrl) {
@@ -27,8 +72,28 @@ const CommentableContent = ({ children, pageUrl }) => {
   return (
     <div className="relative">
       {/* Selection indicator - only show when comment sidebar is NOT open */}
-      {hasSelection && !showCommentSidebar && (
-        <div className="fixed top-20 right-4 z-50 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg">
+      {hasSelection && !showCommentSidebar && popupPosition && (
+        <div 
+          className="fixed z-50 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg max-w-xs"
+          style={{
+            top: popupPosition.top,
+            left: popupPosition.left
+          }}
+        >
+          {/* Arrow pointing to the selected text */}
+          <div 
+            className={`absolute w-0 h-0 border-l-4 border-r-4 border-transparent ${
+              popupPosition.showAbove 
+                ? 'border-t-4 border-t-blue-500' 
+                : 'border-b-4 border-b-blue-500'
+            }`}
+            style={{
+              top: popupPosition.showAbove ? 'auto' : '-4px',
+              bottom: popupPosition.showAbove ? '-4px' : 'auto',
+              left: '16px'
+            }}
+          ></div>
+          
           <div className="text-sm mb-2">
             Text selected: "{selectedText.substring(0, 50)}{selectedText.length > 50 ? '...' : ''}"
           </div>
@@ -55,9 +120,9 @@ const CommentableContent = ({ children, pageUrl }) => {
       {/* Toggle button for comment sidebar */}
       <button
         onClick={toggleCommentSidebar}
-        className={`fixed top-1/2 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white p-3 shadow-lg z-40 transition-all duration-500 ease-in-out ${
+        className={`fixed top-1/2 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white p-3 shadow-lg z-50 transition-all duration-500 ease-in-out ${
           showCommentSidebar 
-            ? 'right-80 rounded-l-lg border-r-0' 
+            ? 'right-80 rounded-l-lg' 
             : 'right-0 rounded-l-lg'
         }`}
         title="Toggle Comments"
@@ -102,7 +167,7 @@ const CommentableContent = ({ children, pageUrl }) => {
 
       {/* Comment sidebar */}
       <div
-        className={`comment-sidebar fixed top-0 right-0 w-80 bg-white border-l border-gray-300 h-screen overflow-y-auto shadow-lg transform transition-transform duration-500 ease-in-out ${
+        className={`comment-sidebar fixed top-0 right-0 w-80 bg-white border-l border-gray-300 h-screen overflow-y-auto shadow-xl transform transition-transform duration-500 ease-in-out z-40 ${
           showCommentSidebar ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

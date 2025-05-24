@@ -35,7 +35,7 @@ export default function Header({ sections, activeSection, scrollToSection, isPag
           </div>
           <div className="flex flex-col">
             <span className="text-xl md:text-2xl font-bold tracking-tight">Open Science</span>
-            <span className="text-xs text-sky-300 tracking-wide">Research Platform</span>
+            <span className="text-xs text-sky-300 tracking-wide">Research Center</span>
           </div>
         </Link>
         

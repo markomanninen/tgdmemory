@@ -130,7 +130,11 @@ const CommentSidebar = ({ pageUrl, selectedText, selectionDetails, onCommentSubm
                   </svg>
                   <div>
                     <strong className="text-blue-800">Selected text:</strong>
-                    <p className="text-blue-700 italic">"{savedSelection.text}"</p>
+                    <p className="text-blue-700 italic">"{
+                      savedSelection.text.length > 100 
+                        ? `${savedSelection.text.substring(0, 50)}...${savedSelection.text.substring(savedSelection.text.length - 50)}`
+                        : savedSelection.text
+                    }"</p>
                   </div>
                 </div>
               </div>
@@ -166,24 +170,28 @@ const CommentSidebar = ({ pageUrl, selectedText, selectionDetails, onCommentSubm
             />
 
             <div className="grid grid-cols-1 gap-3">
-              <input
-                type="text"
-                placeholder="Tags (comma-separated)"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                className="w-full p-3 border border-sky-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
-              />
+              {user && (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Tags (comma-separated)"
+                    value={tags}
+                    onChange={(e) => setTags(e.target.value)}
+                    className="w-full p-3 border border-sky-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
+                  />
 
-              <select
-                value={userGroup}
-                onChange={(e) => setUserGroup(e.target.value)}
-                className="w-full p-3 border border-sky-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
-              >
-                <option value="general">💬 General Discussion</option>
-                <option value="experts">🎓 Expert Analysis</option>
-                <option value="students">📚 Student Questions</option>
-                <option value="researchers">🔬 Research Notes</option>
-              </select>
+                  <select
+                    value={userGroup}
+                    onChange={(e) => setUserGroup(e.target.value)}
+                    className="w-full p-3 border border-sky-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
+                  >
+                    <option value="general">💬 General Discussion</option>
+                    <option value="experts">🎓 Expert Analysis</option>
+                    <option value="students">📚 Student Questions</option>
+                    <option value="researchers">🔬 Research Notes</option>
+                  </select>
+                </>
+              )}
             </div>
 
             {user && (
@@ -271,7 +279,11 @@ const CommentSidebar = ({ pageUrl, selectedText, selectionDetails, onCommentSubm
                       </svg>
                       <div>
                         <strong className="text-blue-800">Regarding:</strong>
-                        <p className="text-blue-700 italic">"{comment.selectedText}"</p>
+                        <p className="text-blue-700 italic">"{
+                          comment.selectedText.length > 100 
+                            ? `${comment.selectedText.substring(0, 50)}...${comment.selectedText.substring(comment.selectedText.length - 50)}`
+                            : comment.selectedText
+                        }"</p>
                       </div>
                     </div>
                   </div>
@@ -295,19 +307,27 @@ const CommentSidebar = ({ pageUrl, selectedText, selectionDetails, onCommentSubm
                       </span>
                       <div className="flex items-center space-x-2 text-xs text-gray-500">
                         <span>{formatDate(comment.createdAt)}</span>
-                        <span>•</span>
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium border flex items-center space-x-1 whitespace-nowrap ${
                           comment.userGroup === 'general' ? 'bg-blue-100 text-blue-700 border-blue-200' :
                           comment.userGroup === 'experts' ? 'bg-purple-100 text-purple-700 border-purple-200' :
                           comment.userGroup === 'students' ? 'bg-green-100 text-green-700 border-green-200' :
                           comment.userGroup === 'researchers' ? 'bg-orange-100 text-orange-700 border-orange-200' :
                           'bg-gray-100 text-gray-700 border-gray-200'
                         }`}>
-                          {comment.userGroup === 'general' && '💬 General'}
-                          {comment.userGroup === 'experts' && '🎓 Expert'}
-                          {comment.userGroup === 'students' && '📚 Student'}
-                          {comment.userGroup === 'researchers' && '🔬 Research'}
-                          {!['general', 'experts', 'students', 'researchers'].includes(comment.userGroup) && `📝 ${comment.userGroup}`}
+                          <span className="text-sm">
+                            {comment.userGroup === 'general' && '💬'}
+                            {comment.userGroup === 'experts' && '🎓'}
+                            {comment.userGroup === 'students' && '📚'}
+                            {comment.userGroup === 'researchers' && '🔬'}
+                            {!['general', 'experts', 'students', 'researchers'].includes(comment.userGroup) && '📝'}
+                          </span>
+                          <span>
+                            {comment.userGroup === 'general' && 'General'}
+                            {comment.userGroup === 'experts' && 'Expert'}
+                            {comment.userGroup === 'students' && 'Student'}
+                            {comment.userGroup === 'researchers' && 'Research'}
+                            {!['general', 'experts', 'students', 'researchers'].includes(comment.userGroup) && comment.userGroup}
+                          </span>
                         </span>
                       </div>
                     </div>

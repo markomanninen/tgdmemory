@@ -310,7 +310,7 @@ export default function App() {
             
             <div className="border-t border-slate-700/50 pt-8">
               <p className="text-slate-400 text-sm">
-                Copyright &copy; {new Date().getFullYear()} - Marko T. Manninen. All rights reserved.
+                Copyright &copy; {new Date().getFullYear()} - Open Science Center. All rights reserved.
               </p>
             </div>
           </div>

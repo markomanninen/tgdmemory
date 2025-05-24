@@ -86,7 +86,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h4 className="font-medium text-gray-900">Email</h4>
-                    <p className="text-gray-600">research@tgdmemory.org</p>
+                    <p className="text-gray-600">contact@openscience.center</p>
                   </div>
                 </div>
 
@@ -98,7 +98,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h4 className="font-medium text-gray-900">Location</h4>
-                    <p className="text-gray-600">Research Center<br/>Helsinki, Finland</p>
+                    <p className="text-gray-600">Open Science Center<br/>Helsinki, Finland</p>
                   </div>
                 </div>
 

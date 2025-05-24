@@ -36,7 +36,7 @@ export default function IntroSection() {
           ref={pageTitleRef} 
           className={`text-4xl md:text-5xl lg:text-6xl font-black text-center mb-6 md:mb-8 ${pageTitleVisible ? 'animate-fadeIn' : 'opacity-0'} gradient-text`}
         >
-          Introduction to Mainstream and Quantum Perspectives on Memory
+          Quantum Perspectives on Memory
         </h1>
         <h2 
           ref={pageSubtitleRef}
@@ -49,8 +49,8 @@ export default function IntroSection() {
           ref={introParagraphRef}
           className={`unified-content space-y-6 max-w-5xl mx-auto ${introParagraphVisible ? 'animate-fadeInUp' : 'opacity-0'} animation-delay-400`}
         >
-          <p className="text-lg leading-relaxed text-gray-700">
-            Memory, the capacity for encoding, storing, and retrieving information, is a fundamental aspect of human cognition. It underpins identity, learning, and adaptation. Traditional investigations within psychology and neuroscience have provided significant insights into its biological substrates and behavioral manifestations.
+          <p className="text-lg leading-relaxed text-gray-700 bg-sky-50 border-l-4 border-sky-400 pl-6 py-4 rounded-r-lg">
+            Memory, the capacity for encoding, storing, and retrieving information, is a fundamental aspect of human cognition. It underpins identity, learning, and adaptation. Traditional investigations within psychology and neuroscience have provided significant insights into its biological substrates and behavioral manifestations. But, can memory be understood through the lens of quantum mechanics?
           </p>
         </div>
 
@@ -72,7 +72,7 @@ export default function IntroSection() {
                 <dt className="font-bold text-lg text-slate-800 mb-2">Mainstream Models:</dt>
                 <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">Frameworks such as the Multi-Store Model or Working Memory models delineate information processing architectures. However, a comprehensive explanation for the subjective qualities of memory, including the phenomenal experience of recollection, often remains outside their primary scope.</dd>
                 <dt className="font-bold text-lg text-slate-800 mb-2">Quantum Considerations in Consciousness Science:</dt>
-                <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">The difficulties in accounting for subjective experience (the "hard problem" of consciousness) have led some to consider quantum mechanical principles. Concepts like superposition and entanglement have been explored for their potential parallels with mental phenomena (e.g., the Orch OR theory).</dd>
+                <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">The difficulties in accounting for subjective experience (the "hard problem" of consciousness) have led some to consider quantum mechanical principles. Concepts like superposition and entanglement have been explored for their potential parallels with mental phenomena (e.g., the Orch OR theory). But do they represent a model for cognitive processes crusial to conscious experience?</dd>
               </dl>
             </div>
             <div 
