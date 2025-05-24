@@ -156,3 +156,5 @@ metrics/
 .env.*
 !.env.template
 !.env.example
+
+CNAME.txt
