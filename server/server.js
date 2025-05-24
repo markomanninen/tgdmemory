@@ -107,7 +107,7 @@ if (process.env.MONGODB_URI) {
       console.error('MongoDB connection error:', err);
     });
 } else {
-  const message = 'MONGODB_URI is not defined in .env file. Cannot connect to database.';
+  const message = 'MONGODB_URI environment variable is not set. Cannot connect to database.';
   logger.error(message);
   console.error(message);
 }
