@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const PagesMenu = () => {
   const diracLink = `${import.meta.env.BASE_URL}src/pages/dirac_propagator/index.html`;
 
@@ -157,8 +159,8 @@ const PagesMenu = () => {
               from researchers, students, and enthusiasts in the TGD community.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="/contact" 
+              <Link 
+                to="/contact" 
                 className="bg-gradient-to-r from-sky-500 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-sky-600 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -166,16 +168,16 @@ const PagesMenu = () => {
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
                 </svg>
                 <span>Contact Us</span>
-              </a>
-              <a 
-                href="/" 
+              </Link>
+              <Link 
+                to="/" 
                 className="bg-white text-sky-600 py-3 px-6 rounded-lg font-semibold hover:bg-sky-50 transition-all duration-200 shadow-md hover:shadow-lg border border-sky-200 flex items-center justify-center space-x-2"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd"/>
                 </svg>
                 <span>Back to Main</span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

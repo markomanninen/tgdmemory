@@ -95,12 +95,55 @@ process.on('SIGINT', () => {
   });
 });
 
+// Function to initialize database with admin user
+const initializeDatabase = async () => {
+  try {
+    // Check if any admin user exists
+    const existingAdmin = await User.findOne({ roles: { $in: ['admin'] } });
+    
+    if (!existingAdmin) {
+      console.log('No admin user found. Creating default admin user...');
+      
+      // Get admin credentials from environment or use defaults
+      const adminEmail = process.env.ADMIN_EMAIL || 'admin@openscience.center';
+      const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+      const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+      
+      // Create default admin user
+      const adminUser = new User({
+        username: adminUsername,
+        email: adminEmail,
+        password: adminPassword, // Will be hashed by pre-save hook
+        roles: ['admin']
+      });
+      
+      await adminUser.save();
+      console.log('✅ Default admin user created successfully!');
+      console.log(`📧 Email: ${adminEmail}`);
+      console.log(`👤 Username: ${adminUsername}`);
+      console.log('🔑 Password: [Set via ADMIN_PASSWORD env var or default]');
+      console.log('⚠️  IMPORTANT: Change the admin password after first login!');
+      
+      logger.info('Default admin user created successfully');
+    } else {
+      console.log('Admin user already exists, skipping creation.');
+      logger.info('Admin user already exists');
+    }
+  } catch (error) {
+    console.error('Error initializing database:', error);
+    logger.error('Error initializing database:', error);
+  }
+};
+
 // Connect to MongoDB
 if (process.env.MONGODB_URI) {
   mongoose.connect(process.env.MONGODB_URI)
-    .then(() => {
+    .then(async () => {
       logger.info('MongoDB connected successfully.');
       console.log('MongoDB connected successfully.');
+      
+      // Initialize database with admin user
+      await initializeDatabase();
     })
     .catch(err => {
       logger.error('MongoDB connection error:', err);

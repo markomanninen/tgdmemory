@@ -18,7 +18,7 @@ if (!existingAdmin) {
     // These would be passed in through docker-compose.yml environment section
     const adminUser = {
         username: 'admin',
-        email: 'admin@tgdmemory.com',
+        email: 'admin@openscience.center',
         password: defaultPasswordHash,
         roles: ['admin'],
         createdAt: new Date(),

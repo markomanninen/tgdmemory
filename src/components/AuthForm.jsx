@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const AuthForm = ({ formType, onSubmit, error }) => {
   const [formData, setFormData] = useState({
@@ -153,12 +154,12 @@ const AuthForm = ({ formType, onSubmit, error }) => {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               {formType === 'login' ? "Don't have an account? " : "Already have an account? "}
-              <a 
-                href={formType === 'login' ? '/register' : '/login'} 
+              <Link 
+                to={formType === 'login' ? '/register' : '/login'} 
                 className="text-sky-600 hover:text-sky-700 font-semibold transition-colors duration-200"
               >
                 {formType === 'login' ? 'Sign up' : 'Sign in'}
-              </a>
+              </Link>
             </p>
           </div>
         </div>

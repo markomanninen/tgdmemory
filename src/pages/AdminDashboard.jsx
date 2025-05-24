@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import CommentModeration from '../components/admin/CommentModeration';
 import UserManagement from '../components/admin/UserManagement';
 import { useAuth } from '../contexts/AuthContext';
@@ -44,7 +45,7 @@ const AdminDashboard = () => {
         <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded">
           <h2 className="text-lg font-semibold mb-2">Authentication Required</h2>
           <p>You need to be logged in to access the admin dashboard.</p>
-          <p className="mt-4 text-sm">Please <a href="/login" className="text-blue-600 hover:underline">login</a> to continue.</p>
+          <p className="mt-4 text-sm">Please <Link to="/login" className="text-blue-600 hover:underline">login</Link> to continue.</p>
         </div>
         <div className="mt-4 p-4 bg-gray-100 rounded-lg">
           <p className="text-sm font-semibold">Debug Info:</p>
@@ -80,8 +81,8 @@ const AdminDashboard = () => {
       {/* Navigation section */}
       <div className="mb-6 flex justify-between items-center">
         <div>
-          <a 
-            href="/admin/debug" 
+          <Link 
+            to="/admin/debug" 
             className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,7 +90,7 @@ const AdminDashboard = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
             Troubleshooting Tools
-          </a>
+          </Link>
         </div>
       </div>
       
