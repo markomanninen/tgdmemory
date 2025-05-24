@@ -30,7 +30,8 @@ const CommentSidebar = ({ pageUrl, selectedText, selectionDetails, onCommentSubm
     setIsLoading(true);
     setError(null);
     try {
-      const response = await api.getComments(pageUrl);
+      // Fetch approved comments for the general group
+      const response = await api.getComments(pageUrl, null, 'general');
       setComments(response.data || []);
     } catch (err) {
       console.error('Error fetching comments:', err);
@@ -63,11 +64,24 @@ const CommentSidebar = ({ pageUrl, selectedText, selectionDetails, onCommentSubm
       };
 
       const response = await api.createComment(commentData);
-      setComments(prev => [response.data, ...prev]);
+      
+      // Only add to local state if comment is approved (authenticated users)
+      // Anonymous comments won't appear until approved by admin
+      if (response.data.status === 'approved') {
+        setComments(prev => [response.data, ...prev]);
+      }
+      
       setNewComment('');
       setTags('');
       if (!user) setAuthorName('');
       if (onCommentSubmit) onCommentSubmit(response.data);
+      
+      // Show success message
+      if (response.data.status === 'pending_approval') {
+        setError('Comment submitted successfully! It will appear after admin approval.');
+        // Clear the "error" message after 5 seconds
+        setTimeout(() => setError(null), 5000);
+      }
     } catch (err) {
       console.error('Error creating comment:', err);
       setError(err.response?.data?.message || 'Failed to submit comment');
@@ -123,13 +137,23 @@ const CommentSidebar = ({ pageUrl, selectedText, selectionDetails, onCommentSubm
             )}
 
             {!user && (
-              <input
-                type="text"
-                placeholder="Your name (optional)"
-                value={authorName}
-                onChange={(e) => setAuthorName(e.target.value)}
-                className="w-full p-3 border border-sky-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
-              />
+              <>
+                <input
+                  type="text"
+                  placeholder="Your name (optional)"
+                  value={authorName}
+                  onChange={(e) => setAuthorName(e.target.value)}
+                  className="w-full p-3 border border-sky-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
+                />
+                <div className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg p-2">
+                  <div className="flex items-center space-x-1">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
+                    </svg>
+                    <span>Anonymous comments require approval before appearing publicly.</span>
+                  </div>
+                </div>
+              </>
             )}
 
             <textarea
@@ -196,15 +220,25 @@ const CommentSidebar = ({ pageUrl, selectedText, selectionDetails, onCommentSubm
           </form>
         </div>
 
-        {/* Enhanced Error Display */}
+        {/* Enhanced Message Display (Error or Success) */}
         {error && (
-          <div className="p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-700 rounded-lg text-sm shadow-sm">
+          <div className={`p-4 border rounded-lg text-sm shadow-sm ${
+            error.includes('successfully') 
+              ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 text-green-700'
+              : 'bg-gradient-to-r from-red-50 to-pink-50 border-red-200 text-red-700'
+          }`}>
             <div className="flex items-start space-x-2">
-              <svg className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
+              <svg className={`w-5 h-5 mt-0.5 flex-shrink-0 ${
+                error.includes('successfully') ? 'text-green-500' : 'text-red-500'
+              }`} fill="currentColor" viewBox="0 0 20 20">
+                {error.includes('successfully') ? (
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                ) : (
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
+                )}
               </svg>
               <div>
-                <h5 className="font-medium">Error</h5>
+                <h5 className="font-medium">{error.includes('successfully') ? 'Success' : 'Error'}</h5>
                 <p>{error}</p>
               </div>
             </div>
@@ -245,22 +279,35 @@ const CommentSidebar = ({ pageUrl, selectedText, selectionDetails, onCommentSubm
                 
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-sky-400 to-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-medium ${
+                      comment.userId ? 
+                        'bg-gradient-to-br from-emerald-400 to-green-500' : // Authenticated user
+                        'bg-gradient-to-br from-gray-400 to-gray-500'       // Anonymous user
+                    }`}>
                       {(comment.authorDisplayName || 'A').charAt(0).toUpperCase()}
                     </div>
                     <div>
                       <span className="font-medium text-sm text-gray-800">
                         {comment.authorDisplayName || 'Anonymous'}
+                        {comment.status === 'pending_approval' && (
+                          <span className="ml-2 text-xs text-yellow-600 bg-yellow-100 px-2 py-0.5 rounded-full">⏳ Pending</span>
+                        )}
                       </span>
                       <div className="flex items-center space-x-2 text-xs text-gray-500">
                         <span>{formatDate(comment.createdAt)}</span>
                         <span>•</span>
-                        <span className="bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full">
-                          {comment.userGroup === 'general' && '💬'}
-                          {comment.userGroup === 'experts' && '🎓'}
-                          {comment.userGroup === 'students' && '📚'}
-                          {comment.userGroup === 'researchers' && '🔬'}
-                          {comment.userGroup}
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${
+                          comment.userGroup === 'general' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+                          comment.userGroup === 'experts' ? 'bg-purple-100 text-purple-700 border-purple-200' :
+                          comment.userGroup === 'students' ? 'bg-green-100 text-green-700 border-green-200' :
+                          comment.userGroup === 'researchers' ? 'bg-orange-100 text-orange-700 border-orange-200' :
+                          'bg-gray-100 text-gray-700 border-gray-200'
+                        }`}>
+                          {comment.userGroup === 'general' && '💬 General'}
+                          {comment.userGroup === 'experts' && '🎓 Expert'}
+                          {comment.userGroup === 'students' && '📚 Student'}
+                          {comment.userGroup === 'researchers' && '🔬 Research'}
+                          {!['general', 'experts', 'students', 'researchers'].includes(comment.userGroup) && `📝 ${comment.userGroup}`}
                         </span>
                       </div>
                     </div>

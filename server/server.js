@@ -664,8 +664,36 @@ app.put('/api/users/:userId/roles', authMiddleware, authorizeRoles('admin'), asy
 
 // --- Comment API Endpoints ---
 
-// POST /api/comments - Create a new comment
-app.post('/api/comments', authMiddleware, async (req, res) => {
+// Simple spam detection function
+const detectSpam = (text, authorName = '') => {
+  const spamPatterns = [
+    /https?:\/\/[^\s]+/gi, // URLs
+    /\b(buy|sell|click|free|money|earn|casino|poker|viagra|cialis)\b/gi, // Common spam words
+    /(.)\1{4,}/gi, // Repeated characters (4+ times)
+    /[A-Z]{5,}/g, // All caps words (5+ chars)
+  ];
+  
+  const text_lower = text.toLowerCase();
+  const name_lower = authorName.toLowerCase();
+  
+  // Check for spam patterns
+  for (let pattern of spamPatterns) {
+    if (pattern.test(text) || pattern.test(authorName)) {
+      return true;
+    }
+  }
+  
+  // Check for excessive length
+  if (text.length > 2000) return true;
+  
+  // Check for suspicious author names
+  if (authorName.length > 50) return true;
+  
+  return false;
+};
+
+// POST /api/comments - Create a new comment (supports both authenticated and anonymous users)
+app.post('/api/comments', async (req, res) => {
   try {
     const {
       pageUrl,
@@ -683,28 +711,54 @@ app.post('/api/comments', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'pageUrl and commentText are required.' });
     }
 
-    // Construct the comment object, allowing Mongoose defaults to apply where values aren't provided
+    // Basic spam detection
+    if (detectSpam(commentText, authorDisplayName)) {
+      return res.status(400).json({ error: 'Comment flagged as potential spam.' });
+    }
+
+    // Check if user is authenticated (optional)
+    const authHeader = req.headers.authorization;
+    let user = null;
+    let isAuthenticated = false;
+
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.substring(7);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        user = await User.findById(decoded.user.id); // Fixed: use decoded.user.id
+        isAuthenticated = true;
+      } catch (err) {
+        // Token is invalid, treat as anonymous
+        isAuthenticated = false;
+      }
+    }
+
+    // Construct the comment object
     const commentData = {
       pageUrl,
       commentText,
       selectedText: selectedText || null,
       selectionDetails: selectionDetails || null,
-      authorDisplayName: authorDisplayName || req.user.username || 'Anonymous', // Use authenticated username if available
-      userId: req.user.id, // Get userId from the authenticated user
-      // userGroup will use model default 'public' if undefined and not explicitly passed
-      // status will use the model default (e.g., 'approved' or 'pending_approval')
+      authorDisplayName: isAuthenticated ? (user?.username || 'User') : (authorDisplayName || 'Anonymous'),
+      userId: isAuthenticated ? user?._id : null,
+      userGroup: userGroup || 'general', // Default to 'general' instead of 'public'
+      // Anonymous comments require approval, authenticated user comments are auto-approved
+      status: isAuthenticated ? 'approved' : 'pending_approval'
     };
 
-    // Only set these if they are explicitly passed to avoid overriding model defaults with undefined
-    if (userGroup !== undefined) commentData.userGroup = userGroup;
-    if (isPrivate !== undefined) commentData.isPrivate = isPrivate;
+    // Only authenticated users can make private comments
+    if (isAuthenticated && isPrivate !== undefined) {
+      commentData.isPrivate = isPrivate;
+    } else {
+      commentData.isPrivate = false;
+    }
+
     if (tags !== undefined) commentData.tags = tags;
     if (parentId !== undefined) commentData.parentId = parentId;
 
-
     const newComment = new Comment(commentData);
-
     await newComment.save();
+    
     res.status(201).json(newComment);
   } catch (error) {
     console.error('Error creating comment:', error);

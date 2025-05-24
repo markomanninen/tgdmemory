@@ -94,11 +94,18 @@ const useTextSelection = () => {
     const text = selection.toString().trim();
     
     if (text && text.length > 0) {
-      // Don't clear selection when clicking inside the comment sidebar
+      // Don't track selection if it's within the comment sidebar
       const sidebarElement = document.querySelector('.comment-sidebar');
-      if (sidebarElement) {
-        const clickedOnSidebar = event => sidebarElement.contains(event.target);
-        if (clickedOnSidebar) return;
+      const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+      
+      if (sidebarElement && range) {
+        const isWithinSidebar = sidebarElement.contains(range.commonAncestorContainer) ||
+                                sidebarElement.contains(range.startContainer) ||
+                                sidebarElement.contains(range.endContainer);
+        
+        if (isWithinSidebar) {
+          return; // Don't track selections within the sidebar
+        }
       }
       
       setSelectedText(text);
@@ -124,12 +131,31 @@ const useTextSelection = () => {
   useEffect(() => {
     // Function to handle document mouseup for tracking selection
     const handleMouseUp = (event) => {
+      // Don't track selections that start or end within the comment sidebar
+      const sidebarElement = document.querySelector('.comment-sidebar');
+      if (sidebarElement && sidebarElement.contains(event.target)) {
+        return; // Exit early if the click is within the sidebar
+      }
+      
       // Delay handling selection to ensure it's captured properly
       setTimeout(() => {
         const selection = window.getSelection();
         const text = selection.toString().trim();
         
         if (text && text.length > 0) {
+          // Double-check that the selection is not within the sidebar
+          const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+          
+          if (sidebarElement && range) {
+            const isWithinSidebar = sidebarElement.contains(range.commonAncestorContainer) ||
+                                    sidebarElement.contains(range.startContainer) ||
+                                    sidebarElement.contains(range.endContainer);
+            
+            if (isWithinSidebar) {
+              return; // Don't track selections within the sidebar
+            }
+          }
+          
           setSelectedText(text);
           setSelectionDetails(getSelectionDetails(selection));
         }

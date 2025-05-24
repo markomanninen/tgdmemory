@@ -26,15 +26,18 @@ const CommentableContent = ({ children, pageUrl }) => {
 
   return (
     <div className="relative">
-      {/* Selection indicator */}
-      {hasSelection && (
+      {/* Selection indicator - only show when comment sidebar is NOT open */}
+      {hasSelection && !showCommentSidebar && (
         <div className="fixed top-20 right-4 z-50 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg">
           <div className="text-sm mb-2">
             Text selected: "{selectedText.substring(0, 50)}{selectedText.length > 50 ? '...' : ''}"
           </div>
           <div className="flex space-x-2">
             <button
-              onClick={() => setShowCommentSidebar(true)}
+              onClick={() => {
+                setShowCommentSidebar(true);
+                // Popup will automatically disappear since hasSelection && !showCommentSidebar will be false
+              }}
               className="bg-white text-blue-500 px-3 py-1 rounded text-sm hover:bg-gray-100"
             >
               Comment on this
@@ -52,8 +55,10 @@ const CommentableContent = ({ children, pageUrl }) => {
       {/* Toggle button for comment sidebar */}
       <button
         onClick={toggleCommentSidebar}
-        className={`fixed top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-l-lg shadow-lg z-40 transition-transform duration-300 ease-in-out ${
-          showCommentSidebar ? 'mr-80' : 'mr-0'
+        className={`fixed top-1/2 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white p-3 shadow-lg z-40 transition-all duration-500 ease-in-out ${
+          showCommentSidebar 
+            ? 'right-80 rounded-l-lg border-r-0' 
+            : 'right-0 rounded-l-lg'
         }`}
         title="Toggle Comments"
       >
