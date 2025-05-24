@@ -80,125 +80,211 @@ const CommentSidebar = ({ pageUrl, selectedText, selectionDetails, onCommentSubm
   };
 
   return (
-    <div className="w-full h-full p-4 overflow-y-auto">
-      <h3 className="text-lg font-semibold mb-4">Comments</h3>
+    <div className="bg-gradient-to-br from-white to-sky-50 shadow-xl rounded-xl border border-sky-200/50 h-full overflow-hidden flex flex-col backdrop-blur-sm">
+      {/* Enhanced Header */}
+      <div className="bg-gradient-to-r from-sky-500 to-blue-600 p-4 text-white rounded-t-xl">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd"/>
+            </svg>
+            <h3 className="text-lg font-semibold">Discussion Panel</h3>
+          </div>
+          <div className="text-xs bg-white/20 px-2 py-1 rounded-full">
+            {comments.length} comment{comments.length !== 1 ? 's' : ''}
+          </div>
+        </div>
+      </div>
       
-      {/* Comment Form */}
-      <form ref={formRef} onSubmit={handleSubmitComment} className="mb-6 p-4 bg-gray-50 rounded-lg">
-        <h4 className="font-medium mb-3">Add Comment</h4>
-        
-        {savedSelection.text && (
-          <div className="mb-3 p-2 bg-blue-50 border-l-4 border-blue-400 text-sm">
-            <strong>Selected text:</strong> "{savedSelection.text}"
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {/* Enhanced Comment Form */}
+        <div className="bg-white/70 backdrop-blur-sm rounded-lg p-4 border border-sky-200/50 shadow-sm">
+          <h4 className="text-sm font-semibold text-sky-800 mb-3 flex items-center">
+            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd"/>
+            </svg>
+            Add Your Comment
+          </h4>
+          
+          <form ref={formRef} onSubmit={handleSubmitComment} className="space-y-3">
+            {savedSelection.text && (
+              <div className="p-3 bg-gradient-to-r from-blue-50 to-sky-50 border-l-4 border-blue-400 rounded-r text-sm">
+                <div className="flex items-start space-x-2">
+                  <svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
+                  </svg>
+                  <div>
+                    <strong className="text-blue-800">Selected text:</strong>
+                    <p className="text-blue-700 italic">"{savedSelection.text}"</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {!user && (
+              <input
+                type="text"
+                placeholder="Your name (optional)"
+                value={authorName}
+                onChange={(e) => setAuthorName(e.target.value)}
+                className="w-full p-3 border border-sky-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
+              />
+            )}
+
+            <textarea
+              placeholder="Share your thoughts..."
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              rows={3}
+              className="w-full p-3 border border-sky-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all resize-none bg-white/70 backdrop-blur-sm"
+              required
+            />
+
+            <div className="grid grid-cols-1 gap-3">
+              <input
+                type="text"
+                placeholder="Tags (comma-separated)"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                className="w-full p-3 border border-sky-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
+              />
+
+              <select
+                value={userGroup}
+                onChange={(e) => setUserGroup(e.target.value)}
+                className="w-full p-3 border border-sky-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
+              >
+                <option value="general">💬 General Discussion</option>
+                <option value="experts">🎓 Expert Analysis</option>
+                <option value="students">📚 Student Questions</option>
+                <option value="researchers">🔬 Research Notes</option>
+              </select>
+            </div>
+
+            {user && (
+              <label className="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={isPrivate}
+                  onChange={(e) => setIsPrivate(e.target.checked)}
+                  className="rounded border-sky-300 text-sky-600 focus:ring-sky-500 transition-colors"
+                />
+                <span>🔒 Private comment (only visible to you)</span>
+              </label>
+            )}
+
+            <button
+              type="submit"
+              disabled={isSubmitting || !newComment.trim()}
+              className="w-full bg-gradient-to-r from-sky-500 to-blue-600 text-white py-3 px-4 rounded-lg text-sm font-medium hover:from-sky-600 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
+            >
+              {isSubmitting ? (
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <span>Submitting...</span>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center space-x-2">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
+                  </svg>
+                  <span>Submit Comment</span>
+                </div>
+              )}
+            </button>
+          </form>
+        </div>
+
+        {/* Enhanced Error Display */}
+        {error && (
+          <div className="p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-700 rounded-lg text-sm shadow-sm">
+            <div className="flex items-start space-x-2">
+              <svg className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
+              </svg>
+              <div>
+                <h5 className="font-medium">Error</h5>
+                <p>{error}</p>
+              </div>
+            </div>
           </div>
         )}
 
-        {!user && (
-          <input
-            type="text"
-            placeholder="Your name (optional)"
-            value={authorName}
-            onChange={(e) => setAuthorName(e.target.value)}
-            className="w-full p-2 border rounded mb-2 text-sm"
-          />
-        )}
-
-        <textarea
-          placeholder="Write your comment..."
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          rows={3}
-          className="w-full p-2 border rounded mb-2 text-sm"
-          required
-        />
-
-        <input
-          type="text"
-          placeholder="Tags (comma-separated)"
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-          className="w-full p-2 border rounded mb-2 text-sm"
-        />
-
-        <select
-          value={userGroup}
-          onChange={(e) => setUserGroup(e.target.value)}
-          className="w-full p-2 border rounded mb-2 text-sm"
-        >
-          <option value="general">General</option>
-          <option value="experts">Experts</option>
-          <option value="students">Students</option>
-          <option value="researchers">Researchers</option>
-        </select>
-
-        {user && (
-          <label className="flex items-center mb-2 text-sm">
-            <input
-              type="checkbox"
-              checked={isPrivate}
-              onChange={(e) => setIsPrivate(e.target.checked)}
-              className="mr-2"
-            />
-            Private comment
-          </label>
-        )}
-
-        <button
-          type="submit"
-          disabled={isSubmitting || !newComment.trim()}
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded text-sm hover:bg-blue-600 disabled:bg-gray-400"
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit Comment'}
-        </button>
-      </form>
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded mb-4 text-sm">
-          {error}
-        </div>
-      )}
-
-      {/* Comments List */}
-      <div className="space-y-4">
-        {isLoading ? (
-          <p className="text-gray-500 text-sm">Loading comments...</p>
-        ) : comments.length === 0 ? (
-          <p className="text-gray-500 text-sm">No comments yet. Be the first to comment!</p>
-        ) : (
-          comments.map(comment => (
-            <div key={comment._id} className="p-3 bg-gray-50 rounded border">
-              {comment.selectedText && (
-                <div className="mb-2 p-2 bg-blue-50 border-l-4 border-blue-400 text-xs">
-                  <strong>Regarding:</strong> "{comment.selectedText}"
-                </div>
-              )}
-              
-              <div className="text-sm mb-2">
-                <strong>{comment.authorDisplayName}:</strong>
-                <span className="text-gray-600 ml-2 text-xs">
-                  {formatDate(comment.createdAt)}
-                </span>
-              </div>
-              
-              <p className="text-sm mb-2">{comment.commentText}</p>
-              
-              {comment.tags && comment.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1 mb-2">
-                  {comment.tags.map((tag, index) => (
-                    <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-              
-              <div className="flex justify-between items-center text-xs text-gray-500">
-                <span>Group: {comment.userGroup}</span>
-                {comment.isPrivate && <span className="text-red-500">Private</span>}
-              </div>
+        {/* Enhanced Comments Display */}
+        <div className="space-y-3">
+          {isLoading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500 mx-auto mb-3"></div>
+              <p className="text-gray-500 text-sm">Loading comments...</p>
             </div>
-          ))
-        )}
+          ) : comments.length === 0 ? (
+            <div className="text-center py-8 bg-white/50 rounded-lg border border-sky-200/50">
+              <svg className="w-12 h-12 text-sky-300 mx-auto mb-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd"/>
+              </svg>
+              <p className="text-gray-500 text-sm">No comments yet</p>
+              <p className="text-gray-400 text-xs mt-1">Be the first to start the discussion!</p>
+            </div>
+          ) : (
+            comments.map((comment, index) => (
+              <div key={comment._id} className="bg-white/60 backdrop-blur-sm rounded-lg p-4 border border-sky-200/50 shadow-sm hover:shadow-md transition-all duration-200 animate-fadeInUp" style={{animationDelay: `${index * 100}ms`}}>
+                {comment.selectedText && (
+                  <div className="mb-3 p-2 bg-gradient-to-r from-blue-50 to-sky-50 border-l-4 border-blue-400 rounded-r text-xs">
+                    <div className="flex items-start space-x-2">
+                      <svg className="w-3 h-3 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
+                      </svg>
+                      <div>
+                        <strong className="text-blue-800">Regarding:</strong>
+                        <p className="text-blue-700 italic">"{comment.selectedText}"</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="flex justify-between items-start mb-3">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gradient-to-br from-sky-400 to-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
+                      {(comment.authorDisplayName || 'A').charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <span className="font-medium text-sm text-gray-800">
+                        {comment.authorDisplayName || 'Anonymous'}
+                      </span>
+                      <div className="flex items-center space-x-2 text-xs text-gray-500">
+                        <span>{formatDate(comment.createdAt)}</span>
+                        <span>•</span>
+                        <span className="bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full">
+                          {comment.userGroup === 'general' && '💬'}
+                          {comment.userGroup === 'experts' && '🎓'}
+                          {comment.userGroup === 'students' && '📚'}
+                          {comment.userGroup === 'researchers' && '🔬'}
+                          {comment.userGroup}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  {comment.isPrivate && (
+                    <span className="text-xs text-red-500 bg-red-50 px-2 py-1 rounded-full">🔒 Private</span>
+                  )}
+                </div>
+                
+                <p className="text-sm text-gray-700 leading-relaxed mb-3">{comment.commentText}</p>
+                
+                {comment.tags && comment.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1">
+                    {comment.tags.map((tag, tagIndex) => (
+                      <span key={tagIndex} className="bg-gradient-to-r from-blue-100 to-sky-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium border border-blue-200/50">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

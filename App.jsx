@@ -12,38 +12,81 @@ import TgdCoreSection from './src/components/TgdCoreSection';
 import TgdMemorySection from './src/components/TgdMemorySection';
 import AdminDashboard from './src/pages/AdminDashboard';
 import AdminDebug from './src/pages/AdminDebug';
+import ContactPage from './src/pages/ContactPage';
 import LoginPage from './src/pages/LoginPage';
 import RegisterPage from './src/pages/RegisterPage';
 
 // Main content component for the home page
 const MainContent = ({ sections, activeSection, scrollToSection, headerHeight }) => (
   // The Header is now rendered by the App component directly for all routes
-  <main className="container mx-auto px-4 pt-24 pb-12">
-    <IntroSection />
-    <TgdCoreSection />
-    <TgdMemorySection />
-    <ImplicationsSection />
-    <ConclusionSection />
-    <ContactSection />
+  <main className="container mx-auto px-4 pt-32 pb-20 relative z-10">
+    <div className="enhanced-card mb-12 backdrop-blur-xl bg-white/40 border border-white/30">
+      <IntroSection />
+    </div>
+    <div className="enhanced-card mb-12 backdrop-blur-xl bg-white/40 border border-white/30">
+      <TgdCoreSection />
+    </div>
+    <div className="enhanced-card mb-12 backdrop-blur-xl bg-white/40 border border-white/30">
+      <TgdMemorySection />
+    </div>
+    <div className="enhanced-card mb-12 backdrop-blur-xl bg-white/40 border border-white/30">
+      <ImplicationsSection />
+    </div>
+    <div className="enhanced-card mb-12 backdrop-blur-xl bg-white/40 border border-white/30">
+      <ConclusionSection />
+    </div>
+    <div className="enhanced-card backdrop-blur-xl bg-white/40 border border-white/30">
+      <ContactSection />
+    </div>
   </main>
 );
 
 export default function App() {
   const [activeSection, setActiveSection] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isKeyboardNavigating, setIsKeyboardNavigating] = useState(false);
+  const [clearMenuFocus, setClearMenuFocus] = useState(false);
   const sections = ['intro', 'tgd-core', 'tgd-memory', 'implications', 'conclusion', 'contact'];
   const headerHeight = 64; // Assuming a fixed header height
   const location = useLocation();
 
-  const scrollToSection = (index) => {
+  // Check for mobile device for performance optimization
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const scrollToSection = (index, isKeyboardNav = false) => {
     const sectionId = sections[index];
+    
     const sectionElement = document.getElementById(sectionId);
+    
     if (sectionElement) {
+      // Always set flag to prevent scroll handler interference during any navigation
+      setIsKeyboardNavigating(true);
+      
+      // Use manual calculation to account for fixed header
+      const rect = sectionElement.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const targetPosition = rect.top + scrollTop - headerHeight - 20; // Extra padding for better UX
+      
       window.scrollTo({
-        top: sectionElement.offsetTop - headerHeight,
+        top: targetPosition,
         behavior: 'smooth',
       });
+      
       setActiveSection(index);
+      
+      // Clear the navigation flag after scroll animation completes
+      setTimeout(() => {
+        setIsKeyboardNavigating(false);
+      }, 800); // Slightly longer than typical smooth scroll duration
     }
   };
 
@@ -51,15 +94,29 @@ export default function App() {
   useEffect(() => {
     if (location.pathname === '/') {
       const handleScroll = () => {
+        // Skip scroll-based active section detection during keyboard navigation
+        if (isKeyboardNavigating) {
+          return;
+        }
+        
         let currentIndex = 0;
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        
         for (let i = 0; i < sections.length; i++) {
           const section = document.getElementById(sections[i]);
-          if (section && window.scrollY >= section.offsetTop - headerHeight - 150) {
-            currentIndex = i;
+          if (section) {
+            const rect = section.getBoundingClientRect();
+            const sectionTop = rect.top + scrollY;
+            const threshold = sectionTop - headerHeight - 100; // Smaller threshold for better UX
+            
+            if (scrollY >= threshold) {
+              currentIndex = i;
+            }
           }
         }
+        
         setActiveSection(currentIndex);
-        setShowBackToTop(window.scrollY > 300);
+        setShowBackToTop(scrollY > 300);
       };
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
@@ -67,8 +124,64 @@ export default function App() {
       setShowBackToTop(false); // Hide back to top button on other pages
       setActiveSection(0); // Reset active section
     }
-  }, [location.pathname, sections, headerHeight]);
+  }, [location.pathname, sections, headerHeight, isKeyboardNavigating]);
 
+  // Keyboard navigation for menu items - left/right arrow keys
+  useEffect(() => {
+    if (location.pathname === '/') {
+      const handleKeyDown = (event) => {
+        // Only handle keyboard navigation when not focused on input elements
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.isContentEditable) {
+          return;
+        }
+
+        switch (event.key) {
+          case 'ArrowLeft':
+            event.preventDefault();
+            // Clear focus from menu buttons and trigger keyboard navigation
+            setClearMenuFocus(prev => !prev); // Toggle to trigger useEffect
+            const prevIndex = activeSection > 0 ? activeSection - 1 : sections.length - 1;
+            scrollToSection(prevIndex, true); // true indicates keyboard navigation
+            break;
+          case 'ArrowRight':
+            event.preventDefault();
+            // Clear focus from menu buttons and trigger keyboard navigation
+            setClearMenuFocus(prev => !prev); // Toggle to trigger useEffect
+            const nextIndex = activeSection < sections.length - 1 ? activeSection + 1 : 0;
+            scrollToSection(nextIndex, true); // true indicates keyboard navigation
+            break;
+          default:
+            break;
+        }
+      };
+
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [location.pathname, activeSection, sections, scrollToSection]);
+
+  // Hash navigation support for anchor links
+  useEffect(() => {
+    if (location.pathname === '/' && location.hash) {
+      // Remove the # from the hash to get the section id
+      const sectionId = location.hash.substring(1);
+      const sectionIndex = sections.indexOf(sectionId);
+      
+      if (sectionIndex !== -1) {
+        // Small delay to ensure the page has rendered
+        setTimeout(() => {
+          scrollToSection(sectionIndex);
+        }, 100);
+      }
+    }
+  }, [location.pathname, location.hash, sections, scrollToSection]);
+
+  // Ensure non-main pages scroll to top
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      window.scrollTo(0, 0);
+    }
+  }, [location.pathname]);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -78,12 +191,42 @@ export default function App() {
   };
 
   return (
-    <div className="bg-sky-50 text-gray-800 font-sans">
+    <div className="relative min-h-screen">
+      {/* Enhanced Animated Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-50 via-sky-50/50 to-blue-100/70"></div>
+      
+      {/* Advanced Particle System with Mobile Optimization */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {/* Large floating orbs - optimized for mobile */}
+        <div className={`absolute top-1/4 left-1/4 ${isMobile ? 'w-48 h-48' : 'w-96 h-96'} bg-gradient-to-br from-sky-200/30 to-blue-300/20 rounded-full blur-3xl ${isMobile ? 'animate-none' : 'animate-enhanced-pulse'}`}></div>
+        <div className={`absolute top-3/4 right-1/4 ${isMobile ? 'w-40 h-40' : 'w-80 h-80'} bg-gradient-to-br from-cyan-200/25 to-sky-300/20 rounded-full blur-3xl ${isMobile ? 'animate-none' : 'animate-float animation-delay-1000'}`}></div>
+        {!isMobile && <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-br from-blue-200/30 to-indigo-300/20 rounded-full blur-3xl animate-enhanced-pulse animation-delay-2000"></div>}
+        
+        {/* Medium particles - only on desktop */}
+        {!isMobile && (
+          <>
+            <div className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-br from-sky-300/20 to-blue-400/15 rounded-full blur-2xl animate-float animation-delay-600"></div>
+            <div className="absolute bottom-32 left-20 w-24 h-24 bg-gradient-to-br from-cyan-300/25 to-sky-400/15 rounded-full blur-2xl animate-enhanced-pulse animation-delay-1000"></div>
+            
+            {/* Small accent particles */}
+            <div className="absolute top-1/3 right-1/3 w-16 h-16 bg-gradient-to-br from-blue-400/30 to-indigo-400/20 rounded-full blur-xl animate-float animation-delay-400"></div>
+            <div className="absolute bottom-1/4 left-1/3 w-20 h-20 bg-gradient-to-br from-sky-400/25 to-cyan-400/20 rounded-full blur-xl animate-enhanced-pulse animation-delay-800"></div>
+          </>
+        )}
+      </div>
+
+      {/* Subtle Grid Pattern Overlay */}
+      <div className="fixed inset-0 opacity-[0.02] pointer-events-none" style={{
+        backgroundImage: `radial-gradient(circle at 1px 1px, rgba(15, 23, 42, 0.3) 1px, transparent 0)`,
+        backgroundSize: '40px 40px'
+      }}></div>
+      
       {/* Render Header for all routes, passing necessary props */}
       <Header
         sections={sections}
         activeSection={activeSection}
         scrollToSection={scrollToSection}
+        clearMenuFocus={clearMenuFocus}
         // Pass a flag or modify sections prop if header content needs to change for /pages
         isPagesView={location.pathname === '/pages'}
       />
@@ -102,6 +245,7 @@ export default function App() {
           // PagesMenu will be rendered below the global Header
           <PagesMenu />
         } />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/admin" element={
@@ -116,21 +260,77 @@ export default function App() {
         } />
       </Routes>
 
-      {/* Footer */}
-      <footer className="text-center py-10 text-gray-500 text-sm bg-white border-t border-gray-200">
-        <p>Copyright &copy; {new Date().getFullYear()} - Marko T. Manninen</p>
+      {/* Enhanced Footer */}
+      <footer className="relative z-10 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white py-20 border-t border-slate-700/50 overflow-hidden">
+        {/* Footer Background Effects */}
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-sky-500/10 to-blue-600/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-br from-cyan-500/10 to-sky-600/5 rounded-full blur-3xl"></div>
+        
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="text-center">
+            <div className="mb-8">
+              <h3 className="text-3xl font-bold mb-3 bg-gradient-to-r from-sky-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                TGD & Memory Research
+              </h3>
+              <p className="text-slate-300 max-w-3xl mx-auto text-lg leading-relaxed">
+                Exploring the frontiers of consciousness and memory through Topological Geometrodynamics
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8 mb-12 max-w-4xl mx-auto">
+              <div className="backdrop-blur-sm bg-white/5 p-6 rounded-xl border border-white/10 hover-lift">
+                <div className="w-12 h-12 bg-gradient-to-br from-sky-400 to-blue-500 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <span className="block font-semibold text-white mb-2 text-lg">Research</span>
+                <span className="text-slate-300">Quantum Consciousness</span>
+              </div>
+              <div className="backdrop-blur-sm bg-white/5 p-6 rounded-xl border border-white/10 hover-lift">
+                <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-sky-500 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd"/>
+                  </svg>
+                </div>
+                <span className="block font-semibold text-white mb-2 text-lg">Theory</span>
+                <span className="text-slate-300">TGD Framework</span>
+              </div>
+              <div className="backdrop-blur-sm bg-white/5 p-6 rounded-xl border border-white/10 hover-lift">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
+                  </svg>
+                </div>
+                <span className="block font-semibold text-white mb-2 text-lg">Applications</span>
+                <span className="text-slate-300">Memory Models</span>
+              </div>
+            </div>
+            
+            <div className="border-t border-slate-700/50 pt-8">
+              <p className="text-slate-400 text-sm">
+                Copyright &copy; {new Date().getFullYear()} - Marko T. Manninen. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </div>
       </footer>
 
-      {/* Back to Top Button - only show if not on /pages and showBackToTop is true */}
+      {/* Enhanced Back to Top Button */}
       {showBackToTop && location.pathname === '/' && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-4 rounded-full shadow-lg transition-opacity duration-300 ease-in-out z-50"
+          className="fixed bottom-8 right-8 group z-50"
           aria-label="Scroll to top"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
-          </svg>
+          <div className="bg-gradient-to-r from-sky-500 via-sky-600 to-blue-600 hover:from-sky-600 hover:via-sky-700 hover:to-blue-700 text-white font-bold p-4 rounded-full shadow-2xl transition-all duration-300 ease-in-out backdrop-blur-sm border border-white/20 hover:scale-110 relative overflow-hidden">
+            {/* Shimmer effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 transform group-hover:-translate-y-1 transition-transform duration-300 relative z-10">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
+            </svg>
+          </div>
         </button>
       )}
     </div>

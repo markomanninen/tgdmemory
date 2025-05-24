@@ -257,14 +257,27 @@ function showExplanation(latexEquation, rawTitleFromAttribute, clickedContainerE
     modalBody.innerHTML = `
     <div class="bg-gradient-to-br from-slate-50 to-blue-50 border border-slate-200 rounded-xl p-2 mb-6 shadow-sm equation-display">
       <div class="flex items-start justify-between">
-        <button class="copy-button group flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-blue-600 hover:bg-white rounded-lg transition-all duration-200 border border-transparent hover:border-blue-200 hover:shadow-sm ml-auto" 
-                title="Copy equation" data-latex="${escapeHtml(latexEquation || '')}">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:scale-110">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="transition-colors">Copy</span>
-        </button>
+        <div class="flex items-center gap-2 ml-auto">
+          <button class="raw-latex-button group flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-indigo-600 hover:bg-white rounded-lg transition-all duration-200 border border-transparent hover:border-indigo-200 hover:shadow-sm" 
+                  title="View raw LaTeX" data-latex="${escapeHtml(latexEquation || '')}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:scale-110">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14,2 14,8 20,8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10,9 9,9 8,9"></polyline>
+            </svg>
+            <span class="transition-colors">Raw LaTeX</span>
+          </button>
+          <button class="copy-button group flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-blue-600 hover:bg-white rounded-lg transition-all duration-200 border border-transparent hover:border-blue-200 hover:shadow-sm" 
+                  title="Copy equation" data-latex="${escapeHtml(latexEquation || '')}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:scale-110">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="transition-colors">Copy</span>
+          </button>
+        </div>
       </div>
       <div class="text-lg overflow-x-auto">
         ${latexToDisplayInModal || 'No LaTeX equation provided'}
@@ -292,17 +305,6 @@ function showExplanation(latexEquation, rawTitleFromAttribute, clickedContainerE
           <p class="text-sm text-slate-500">Generating detailed mathematical explanation...</p>
         </div>
       </div>
-    </div>
-    
-    <div class="mt-6 pt-4 border-t border-slate-100">
-      <details class="group">
-        <summary class="flex items-center gap-2 text-xs text-slate-400 hover:text-slate-600 cursor-pointer transition-colors">
-          <span>Raw LaTeX Code</span>
-        </summary>
-        <div class="mt-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
-          <code class="text-xs font-mono text-slate-600 break-all">${escapeHtml(latexEquation || '')}</code>
-        </div>
-      </details>
     </div>
     
     <style>
@@ -396,6 +398,12 @@ function showExplanation(latexEquation, rawTitleFromAttribute, clickedContainerE
         color: #059669 !important;
         background-color: #d1fae5 !important;
         border-color: #a7f3d0 !important;
+      }
+      
+      .raw-latex-button.viewing {
+        color: #7c3aed !important;
+        background-color: #ede9fe !important;
+        border-color: #c4b5fd !important;
       }
       
       .explanation-content {
@@ -982,6 +990,55 @@ document.addEventListener('DOMContentLoaded', function() {
             copyButton.querySelector('span').textContent = 'Copy';
           }, 2000);
         });
+      }
+    }
+  });
+
+  // Event Delegation for raw LaTeX view buttons
+  document.body.addEventListener('click', function(event) {
+    const rawLatexButton = event.target.closest('.raw-latex-button');
+    if (rawLatexButton) {
+      event.preventDefault();
+      const latex = rawLatexButton.getAttribute('data-latex');
+      if (latex) {
+        // Check if we're currently showing raw LaTeX
+        const equationDisplay = rawLatexButton.closest('.equation-display');
+        const equationContent = equationDisplay.querySelector('.text-lg');
+        const isCurrentlyShowingRaw = rawLatexButton.classList.contains('viewing');
+        
+        if (isCurrentlyShowingRaw) {
+          // Switch back to rendered view
+          rawLatexButton.classList.remove('viewing');
+          rawLatexButton.querySelector('span').textContent = 'Raw LaTeX';
+          
+          // Restore the rendered equation
+          const originalRenderedEquation = rawLatexButton.getAttribute('data-original-rendered');
+          if (originalRenderedEquation) {
+            equationContent.innerHTML = originalRenderedEquation;
+            
+            // Re-typeset the restored MathJax content
+            if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+              MathJax.typesetPromise([equationContent])
+                .catch(function (err) {
+                  console.error('MathJax typesetting error when restoring:', err);
+                });
+            }
+          }
+        } else {
+          // Switch to raw LaTeX view
+          rawLatexButton.classList.add('viewing');
+          rawLatexButton.querySelector('span').textContent = 'Show Rendered';
+          
+          // Store the current rendered content before replacing
+          rawLatexButton.setAttribute('data-original-rendered', equationContent.innerHTML);
+          
+          // Show raw LaTeX in a formatted code block
+          equationContent.innerHTML = `
+            <div class="bg-slate-100 p-4 font-mono text-sm text-slate-800 overflow-x-auto">
+              <pre class="whitespace-pre-wrap break-all">${escapeHtml(latex)}</pre>
+            </div>
+          `;
+        }
       }
     }
   });

@@ -45,39 +45,66 @@ async function loadSections() {
     
     console.log("All HTML sections loaded into DOM.");
 
-    // Ensure MathJax processes the new content and ToC generation follows
-    if (window.MathJax && window.MathJax.startup && typeof window.MathJax.startup.promise !== 'undefined') {
-        window.MathJax.startup.promise.then(() => {
-            console.log("MathJax startup promise resolved. Attempting to typeset dynamic content.");
-            if (typeof window.MathJax.typesetPromise === 'function') {
-                window.MathJax.typesetPromise([document.getElementById('article-content')])
-                    .then(() => {
-                        console.log("MathJax typesetting complete for dynamic content.");
-                        // Generate ToC *after* MathJax has potentially altered the layout
-                        generateFullToc();
-                        initializeTocHighlighting();
-                    })
-                    .catch((err) => {
-                        console.error("MathJax typesetting error:", err);
-                        // Still generate ToC even if MathJax fails, but log the error
-                        generateFullToc();
-                        initializeTocHighlighting();
-                    });
-            } else {
-                 console.error("MathJax.typesetPromise is not available even after startup.promise. ToC will be generated.");
-                 generateFullToc();
-                 initializeTocHighlighting();
-            }
-        }).catch(err => {
-            console.error("MathJax startup promise failed:", err, "ToC will be generated.");
+    // Enhanced MathJax handling with new startup events
+    const processMathJaxAndGenerateToc = () => {
+        console.log("Processing MathJax content and generating ToC...");
+        if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+            window.MathJax.typesetPromise([document.getElementById('article-content')])
+                .then(() => {
+                    console.log("MathJax typesetting complete for dynamic content.");
+                    // Generate ToC *after* MathJax has potentially altered the layout
+                    generateFullToc();
+                    initializeTocHighlighting();
+                })
+                .catch((err) => {
+                    console.error("MathJax typesetting error:", err);
+                    // Still generate ToC even if MathJax fails, but log the error
+                    generateFullToc();
+                    initializeTocHighlighting();
+                });
+        } else {
+            console.log("MathJax typesetting not available, proceeding with ToC generation.");
             generateFullToc();
             initializeTocHighlighting();
-        });
+        }
+    };
+
+    // Check if MathJax is ready using the new event system
+    if (window.mathJaxReady) {
+        console.log("MathJax already ready, processing content immediately.");
+        processMathJaxAndGenerateToc();
     } else {
-        console.warn("MathJax or its startup.promise not available when sections loaded. Proceeding with ToC generation, but MathJax might not render dynamic content correctly.");
-        // Fallback: generate ToC anyway
-        generateFullToc();
-        initializeTocHighlighting();
+        console.log("Waiting for MathJax ready event...");
+        // Listen for the custom mathjax-ready event
+        window.addEventListener('mathjax-ready', () => {
+            console.log("MathJax ready event received, processing content.");
+            processMathJaxAndGenerateToc();
+        });
+
+        // Fallback: also listen to the traditional startup promise (for compatibility)
+        if (window.MathJax && window.MathJax.startup && typeof window.MathJax.startup.promise !== 'undefined') {
+            window.MathJax.startup.promise.then(() => {
+                console.log("MathJax startup promise resolved as fallback.");
+                if (!window.mathJaxReady) {
+                    processMathJaxAndGenerateToc();
+                }
+            }).catch(err => {
+                console.error("MathJax startup promise failed:", err);
+                if (!window.mathJaxReady) {
+                    generateFullToc();
+                    initializeTocHighlighting();
+                }
+            });
+        } else {
+            // Final fallback: proceed without MathJax after a short delay
+            setTimeout(() => {
+                if (!window.mathJaxReady) {
+                    console.warn("MathJax not available, proceeding without it.");
+                    generateFullToc();
+                    initializeTocHighlighting();
+                }
+            }, 2000);
+        }
     }
 }
 
@@ -198,13 +225,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const decreaseFontButton = document.getElementById('decrease-font');
     const increaseFontButton = document.getElementById('increase-font');
     const articleContent = document.getElementById('article-content');
-    let currentFontSize = 1; // Represents 1em
+    let currentFontSize = 1.2; // Represents 1.2em (initial size +2)
 
     const updateFontSize = () => {
         if (articleContent) {
             articleContent.style.fontSize = `${currentFontSize}em`;
         }
     };
+
+    // Set initial font size to +2
+    updateFontSize();
 
     if (decreaseFontButton && increaseFontButton && articleContent) {
         decreaseFontButton.addEventListener('click', () => {

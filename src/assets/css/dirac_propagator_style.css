@@ -324,4 +324,29 @@ body {
   background-color: #7dd3fc; /* bg-sky-300 */
 }
 
+/* MathJax Inline Equation Styling */
+.MathJax {
+  padding-left: 0.25rem !important; /* 4px left padding */
+  padding-right: 0.25rem !important; /* 4px right padding */
+}
+
+/* Specific targeting for inline math */
+mjx-container[jax="CHTML"][display="false"] {
+  padding-left: 0.25rem !important;
+  padding-right: 0.25rem !important;
+}
+
+/* Alternative targeting for different MathJax output formats */
+.MathJax_Display {
+  /* Keep display equations without extra padding */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  /* Keep display equations without extra padding */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 /* END OF UNIFIED CONTENT STYLES */

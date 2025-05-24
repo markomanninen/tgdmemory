@@ -7,7 +7,36 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/css/dirac_propagator_style.css">
     <!-- <link rel="stylesheet" href="../../assets/css/index.css"> --> <!-- Commented out to isolate potential CSS issues -->
-    <script type="module" src="../../assets/js/mathjax_config.js"></script>
+    
+    <!-- Enhanced MathJax Configuration and Loading -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams',
+                packages: {'[+]': ['ams']},
+                macros: {}
+            },
+            loader: {
+                load: ['[tex]/ams']
+            },
+            svg: {
+                fontCache: 'global'
+            },
+            startup: {
+                ready: () => {
+                    console.log('MathJax startup ready');
+                    MathJax.startup.defaultReady();
+                    // Signal that MathJax is ready for content loading
+                    window.mathJaxReady = true;
+                    // Dispatch custom event for content loading
+                    window.dispatchEvent(new Event('mathjax-ready'));
+                }
+            }
+        };
+    </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script type="module" src="../../assets/js/globalEquationExplainer.js" defer></script>
 </head>
@@ -15,10 +44,19 @@
     <header class="bg-blue-600 text-white p-4 shadow-md">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-bold">TGD Verse</h1>
-            <div id="font-controls" class="flex items-center">
-                <span class="mr-2">Font size:</span>
-                <button id="decrease-font" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-l">-A</button>
-                <button id="increase-font" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-r">+A</button>
+            <div class="flex items-center space-x-4">
+                <!-- Back to Research Pages Link -->
+                <a href="/pages" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center space-x-2 transition-colors duration-200">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd"/>
+                    </svg>
+                    <span>Back to Research</span>
+                </a>
+                <div id="font-controls" class="flex items-center">
+                    <span class="mr-2">Font size:</span>
+                    <button id="decrease-font" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-l">-A</button>
+                    <button id="increase-font" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-r">+A</button>
+                </div>
             </div>
         </div>
     </header>
