@@ -49,18 +49,29 @@ export default defineConfig(({ command, mode }) => {
       } : undefined,
       sourcemap: !isProd,
       chunkSizeWarningLimit: 1000 // Increase warning limit for larger chunks
-    },
-    server: {
-      https: false, // Force HTTP instead of HTTPS
-      strictPort: true, // Don't try other ports if 3000 is in use
+    }
+  };
+
+  // Only add server config in development mode
+  if (command === 'serve') {
+    config.server = {
+      https: false,
+      strictPort: true,
+      port: 5173,
+      hmr: {
+        port: 24678,
+        host: 'localhost',
+        clientPort: 24678
+      },
       proxy: {
         '/api': {
           target: 'http://localhost:3000',
-          changeOrigin: true
+          changeOrigin: true,
+          ws: false
         }
       }
-    }
-  };
+    };
+  }
 
   // Set base path only for GitHub Pages deployment, not for local preview
   if (command === 'build' && process.env.GITHUB_ACTIONS) {
