@@ -1,11 +1,13 @@
 // src/components/TableModal.jsx
+import ReactDOM from 'react-dom'; // Import ReactDOM for creating a portal
 
 export default function TableModal({ isOpen, onClose, title, headers, rows }) {
   if (!isOpen) {
     return null;
   }
 
-  return (
+  // JSX for the modal structure
+  const modalJsx = (
     <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="table-modal-title">
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
@@ -37,4 +39,8 @@ export default function TableModal({ isOpen, onClose, title, headers, rows }) {
       </div>
     </div>
   );
+
+  // Use a portal to render the modal at the document.body level
+  // This ensures it breaks out of any parent styling that might constrain its fixed positioning
+  return ReactDOM.createPortal(modalJsx, document.body);
 }

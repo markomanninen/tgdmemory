@@ -15,6 +15,7 @@ const winston = require('winston');
 
 // Load environment variables from .env file
 console.log('Server starting - Loading environment variables...');
+//dotenv.config({ path: path.join(__dirname, '..', '.env') });
 dotenv.config();
 console.log('Environment loaded - Checking key variables:');
 console.log('PORT:', process.env.PORT || '3000 (default)');
@@ -542,11 +543,13 @@ app.post('/api/auth/login', authLimiter, async (req, res) => {
     }
 
     const user = await User.findOne({ email });
+    
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials.' }); // User not found
     }
-
+    
     const isMatch = await user.comparePassword(password);
+    
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials.' }); // Password incorrect
     }

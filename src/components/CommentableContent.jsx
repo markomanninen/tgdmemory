@@ -117,15 +117,14 @@ const CommentableContent = ({ children, pageUrl }) => {
         </div>
       )}
 
-      {/* Toggle button for comment sidebar */}
+      {/* Toggle button - always visible at right edge */}
       <button
         onClick={toggleCommentSidebar}
-        className={`fixed top-1/2 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white p-3 shadow-lg z-50 transition-all duration-500 ease-in-out ${
-          showCommentSidebar 
-            ? 'right-80 rounded-l-lg' 
-            : 'right-0 rounded-l-lg'
-        }`}
+        className="fixed top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-l-lg shadow-lg z-50 transition-transform duration-500 ease-in-out"
         title="Toggle Comments"
+        style={{
+          transform: `translateY(-50%) translateX(${showCommentSidebar ? '-320px' : '0px'})`
+        }}
       >
         {showCommentSidebar ? (
           <svg 
@@ -167,7 +166,7 @@ const CommentableContent = ({ children, pageUrl }) => {
 
       {/* Comment sidebar */}
       <div
-        className={`comment-sidebar fixed top-0 right-0 w-80 bg-white border-l border-gray-300 h-screen overflow-y-auto shadow-xl transform transition-transform duration-500 ease-in-out z-40 ${
+        className={`fixed top-0 right-0 w-80 bg-white border-l border-gray-300 h-screen overflow-y-auto shadow-xl transform transition-transform duration-500 ease-in-out z-40 ${
           showCommentSidebar ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

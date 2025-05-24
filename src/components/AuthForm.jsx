@@ -24,31 +24,31 @@ const AuthForm = ({ formType, onSubmit, error }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 to-blue-100 px-4 pt-32 pb-12">
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 to-blue-100 px-4 pt-24 sm:pt-32 pb-12 sm:pb-16">
       <div className="max-w-md w-full space-y-8">
         {/* Enhanced Header */}
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-sky-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <div className="w-16 h-16 bg-gradient-to-br from-sky-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-5 shadow-lg">
             <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {formType === 'login' ? 'Welcome Back' : 'Join Us'}
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
+            {formType === 'login' ? 'Welcome Back' : 'Create Account'}
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 sm:text-lg">
             {formType === 'login' 
-              ? 'Sign in to access your TGD research account' 
-              : 'Create your account to join the TGD research community'
+              ? 'Sign in to access your TGD research account.' 
+              : 'Join the TGD research community.'
             }
           </p>
         </div>
 
         {/* Enhanced Form */}
-        <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 p-8">
+        <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 p-6 sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {formType === 'register' && (
-              <div className="space-y-1">
+              <div className="space-y-1.5">
                 <label className="block text-sm font-semibold text-gray-700" htmlFor="username">
                   Username
                 </label>
@@ -72,7 +72,7 @@ const AuthForm = ({ formType, onSubmit, error }) => {
               </div>
             )}
             
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <label className="block text-sm font-semibold text-gray-700" htmlFor="email">
                 Email Address
               </label>
@@ -96,7 +96,7 @@ const AuthForm = ({ formType, onSubmit, error }) => {
               </div>
             </div>
             
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <label className="block text-sm font-semibold text-gray-700" htmlFor="password">
                 Password
               </label>

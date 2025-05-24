@@ -1,9 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 import TableModal from './TableModal';
 
 export default function IntroSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Add useEffect to toggle body class for scroll prevention
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.classList.add('modal-open-no-scroll');
+    } else {
+      document.body.classList.remove('modal-open-no-scroll');
+    }
+    // Cleanup function to remove the class if the component unmounts while modal is open
+    return () => {
+      document.body.classList.remove('modal-open-no-scroll');
+    };
+  }, [isModalOpen]);
 
   const tableHeaders = ["Feature", "Classical Models (e.g., MSM, Baddeley's WM)", "Standard QM Approaches (e.g., Orch OR variants)", "TGD Framework"];
   const tableRows = [
@@ -79,13 +92,19 @@ export default function IntroSection() {
               onClick={() => setIsModalOpen(true)}
               className={`enhanced-card hover-lift cursor-pointer transition-transform duration-200 hover:scale-105 ${challengesContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}
             >
-              <img
-                src="memory_models.png"
-                alt="Snapshot of Table 1: Comparative Overview of Key Memory Models. Click to open full table."
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
                 className="w-full h-auto object-contain rounded-lg shadow-md border border-gray-300 bg-gray-50"
-              />
+                aria-label="Background video showing memory model comparison overview. Click to open full table."
+              >
+                <source src="bg.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
               <p className="text-center text-sm text-gray-500 mt-4 italic">
-                Table 1: Comparative Overview (Click diagram to view details)
+                Table 1: Comparative Overview (Click video to view details)
               </p>
             </div>
           </div>

@@ -193,30 +193,72 @@ export default function App() {
   return (
     <div className="relative min-h-screen">
       {/* Enhanced Animated Background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-50 via-sky-50/50 to-blue-100/70"></div>
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-50 via-sky-50/50 to-blue-100/70 pointer-events-none z-[-1]"></div>
       
-      {/* Advanced Particle System with Mobile Optimization */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {/* Large floating orbs - optimized for mobile */}
-        <div className={`absolute top-1/4 left-1/4 ${isMobile ? 'w-48 h-48' : 'w-96 h-96'} bg-gradient-to-br from-sky-200/30 to-blue-300/20 rounded-full blur-3xl ${isMobile ? 'animate-none' : 'animate-enhanced-pulse'}`}></div>
-        <div className={`absolute top-3/4 right-1/4 ${isMobile ? 'w-40 h-40' : 'w-80 h-80'} bg-gradient-to-br from-cyan-200/25 to-sky-300/20 rounded-full blur-3xl ${isMobile ? 'animate-none' : 'animate-float animation-delay-1000'}`}></div>
-        {!isMobile && <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-br from-blue-200/30 to-indigo-300/20 rounded-full blur-3xl animate-enhanced-pulse animation-delay-2000"></div>}
+      {/* TGD-Themed Geometric Spacetime Animation System */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
+        {/* Spacetime Tessellation Grid */}
+        <div className="absolute inset-0 spacetime-grid opacity-20"></div>
         
-        {/* Medium particles - only on desktop */}
+        {/* Wormhole Portals */}
         {!isMobile && (
           <>
-            <div className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-br from-sky-300/20 to-blue-400/15 rounded-full blur-2xl animate-float animation-delay-600"></div>
-            <div className="absolute bottom-32 left-20 w-24 h-24 bg-gradient-to-br from-cyan-300/25 to-sky-400/15 rounded-full blur-2xl animate-enhanced-pulse animation-delay-1000"></div>
-            
-            {/* Small accent particles */}
-            <div className="absolute top-1/3 right-1/3 w-16 h-16 bg-gradient-to-br from-blue-400/30 to-indigo-400/20 rounded-full blur-xl animate-float animation-delay-400"></div>
-            <div className="absolute bottom-1/4 left-1/3 w-20 h-20 bg-gradient-to-br from-sky-400/25 to-cyan-400/20 rounded-full blur-xl animate-enhanced-pulse animation-delay-800"></div>
+            <div className="absolute top-1/4 left-1/4 w-64 h-64 wormhole-portal animate-wormhole-rotate animation-delay-0"></div>
+            <div className="absolute top-3/4 right-1/3 w-48 h-48 wormhole-portal animate-wormhole-rotate animation-delay-2000"></div>
+            <div className="absolute top-1/2 right-1/4 w-32 h-32 wormhole-portal animate-wormhole-rotate animation-delay-4000"></div>
+          </>
+        )}
+        
+        {/* Many-Sheeted Spacetime Layers */}
+        <div className="absolute top-20 left-20 spacetime-sheet animate-sheet-drift animation-delay-1000"></div>
+        <div className="absolute bottom-32 right-20 spacetime-sheet animate-sheet-drift animation-delay-3000"></div>
+        {!isMobile && (
+          <>
+            <div className="absolute top-1/3 right-1/2 spacetime-sheet animate-sheet-drift animation-delay-1500"></div>
+            <div className="absolute bottom-1/4 left-1/3 spacetime-sheet animate-sheet-drift animation-delay-2500"></div>
+          </>
+        )}
+        
+        {/* Topological Defects (strings/monopoles) */}
+        {!isMobile && (
+          <>
+            <div className="absolute top-1/6 left-1/2 topological-string animate-string-vibrate animation-delay-500"></div>
+            <div className="absolute bottom-1/6 right-1/2 topological-string animate-string-vibrate animation-delay-1500"></div>
+            <div className="absolute top-2/3 left-1/6 topological-string animate-string-vibrate animation-delay-2500"></div>
+          </>
+        )}
+        
+        {/* Quantum Coherence Regions */}
+        <div className="absolute top-1/2 left-1/3 coherence-region animate-coherence-pulse animation-delay-800"></div>
+        <div className="absolute bottom-1/3 right-1/4 coherence-region animate-coherence-pulse animation-delay-1800"></div>
+        {!isMobile && (
+          <>
+            <div className="absolute top-1/4 right-1/6 coherence-region animate-coherence-pulse animation-delay-1200"></div>
+            <div className="absolute bottom-1/2 left-1/6 coherence-region animate-coherence-pulse animation-delay-2200"></div>
+          </>
+        )}
+        
+        {/* Flux Tubes (TGD characteristic structures) */}
+        {!isMobile && (
+          <>
+            <div className="absolute top-10 left-1/3 flux-tube animate-flux-flow animation-delay-600"></div>
+            <div className="absolute bottom-10 right-1/3 flux-tube animate-flux-flow animation-delay-1600"></div>
+            <div className="absolute top-1/2 left-10 flux-tube vertical animate-flux-flow animation-delay-2600"></div>
+            <div className="absolute top-1/2 right-10 flux-tube vertical animate-flux-flow animation-delay-3600"></div>
+          </>
+        )}
+        
+        {/* Mobile-optimized geometric elements */}
+        {isMobile && (
+          <>
+            <div className="absolute top-1/3 right-1/4 w-32 h-32 wormhole-portal animate-wormhole-rotate animation-delay-1000"></div>
+            <div className="absolute bottom-1/3 left-1/4 spacetime-sheet animate-sheet-drift animation-delay-2000"></div>
           </>
         )}
       </div>
 
       {/* Subtle Grid Pattern Overlay */}
-      <div className="fixed inset-0 opacity-[0.02] pointer-events-none" style={{
+      <div className="fixed inset-0 opacity-[0.02] pointer-events-none z-[-1]" style={{
         backgroundImage: `radial-gradient(circle at 1px 1px, rgba(15, 23, 42, 0.3) 1px, transparent 0)`,
         backgroundSize: '40px 40px'
       }}></div>
