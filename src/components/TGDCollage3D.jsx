@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'; // Added useCallback just in case, though not strictly needed by this change
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 const TGDCollage3D = () => {
