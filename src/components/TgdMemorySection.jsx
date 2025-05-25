@@ -49,11 +49,16 @@ export default function TgdMemorySection() {
               </dl>
             </div>
             <div className={`enhanced-card p-6 bg-gradient-to-br from-sky-50/80 to-blue-50/60 border border-sky-200/50 ${subSection1ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
-              <img
-                src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+4D+Brain+%26+Holographic+Recall"
-                alt="Diagram illustrating the 4D Brain concept and Magnetic Body's holographic recall mechanism"
+              <video
+                src="/TGDQuantumMemory.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
                 className="w-full h-auto object-contain rounded-lg shadow-md"
-              />
+              >
+                Your browser does not support the video tag.
+              </video>
               <p className="text-center text-sm text-slate-600 mt-4 italic">TGD: 4D Brain, ZEO, and Holographic Memory Recall via Magnetic Body</p>
             </div>
           </div>
@@ -72,11 +77,16 @@ export default function TgdMemorySection() {
             className={`grid md:grid-cols-2 gap-10 items-stretch ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
           >
             <div className={`enhanced-card p-6 bg-gradient-to-br from-sky-50/80 to-blue-50/60 border border-sky-200/50 ${subSection2ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
-              <img
-                src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+SFRs+%26+Time+Arrows"
-                alt="Diagram illustrating SSFRs, BSRs, and the flow/reversal of time"
+              <video
+                src="/TGDQuantumMemory.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
                 className="w-full h-auto max-h-96 object-contain rounded-lg shadow-md"
-              />
+              >
+                Your browser does not support the video tag.
+              </video>
               <p className="text-center text-sm text-slate-600 mt-4 italic">TGD: State Function Reductions, Selves & Time Perception</p>
             </div>
             <div className={`space-y-6 ${subSection2ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
@@ -116,11 +126,16 @@ export default function TgdMemorySection() {
               </dl>
             </div>
             <div className={`enhanced-card p-6 bg-gradient-to-br from-sky-50/80 to-blue-50/60 border border-sky-200/50 ${subSection3ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
-              <img
-                src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Negentropic+Entanglement"
-                alt="Diagram of TGD Negentropic Entanglement in memory"
+              <video
+                src="/TGDQuantumMemory.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
                 className="w-full h-auto max-h-96 object-contain rounded-lg shadow-md"
-              />
+              >
+                Your browser does not support the video tag.
+              </video>
               <p className="text-center text-sm text-slate-600 mt-4 italic">TGD: Negentropic Entanglement & Memory Engrams</p>
             </div>
           </div>
@@ -139,11 +154,16 @@ export default function TgdMemorySection() {
             className={`grid md:grid-cols-2 gap-10 items-stretch ${subSection4ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
           >
             <div className={`enhanced-card p-6 bg-gradient-to-br from-sky-50/80 to-blue-50/60 border border-sky-200/50 ${subSection4ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
-              <img
-                src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+p-Adic+Cognition"
-                alt="Diagram of TGD p-Adic Physics and Cognition"
+              <video
+                src="/TGDQuantumMemory.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
                 className="w-full h-auto max-h-96 object-contain rounded-lg shadow-md"
-              />
+              >
+                Your browser does not support the video tag.
+              </video>
               <p className="text-center text-sm text-slate-600 mt-4 italic">TGD: p-Adic Physics & Cognitive Representation</p>
             </div>
             <div className={`space-y-6 ${subSection4ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
