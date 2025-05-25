@@ -82,43 +82,26 @@ const TGDCollage3D = () => {
     return positions;
   };
 
-  // Generate 3D spherical lattice positions in concentric spherical layers
-  const generateLatticePositions = (imageCount, baseRadius = 8) => {
+  // Generate 3D cubic grid positions in organized layers
+  const generateLatticePositions = (imageCount, spacing = 6) => {
     const positions = [];
-    const golden = (1 + Math.sqrt(5)) / 2; // Golden ratio for optimal distribution
     
-    // Calculate how many concentric spheres we need
-    const spheresCount = Math.ceil(Math.cbrt(imageCount / 4)); // Rough estimate
-    let imagesPlaced = 0;
+    // Calculate grid dimensions to fit all images
+    const cubeSize = Math.ceil(Math.cbrt(imageCount));
+    const offset = (cubeSize - 1) * spacing / 2; // Center the grid
     
-    for (let sphereIndex = 0; sphereIndex < spheresCount && imagesPlaced < imageCount; sphereIndex++) {
-      const sphereRadius = baseRadius + (sphereIndex * 4); // Each sphere 4 units apart
-      
-      // Calculate images for this sphere based on surface area
-      const imagesInThisSphere = sphereIndex === 0 ? 1 : Math.min(
-        Math.floor(4 * Math.PI * sphereRadius * sphereRadius / 15), // Surface area based distribution
-        imageCount - imagesPlaced
-      );
-      
-      if (sphereIndex === 0) {
-        // Center image
-        positions.push([0, 0, 0]);
-        imagesPlaced++;
-      } else {
-        // Distribute images on sphere surface using Fibonacci sphere
-        for (let i = 0; i < imagesInThisSphere; i++) {
-          const y = 1 - (i / (imagesInThisSphere - 1)) * 2; // y goes from 1 to -1
-          const radiusAtY = Math.sqrt(1 - y * y);
+    let index = 0;
+    
+    // Create a 3D cubic grid
+    for (let x = 0; x < cubeSize && index < imageCount; x++) {
+      for (let y = 0; y < cubeSize && index < imageCount; y++) {
+        for (let z = 0; z < cubeSize && index < imageCount; z++) {
+          const posX = x * spacing - offset;
+          const posY = y * spacing - offset;
+          const posZ = z * spacing - offset;
           
-          const theta = golden * (i + sphereIndex * 100); // Offset for each sphere
-          
-          const x = Math.cos(theta) * radiusAtY * sphereRadius;
-          const z = Math.sin(theta) * radiusAtY * sphereRadius;
-          
-          positions.push([x, y * sphereRadius, z]);
-          imagesPlaced++;
-          
-          if (imagesPlaced >= imageCount) break;
+          positions.push([posX, posY, posZ]);
+          index++;
         }
       }
     }
@@ -202,15 +185,15 @@ const TGDCollage3D = () => {
 
   // Get all available images using actual filenames
   const getImagePaths = () => {
-    const baseFilename = "Digital painting, abstract representation of memory in Topological Geometrodynamics, intricate network of nodes and paths, intense dramatic lighting, high contrast, dark tones, unsettling details, vibrant mysterious hues";
     const paths = [];
     
-    // Add the base filename without number
-    paths.push(`/images/${baseFilename}.jpg`);
+    // Add the base image first
+    paths.push('/images/tgd_memory_base.jpg');
     
-    // Add numbered files (1) through (100)
-    for (let i = 1; i <= 100; i++) {
-      paths.push(`/images/${baseFilename} (${i}).jpg`);
+    // Add numbered files from 001 to 101 with zero-padding
+    for (let i = 1; i <= 101; i++) {
+      const paddedNumber = i.toString().padStart(3, '0');
+      paths.push(`/images/tgd_memory_${paddedNumber}.jpg`);
     }
     
     return paths;
@@ -341,6 +324,16 @@ const TGDCollage3D = () => {
             // Update stored original position
             mesh.userData.originalPosition = { x, y, z };
             
+            // Update material properties for new mode - keep all modes bright
+            if (mesh.material && !mesh.userData.isPlaceholder) {
+              // Apply consistent bright properties to all modes
+              mesh.material.transparent = false;
+              mesh.material.opacity = 1.0;
+              mesh.material.emissive.setHex(0x0a1a2a);
+              mesh.material.emissiveIntensity = 0.1;
+              mesh.material.needsUpdate = true;
+            }
+            
             // Make images face camera in lattice mode, or face center in others
             if (newMode === 'lattice') {
               mesh.lookAt(cameraRef.current.position);
@@ -375,16 +368,18 @@ const TGDCollage3D = () => {
           texture.wrapS = THREE.ClampToEdgeWrapping;
           texture.wrapT = THREE.ClampToEdgeWrapping;
           
-          // Create material with a subtle glow effect instead of separate border mesh
-          const material = new THREE.MeshLambertMaterial({
+          // Create material with different properties based on visualization mode
+          const materialConfig = {
             map: texture,
-            transparent: true,
-            opacity: 0.9,
             side: THREE.DoubleSide,
-            emissive: 0x1a3a5c, // Subtle blue glow
-            emissiveIntensity: 0.2
-          });
+            // Make all modes bright and vibrant
+            transparent: false,
+            opacity: 1.0,
+            emissive: 0x0a1a2a, // Consistent subtle blue glow for all modes
+            emissiveIntensity: 0.1
+          };
 
+          const material = new THREE.MeshLambertMaterial(materialConfig);
           const mesh = new THREE.Mesh(geometry, material);
           const [x, y, z] = sphericalPositions[index];
           
@@ -419,6 +414,42 @@ const TGDCollage3D = () => {
         undefined,
         (error) => {
           console.warn(`Failed to load image: ${imagePath}`, error);
+          
+          // Create a placeholder colored plane for missing images with better visibility
+          const placeholderConfig = {
+            color: new THREE.Color().setHSL((index * 0.1) % 1, 0.7, 0.6), // Brighter base color
+            emissive: 0x111111,
+            emissiveIntensity: 0.2,
+            // Make all placeholders bright and opaque
+            transparent: false,
+            opacity: 1.0
+          };
+
+          const placeholderMaterial = new THREE.MeshLambertMaterial(placeholderConfig);
+          
+          const mesh = new THREE.Mesh(geometry, placeholderMaterial);
+          const [x, y, z] = sphericalPositions[index];
+          
+          mesh.position.set(x, y, z);
+          
+          if (visualizationMode === 'lattice') {
+            mesh.lookAt(camera.position);
+          } else {
+            mesh.lookAt(0, 0, 0);
+          }
+          
+          mesh.userData = {
+            index,
+            imagePath: 'placeholder',
+            originalPosition: { x, y, z },
+            originalScale: { x: 1, y: 1, z: 1 },
+            isImage: true,
+            isPlaceholder: true
+          };
+
+          imageGroup.add(mesh);
+          imageObjects.push(mesh);
+          
           loadedImages++;
           setLoadingProgress((loadedImages / imagePaths.length) * 100);
           
@@ -573,6 +604,17 @@ const TGDCollage3D = () => {
 
     mountRef.current.appendChild(renderer.domElement);
 
+    // Handle window resize
+    const handleResize = () => {
+      if (!mountRef.current || !camera || !renderer) return;
+      
+      camera.aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+
     // Animation loop
     const animate = () => {
       animationRef.current = requestAnimationFrame(animate);
@@ -606,21 +648,10 @@ const TGDCollage3D = () => {
 
     animate();
 
-    // Handle window resize
-    const handleResize = () => {
-      if (!mountRef.current) return;
-      
-      camera.aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
-    };
-
-    window.addEventListener('resize', handleResize);
-
     // Set the ref for external access to updateVisualizationMode
     updateVisualizationModeRef.current = updateVisualizationMode;
 
-    // Cleanup
+    // Cleanup on unmount
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
@@ -645,16 +676,25 @@ const TGDCollage3D = () => {
       // Dispose of Three.js objects
       imageObjectsRef.current.forEach(mesh => {
         if (mesh.geometry) mesh.geometry.dispose();
-        if (mesh.material) mesh.material.dispose();
+        if (mesh.material) {
+          if (mesh.material.map) mesh.material.map.dispose();
+          mesh.material.dispose();
+        }
         if (mesh.userData.glowMesh) {
           mesh.userData.glowMesh.geometry.dispose();
           mesh.userData.glowMesh.material.dispose();
         }
       });
       
-      renderer.dispose();
+      // Dispose renderer
+      if (renderer) {
+        renderer.dispose();
+      }
+      
+      // Clear arrays
+      imageObjectsRef.current = [];
     };
-  }, [isRotating, visualizationMode, modalImage]);
+  }, [modalImage, isRotating, visualizationMode]);
 
   // Handle visualization mode change
   const handleVisualizationChange = (newMode) => {
@@ -678,7 +718,7 @@ const TGDCollage3D = () => {
             <div className="w-16 h-16 border-4 border-sky-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <div className="text-xl font-medium mb-2">Loading TGD Memory Lattice</div>
             <div className="text-sm text-gray-300">
-              {Math.round(loadingProgress)}% ({Math.round(loadingProgress * 1.01)}/101 memories loaded)
+              {Math.round(loadingProgress)}% ({Math.round(loadingProgress * 1.02)}/102 memories loaded)
             </div>
             <div className="w-64 h-2 bg-gray-700 rounded-full mt-4 mx-auto">
               <div 
@@ -716,7 +756,7 @@ const TGDCollage3D = () => {
                   : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
               }`}
             >
-              3D Spherical Lattice
+              Cubic Grid Matrix
             </button>
             <button
               onClick={() => handleVisualizationChange('typography')}
@@ -735,7 +775,7 @@ const TGDCollage3D = () => {
           <div>• Click images to view</div>
           <div>• Drag to rotate sphere</div>
           <div>• Scroll to zoom in/out</div>
-          <div>• 101 quantum memories loaded</div>
+          <div>• 102 quantum memories loaded</div>
         </div>
         
         <div className="mt-3 pt-3 border-t border-gray-600">
@@ -775,7 +815,7 @@ const TGDCollage3D = () => {
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <div className="text-xs text-gray-400">Position in Lattice</div>
-                  <div className="text-purple-400">{modalImage.index + 1} of 101</div>
+                  <div className="text-purple-400">{modalImage.index + 1} of 102</div>
                 </div>
                 <div>
                   <div className="text-xs text-gray-400">Quantum State</div>
