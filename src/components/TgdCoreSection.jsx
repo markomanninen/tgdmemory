@@ -67,9 +67,13 @@ export default function TgdCoreSection() {
             className={`grid md:grid-cols-2 gap-10 items-stretch ${subSection2ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
           >
             <div className={`enhanced-card hover-lift ${subSection2ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
-              <img 
-                src="https://placehold.co/600x400/e2e8f0/38bdf8?text=Diagram:+Field+Bodies+%26+Cognition"
-                alt="Diagram of TGD Field Bodies and Cognitive Correlates"
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                src="TGDConceptsVideo.mp4"
+                aria-label="Video explaining TGD Field Bodies and Cognitive Correlates"
                 className="w-full h-auto max-h-96 object-contain rounded-lg shadow-md border border-gray-300 bg-gray-50"
               />
               <p className="text-center text-sm text-gray-500 mt-4 italic">TGD: Field Bodies & Cognitive Correlates</p>

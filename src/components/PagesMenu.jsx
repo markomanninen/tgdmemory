@@ -115,37 +115,38 @@ const PagesMenu = () => {
             </div>
           </div>
 
-          <div className="group bg-white/50 backdrop-blur-xl rounded-2xl shadow-lg border border-white/50 hover:shadow-xl transition-all duration-300 overflow-hidden opacity-60">
-            <div className="bg-gradient-to-r from-gray-400 to-gray-500 p-6 sm:p-8 text-white"> {/* Adjusted padding */}
+          <div className="group bg-white/50 backdrop-blur-xl rounded-2xl shadow-lg border border-white/50 hover:shadow-xl transition-all duration-300 overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-500 to-indigo-600 p-6 sm:p-8 text-white"> {/* Adjusted padding */}
               <div className="flex items-center justify-between mb-4 sm:mb-5"> {/* Adjusted margin */}
                 <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd"/>
+                    <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd"/>
                   </svg>
                 </div>
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Coming Soon</span>
+                <span className="text-xs bg-white/20 px-2 py-1 rounded-full">New!</span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold mb-2">Quantum Memory Models</h2>
-              <p className="text-gray-200 text-sm sm:text-base">
-                Interactive comparison of classical and quantum memory models.
+              <h2 className="text-xl sm:text-2xl font-bold mb-2">3D Memory Lattice</h2>
+              <p className="text-purple-100 text-sm sm:text-base">
+                Interactive spherical collage of TGD memory visualizations with holographic effects.
               </p>
             </div>
             
             <div className="p-6 sm:p-8"> {/* Adjusted padding */}
-              <p className="text-gray-500 text-sm sm:text-base mb-6 sm:mb-8 italic"> {/* Adjusted margin */}
-                This page will provide an interactive exploration of different memory models, 
-                from classical neural networks to quantum consciousness theories.
+              <p className="text-gray-600 text-sm sm:text-base mb-6 sm:mb-8"> {/* Adjusted margin */}
+                Experience an immersive 3D visualization of abstract TGD memory concepts. Navigate through a 
+                spherical lattice of 100+ generated images representing quantum memory structures with 
+                holographic presentation and interactive focus modes.
               </p>
               
-              <button 
-                disabled
-                className="w-full bg-gray-300 text-gray-500 py-3 px-4 rounded-lg font-semibold cursor-not-allowed flex items-center justify-center space-x-2 text-base sm:text-lg"
+              <Link 
+                to="/collage3d"
+                className="w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 text-base sm:text-lg group-hover:shadow-lg"
               >
-                <span>In Development</span>
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
+                <span>Enter 3D Lattice</span>
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"/>
                 </svg>
-              </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -15,6 +15,7 @@ import AdminDebug from './src/pages/AdminDebug';
 import ContactPage from './src/pages/ContactPage';
 import LoginPage from './src/pages/LoginPage';
 import RegisterPage from './src/pages/RegisterPage';
+import TGDCollage3DPage from './src/pages/TGDCollage3DPage';
 
 // Main content component for the home page
 const MainContent = ({ sections, activeSection, scrollToSection, headerHeight }) => (
@@ -287,6 +288,7 @@ export default function App() {
           // PagesMenu will be rendered below the global Header
           <PagesMenu />
         } />
+        <Route path="/collage3d" element={<TGDCollage3DPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
