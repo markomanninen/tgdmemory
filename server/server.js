@@ -1108,7 +1108,13 @@ app.get('*', (req, res) => {
   }
   
   // For all other routes, serve the React app's index.html
-  res.sendFile(path.join(__dirname, '..', 'index.html'));
+  // In production (Docker), the built files are in the public directory
+  // In development, index.html is in the project root
+  const indexPath = isProd ? 
+    path.join(__dirname, '..', 'public', 'index.html') : 
+    path.join(__dirname, '..', 'index.html');
+  
+  res.sendFile(indexPath);
 });
 
 // Start the server
