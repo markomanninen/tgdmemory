@@ -22,6 +22,7 @@ export default defineConfig(({ command, mode }) => {
   const isProd = mode === 'production';
   
   const config = {
+    appType: 'spa', // Add appType here
     plugins: [react()],
     build: {
       rollupOptions: {

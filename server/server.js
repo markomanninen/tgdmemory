@@ -1099,6 +1099,18 @@ app.get('/api/live', (req, res) => {
   });
 });
 
+// Catch-all handler: send back React's index.html for any non-API routes
+// This must be the last route handler before app.listen()
+app.get('*', (req, res) => {
+  // Skip API routes - they should return 404 if not found
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'API endpoint not found' });
+  }
+  
+  // For all other routes, serve the React app's index.html
+  res.sendFile(path.join(__dirname, '..', 'index.html'));
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Equation explanation server running on port ${PORT}`);
