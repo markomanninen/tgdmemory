@@ -709,6 +709,30 @@ const TGDCollage3D = () => {
     }
   };
 
+  // Function to show the previous image in the modal
+  const showPreviousImage = () => {
+    if (!modalImage) return;
+    const imagePaths = getImagePaths();
+    const currentIndex = modalImage.index;
+    const prevIndex = (currentIndex - 1 + imagePaths.length) % imagePaths.length;
+    setModalImage({
+      index: prevIndex,
+      path: imagePaths[prevIndex],
+    });
+  };
+
+  // Function to show the next image in the modal
+  const showNextImage = () => {
+    if (!modalImage) return;
+    const imagePaths = getImagePaths();
+    const currentIndex = modalImage.index;
+    const nextIndex = (currentIndex + 1) % imagePaths.length;
+    setModalImage({
+      index: nextIndex,
+      path: imagePaths[nextIndex],
+    });
+  };
+
   return (
     <div className="relative w-full h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900">
       {/* Loading screen */}
@@ -796,6 +820,22 @@ const TGDCollage3D = () => {
               className="absolute top-6 right-6 z-10 w-10 h-10 flex items-center justify-center bg-black/50 hover:bg-black/70 text-white rounded-full text-xl transition-colors"
             >
               ×
+            </button>
+
+            {/* Previous button */}
+            <button
+              onClick={showPreviousImage}
+              className="absolute left-6 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-black/50 hover:bg-black/70 text-white rounded-full text-xl transition-colors"
+            >
+              &lt;
+            </button>
+
+            {/* Next button */}
+            <button
+              onClick={showNextImage}
+              className="absolute right-6 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-black/50 hover:bg-black/70 text-white rounded-full text-xl transition-colors"
+            >
+              &gt;
             </button>
             
             {/* Image */}
