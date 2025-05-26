@@ -4,6 +4,12 @@ export default function TgdMemorySection() {
   const [titleRef, titleVisible] = useIntersectionObserver({ threshold: 0.1 });
   const [subtitleRef, subtitleVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
+  const [subSection0TitleRef, subSection0TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection0ContentRef, subSection0ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+
+  const [subSection00TitleRef, subSection00TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
+  const [subSection00ContentRef, subSection00ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
+
   const [subSection1TitleRef, subSection1TitleVisible] = useIntersectionObserver({ threshold: 0.1, delay: 100 });
   const [subSection1ContentRef, subSection1ContentVisible] = useIntersectionObserver({ threshold: 0.1, delay: 300 });
 
@@ -26,6 +32,88 @@ export default function TgdMemorySection() {
         >
           The TGD Model of Memory
         </h2>
+
+        {/* Subsection 0: Critical Challenge to Quantum Consciousness Theories */}
+        <div className="mt-16 pt-12 border-t border-gray-200 relative">
+          <h4
+            ref={subSection0TitleRef}
+            className={`text-2xl md:text-3xl font-bold mb-8 text-center ${subSection0TitleVisible ? 'animate-fadeInDown' : 'opacity-0'} gradient-text`}
+          >
+            Critical Challenge to Quantum Consciousness Theories
+          </h4>
+          <div
+            ref={subSection0ContentRef}
+            className={`grid md:grid-cols-2 gap-10 items-stretch ${subSection0ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+          >
+            <div className={`space-y-6 ${subSection0ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+              <dl className="space-y-4">
+                <dt className="font-bold text-lg text-slate-800 mb-2">The Fundamental Problem:</dt>
+                <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">
+                  If consciousness is associated with quantum jumps (as proposed by many quantum consciousness theories), 
+                  then subjective memory becomes impossible. More specifically: theories in which 
+                  State Function Reduction (SFR) is a building brick of conscious experience
+                  do not allow any subjective memories about previous SFRs.
+                </dd>
+                <dt className="font-bold text-lg text-slate-800 mb-2">Memory Continuity Problem:</dt>
+                <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">Each conscious moment would be completely isolated from previous ones, making continuity of experience impossible. Standard quantum mechanics preserves no information from previous quantum jumps, creating a devastating counter-argument to quantum consciousness theories.</dd>
+                <dt className="font-bold text-lg text-slate-800 mb-2">Need for Alternative Framework:</dt>
+                <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">This fundamental limitation necessitates a more sophisticated theoretical framework that can account for both consciousness and subjective memory - leading to the development of TGD's Zero Energy Ontology.</dd>
+              </dl>
+            </div>
+            <div className={`enhanced-card p-6 bg-gradient-to-br from-sky-50/80 to-blue-50/60 border border-sky-200/50 ${subSection0ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+              <video
+                src="/TGDQuantumMemory.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-auto object-contain rounded-lg shadow-md"
+              >
+                Your browser does not support the video tag.
+              </video>
+              <p className="text-center text-sm text-slate-600 mt-4 italic">The Memory Problem in Quantum Consciousness Theories</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Subsection 00: TGD Resolution through ZEO */}
+        <div className="mt-16 pt-12 border-t border-gray-200 relative">
+          <h4
+            ref={subSection00TitleRef}
+            className={`text-2xl md:text-3xl font-bold mb-8 text-center ${subSection00TitleVisible ? 'animate-fadeInDown' : 'opacity-0'} gradient-text`}
+          >
+            TGD Resolution through Zero Energy Ontology
+          </h4>
+          <div
+            ref={subSection00ContentRef}
+            className={`grid md:grid-cols-2 gap-10 items-stretch ${subSection00ContentVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+          >
+            <div className={`enhanced-card p-6 bg-gradient-to-br from-sky-50/80 to-blue-50/60 border border-sky-200/50 ${subSection00ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+              <video
+                src="/TGDQuantumMemory.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-auto object-contain rounded-lg shadow-md"
+              >
+                Your browser does not support the video tag.
+              </video>
+              <p className="text-center text-sm text-slate-600 mt-4 italic">TGD: Zero Energy Ontology & Memory Resolution</p>
+            </div>
+            <div className={`space-y-6 ${subSection00ContentVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+              <dl className="space-y-4">
+                <dt className="font-bold text-lg text-slate-800 mb-2">Zero Energy Ontology (ZEO):</dt>
+                <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">ZEO is needed to solve the fundamental problem of quantum consciousness theories. In ZEO, physical states are superpositions of histories, and quantum jumps recreate these histories rather than destroying previous information.</dd>
+                <dt className="font-bold text-lg text-slate-800 mb-2">4D Memory Structures:</dt>
+                <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">Memory is encoded as 4D structures in geometric time, allowing information preservation through spacetime geometry rather than relying on fragile quantum states that collapse during state function reductions.</dd>
+                <dt className="font-bold text-lg text-slate-800 mb-2">Consciousness & Memory Integration:</dt>
+                <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">TGD enables both consciousness and subjective memory by distinguishing between consciousness (through state function reductions) and memory storage (through geometric spacetime structures), solving the incompatibility problem of standard quantum consciousness theories.</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+
         {/* Subsection 1: Memory, the 4D Brain, and Magnetic Body Action in ZEO */}
         <div className="mt-16 pt-12 border-t border-gray-200 relative">
           <h4
@@ -41,7 +129,7 @@ export default function TgdMemorySection() {
             <div className={`space-y-6 ${subSection1ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
               <dl className="space-y-4">
                 <dt className="font-bold text-lg text-slate-800 mb-2">The 4D Brain & Memory Encoding:</dt>
-                <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">In ZEO, memories are not just stored in 3D neural patterns. Instead, TGD proposes a "4D brain," where the conscious history of a self is encoded in the 4-dimensional spacetime surface associated with it. Past quantum jumps (conscious moments) embed information about themselves into the geometry and topology of this 4D surface. This is possible due to the slight non-determinism of TGD's fundamental field equations (Kähler action), allowing the 4D spacetime "Bohr orbit" to be rich enough to carry historical information.</dd>
+                <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">In ZEO, memories are not just stored in 3D neural patterns. Instead, TGD proposes a "4D brain," where the conscious history of a self is encoded in the 4-dimensional spacetime surface associated with it. Past quantum jumps (conscious moments) embed information about themselves into the geometry and topology of this 4D surface. This is possible due to the slight non-determinism of TGD's fundamental field equations (Kähler action + volume term), allowing the 4D spacetime "Bohr orbit" to be rich enough to carry historical information. <em>(Holography = holomorphy vision gives same extremals for much more general actions)</em></dd>
                 <dt className="font-bold text-lg text-slate-800 mb-2">Episodic Memories as Re-Experiences:</dt>
                 <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">Thus, episodic memories are not passive playbacks but can be actual re-experiences or a re-illumination of a segment of this 4D past. This is achieved by quantum jumping to a state where the sub-self (mental image) corresponding to the memory is briefly re-activated in the geometric past.</dd>
                 <dt className="font-bold text-lg text-slate-800 mb-2">Role of Magnetic Bodies (MBs) & Holographic Recall:</dt>
@@ -96,7 +184,7 @@ export default function TgdMemorySection() {
                 <dt className="font-bold text-lg text-slate-800 mb-2">State Function Reductions (SFRs) & the Flow of Time:</dt>
                 <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">
                   A "self" is a sequence of <strong>Small State Function Reductions (SSFRs)</strong>. During SSFRs, the conscious experience of the self evolves, the arrow of geometric time is preserved, and the "active" boundary of its associated Causal Diamond (CD) shifts towards the geometric future.
-                  For conscious memory recall, which involves accessing the geometric past, <strong>Big State Function Reductions (BSRs)</strong> are crucial. A BSR can change the arrow of geometric time for the self or a sub-self involved in the recall. This effectively allows the self to "look" into its geometric past, re-activating a past mental image.
+                  For conscious memory recall, which involves accessing the geometric past, <strong>Big State Function Reductions (BSFRs)</strong> are crucial. A <strong>BSFR changes the arrow of geometric time</strong> for the self or a sub-self involved in the recall. This effectively allows the self to "look" into its geometric past, re-activating a past mental image.
                 </dd>
                 <dt className="font-bold text-lg text-slate-800 mb-2">Hierarchy of Selves:</dt>
                 <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">Consciousness is organized into a fractal-like hierarchy of selves. Selves at higher levels experience longer durations of subjective time and integrate information from lower-level selves (sub-selves). This hierarchy is associated with the Magnetic Bodies and the hierarchy of Planck constants.</dd>
@@ -120,7 +208,7 @@ export default function TgdMemorySection() {
             <div className={`space-y-6 ${subSection3ContentVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
               <dl className="space-y-4">
                 <dt className="font-bold text-lg text-slate-800 mb-2">Negentropic Entanglement (NE):</dt>
-                <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">NE, proposed to be possible in the intersection of real and p-adic worlds (or related to the hierarchy of Planck constants), is a correlate of conscious information, attention, and understanding. Unlike standard entanglement which is entropic, NE is information-carrying and stable under quantum jumps (specifically, SSFRs that preserve it), forming the basis of memory engrams as stable patterns of NE.</dd>
+                <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">NE, proposed to be possible in the intersection of real and p-adic worlds (or related to the hierarchy of Planck constants), is a correlate of conscious information, attention, and understanding. Unlike standard entanglement which is entropic, NE is information-carrying and stable under quantum jumps (specifically, SSFRs that preserve it). The stability of NE is enhanced by <strong>large h_eff which scales up quantum time scales</strong>, forming the basis of memory engrams as stable patterns of NE.</dd>
                 <dt className="font-bold text-lg text-slate-800 mb-2">Memory Engrams as NE Patterns:</dt>
                 <dd className="text-slate-700 leading-relaxed pl-4 border-l-4 border-sky-200">Instead of solely relying on synaptic strengths, memory engrams in TGD could be fundamentally patterns of Negentropic Entanglement, potentially at the level of magnetic bodies. These patterns could connect different brain regions or even different selves in the hierarchy, representing associations and learned information in a conscious, information-rich manner.</dd>
               </dl>
